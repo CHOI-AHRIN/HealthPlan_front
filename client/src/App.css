@@ -1,0 +1,40 @@
+@font-face {
+  font-family: "Cafe";
+  src: url("./fonts/Cafe24Syongsyong-v2.0.ttf");
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "omyu";
+  src: url("./fonts/omyu\ pretty.ttf");
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "고령딸기";
+  src: url("./fonts/고령딸기체+TTF.ttf");
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Ssurround";
+  src: url("./fonts/Cafe24Ssurround-v2.0.ttf");
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Ohsquare";
+  src: url("./fonts/Cafe24Ohsquare-v2.0.ttf");
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Danjungha";
+  src: url("./fonts/Cafe24Danjunghae-v2.0.ttf");
+  font-style: normal;
+}
+
+body {
+  font-family: 'Ssurround', sans-serif;
+  font-size:28px;
+}

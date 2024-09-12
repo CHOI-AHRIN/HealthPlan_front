@@ -1,0 +1,165 @@
+/* MainForm CSS */
+
+
+
+.image-container,
+.mainimage {
+  width: 100%;
+  max-width: 100vw;
+  height: 25vh;
+}
+.maincontainer {
+  margin-left: 150px; /* 좌측 여백 설정 */
+  margin-right: 150px; /* 우측 여백 설정 */
+  width: calc(100% - 200px); /* 전체 화면에서 좌우 여백을 뺀 나머지를 너비로 설정 */
+  position: relative;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  overflow: hidden;
+  flex-direction: column;
+  box-sizing: border-box; /* 박스 모델을 border-box로 설정 */
+}
+
+
+/* 하단이미지 위치, 크기 및 애니메이션 */
+.bottom-image-container {
+  position: relative;
+  width: 100%;
+  max-width: 100vw;
+  height: 50vh;
+  overflow: hidden;
+}
+
+.bottom-image,
+.bottom-image2 {
+  width: 50%;
+  height: 100%; /* 이미지를 컨테이너의 높이에 맞춤 */
+  object-fit: cover;
+  opacity: 0.8;
+  position: absolute;
+}
+
+
+.bottom-image {
+  right: 0;
+}
+
+.bottom-image2 {
+  left: 0;
+}
+
+.bottom-text,
+.bottom-text2 {
+  position: absolute;
+  top: 45%;
+  width: 50%; /* 텍스트의 너비를 조절 */
+  transform: translateY(-50%);
+  color: rgb(57, 87, 46);
+  font-size: 1em;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(0, 0.5, 0.5, 0.5);
+  white-space: nowrap;
+}
+
+.bottom-text {
+  left: 5%;
+}
+
+.bottom-text2 {
+  right: -5%;
+}
+
+.bottom-image-container {/* 초기에는 모든 하단 이미지 숨김 */
+  opacity: 0;
+  transform: translateY(80px);
+  transition: opacity 0.8s ease, transform 0.8s ease; /* transition 추가 */
+}
+
+.bottom-image-container.visible {/* 보이게 되면 투명도를 1로, 위치를 초기값으로 변경 */
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 상단 이미지 위치, 크기 및 애니메이션 */
+.mainimage {
+  transition: transform 0.3s ease-in-out;
+  object-fit: cover;
+}
+
+.maintext {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  color: white;
+  text-align: center;
+  width: 100%;
+  font-size: 1.7em; /* 텍스트 크기 조정 */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8); /* 그림자 효과 추가 */
+}
+
+
+.image-container {
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 10px; /* 이미지 컨테이너 간격 조절을 위한 margin 추가 */
+}
+
+
+
+/* 반응형 */
+@media screen and (max-width: 1680px) {
+  .maincontainer {margin-left: 90px;margin-right: 90px; width: calc(100% - 180px);}
+
+  .bottom-image-container {height: 45vh;}
+  .bottom-text,.bottom-text2 {font-size: 1em;}
+  .maintext {font-size: 1.6em; }
+  .image-container:hover .maintext {font-size: 1.7em;}
+  }
+
+@media screen and (max-width: 1380px) {
+  .maincontainer {margin-left: 80px;margin-right: 80px; width: calc(100% - 160px);}
+
+  .bottom-image-container {height: 40vh;}
+  .bottom-text,.bottom-text2 {font-size: 0.7em;}
+  .maintext {font-size: 1.5em; }
+  .image-container:hover .maintext {font-size: 1.6em;}
+  }
+
+@media screen and (max-width: 1080px) {
+  .maincontainer {margin-left: 70px;margin-right: 70px; width: calc(100% - 130px);}
+
+  .bottom-image-container {height: 35vh;}
+  .bottom-text,.bottom-text2 {font-size: 0.5em;}
+  .maintext {font-size: 1.3em; }
+  .image-container:hover .maintext {font-size: 1.4em;}
+  }
+
+@media screen and (max-width: 780px) {
+  .maincontainer {margin-left: 60px;margin-right: 60px; width: calc(100% - 100px);}
+
+  .bottom-image-container {height: 30vh;}
+  .bottom-text,.bottom-text2 {font-size: 0.4em;}
+  .maintext {font-size: 1em; }
+  .image-container:hover .maintext {font-size: 1.1em;}
+  }
+
+@media screen and (max-width: 480px) {
+  .maincontainer {margin-left: 40px;margin-right: 40px; width: calc(100% - 100px);}
+
+.bottom-image-container {height: 30vh;}
+.bottom-text,.bottom-text2 {font-size: 0.3em;}
+.maintext {font-size: 0.6em; }
+.image-container:hover .maintext {font-size: 0.7em;}
+}
+
+@media screen and (max-width: 400px) {
+  .maincontainer {margin-left: 20px;margin-right: 20px; width: calc(100% - 100px);}
+
+  .bottom-image-container {height: 30vh;}
+  .bottom-text,.bottom-text2 {font-size: 0.2em;}
+  .maintext {font-size: 0.5em;}
+  .image-container:hover .maintext {font-size: 0.6em;}
+  }

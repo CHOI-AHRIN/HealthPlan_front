@@ -1,0 +1,39 @@
+/* 삭제버튼 간격 맞추기 위해 이름 칸 줄임 */
+.re1_wrap .table_ty1 tr td.name-container input,
+
+
+/* 삭제버튼 */
+.name-container {
+  display: flex;
+  align-items: center;
+  
+}
+
+.name-container input {
+  margin-right: 10px;
+}
+
+.name-container {
+  display: flex;
+  align-items: center;
+}
+
+.name-container button {
+ 
+  padding-left: 15px;
+  padding-right: 15px;
+  white-space: nowrap; /* 텍스트가 한 줄로만 표시되도록 설정 */
+  writing-mode: horizontal-tb; /* 텍스트를 가로로 표시 */
+  transform: rotate(0deg); /* 텍스트를 가로로 표시 */
+  
+  background-color: #77a581; 
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.name-container button:hover {
+  background-color: #517749;
+}

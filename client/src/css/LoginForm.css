@@ -1,0 +1,59 @@
+/* LoginForm.css */
+
+/* 배경색 */
+.main { 
+  background-color: #e0faeb;
+}
+
+/* 배경 구역 */
+.m_login {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh; /* 혹시라도 높이가 부족한 경우를 대비해서 전체 높이로 설정 */
+}
+
+/* login 글씨 */
+.m_login h3{font-size: 55px; line-height: 67px; color: rgb(17, 88, 15); font-weight: 400; letter-spacing: 0; vertical-align: middle; margin-bottom: 39px;}
+
+
+/* 어디야로고이미지 */
+.logo-image {
+  margin-bottom: 0px; /* 이미지와 텍스트 사이에 간격을 조절할 수 있습니다. */
+}
+
+/* 로그인박스 구역 */
+.log_box {
+  background-color: rgb(119, 165, 129);
+  padding: 20px;
+  border-radius: 8px;
+}
+.in_ty1{position: relative; background: #fff; width: 418px; height: 55px; display: block; margin: 0 auto; margin-bottom: 14px; text-align: left; transition:.3s; }
+.in_ty1 span{position: relative; width: 50px; height: 55px; transition:.3s; display: block; float: left;}
+.in_ty1 span img{padding: 20px; transition:.3s;}
+.in_ty1 input{height: 55px; line-height: 55px; border: 0 !important; font-size: 17px; color: #9a9a9a; width: 355px; outline:none; padding-left: 18px;}
+
+
+/* 로그인, 회원가입 버튼 */
+.s_bt {
+  font-size: 17.5px; /* 원하는 글자 크기로 조절 */
+  font-weight: bold; /* 글자를 진하게 만들기 */
+  background-color: #d1e6cd;
+  color: rgb(17, 88, 15);
+  padding: 15px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  text-align: center;
+  margin-top: -10px;
+}
+
+.s_bt:hover {
+  background-color: #e0faeb;
+}
+
+
+
+
+

@@ -1,0 +1,39 @@
+#upload_img {
+  display: flex;
+}
+
+/*게시판 기본폼*/
+.re1_wrap_writer .table_ty1 tr{overflow: hidden;}
+.re1_wrap_writer .table_ty1 tr td input[type="text"],
+.re1_wrap_writer .table_ty1 tr td select,
+.re1_wrap_writer textarea{width: 100%; } 
+.re1_wrap_writer1 textarea{width: 80%; } 
+
+/*글쓰기*/
+.privacy_box{width: 100%; height: 250px; overflow: hidden; overflow-y: auto;}
+.agreen_box{text-align: right;}
+.bo_w textarea{ border: 1px solid #ddd; height: 500px;}
+.bo_w .fileName{width: 700px !important;}
+
+/*버튼*/
+.bt_ty1{display: inline-block;}
+.bt_ty1 a{font-size: 14px; color: #fff; height: 27px; line-height: 27px; background: #4682B4; text-align: center; border-radius: 5px; padding: 0 7px; transition:.3s;}
+.bt_ty1 a:hover{background: #000;}
+.bt_ty1{background: #67afc7; border-radius: 5px}
+.bt_ty2{background: #77a581; border-radius: 5px; color:white; text-align: center;}
+.bt_ty2:hover {
+    background-color: #517749;
+  }
+.bt_ty3{background: #77a581; border-radius: 5px; color:white}
+.bt_ty3:hover {
+    background-color: #517749;
+  }
+
+.bt_ty{display: inline-block; overflow: hidden;position: relative; width: 157px; height: 62px; line-height: 62px; color: #fff; font-size: 16px; font-weight: 400; text-align: center; margin-right: 8px; transition:.3s;}
+.bt_ty1{display: inline-block; overflow: hidden;position: relative; width: 115px; height: 52px; line-height: 50px; color: #fff; font-size: 16px; font-weight: 400; text-align: center; margin-right: 8px; transition:.3s;}
+.catbtn{display: inline-block; overflow: hidden;position: relative; width: 62px; height: 42px; line-height: 40px; color: #fff; font-size: 16px; font-weight: 400; text-align: center; margin-right: 8px; transition:.3s;}
+
+
+.line {
+  border: 1px solid #000000; margin-top: 20px; 
+}

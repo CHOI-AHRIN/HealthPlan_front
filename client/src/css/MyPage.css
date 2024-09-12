@@ -1,0 +1,38 @@
+/* MyPage.css */
+
+/* 버튼 */
+.bt_ty{display: inline-block; overflow: hidden;position: relative; width: 157px; height: 62px; line-height: 62px; color: #fff; font-size: 16px; font-weight: 400; text-align: center; margin-right: 8px; transition:.3s;}
+.bt_ty2{background: #77a581; border-radius: 5px; text-align: center;}
+.bt_ty2:hover {background-color: #517749;}
+.re_1 .btn_confirm{text-align: center; margin-top: 50px;}
+
+
+/*회원 약관동의*/
+.check_top{overflow: hidden; height: 70px; box-sizing: border-box; border: 1px solid #dbdbdb; border-bottom: 0; padding: 0px 10px;}
+.check_top h3{font-size: 20px; line-height: 70px; color: #303030; font-weight: 700; float: left; letter-spacing: -0.03em;}
+.check_top label{float: right; font-size: 14px; line-height: 70px; color: #606060; }
+.check_top input{float: right; margin-top: 30px; margin-left: 5px;}
+.re_check .check_wrap {background: #fff; box-sizing: border-box; padding: 70px;}
+.re_check .check_cnt textarea{width: 100%; height: 215px; max-width:100%; font-size: 16px; color: #606060; border: 1px solid #e1e1e1; padding: 10px;	 outline:none; background: #fff; letter-spacing: -0.03em;	}
+.re_check .check_cnt2{margin-top: 40px;}
+.agree_box{text-align: right; font-size: 16px; line-height: 16px; color: #606060; margin: 40px 0;}
+.agree_box input{display: none;}
+.agree_box label{position: relative; padding-left: 26px;}
+.agree_box label:before{position: absolute; content:''; width: 16px; height: 16px; background: url(../img/sub/agree_i.png) center no-repeat; left: 0; top: 5px;}
+.agree_box label:after{position: absolute; content:''; width: 8px; height: 8px; background: #2c2c92; left: 4px; top: 9px; border-radius: 50%; opacity: 0; transition:.3s;}
+.agree_box input:checked + label:after{opacity: 1;}
+.btn_confirm{text-align: right;}
+.btn_confirm a:last-child{margin-right: 0;}
+.re1_wrap{background: #fff; padding: 70px; box-sizing: border-box;}
+.re1_wrap .table_ty1 tr th{width: 152px; text-align: left; border: 0; letter-spacing: -0.03em; font-size: 17px;}.re1_wrap .table_ty1 tr td{height: 45px; padding: 14px 0; text-align: left; font-size: 16px; width: 100%;}
+.re1_wrap .table_ty1 tr td div{height: 45px; padding: 14px 0; text-align: left; font-size: 16px; width: 100%;}
+.re1_wrap .table_ty1 tr td input,
+.re1_wrap .table_ty1 tr td select{width: 552px; height: 45px; line-height: 43px; box-sizing: border-box; border: 1px solid #ddd; padding: 0 20px; font-size: 15px; }
+
+/*테이블*/
+
+.table_ty1 tr th{border: 1px solid #ddd; background: #fff; font-size: 17px; color: #303030;	font-weight: 500; height: 59px; line-height: 59px; box-sizing: border-box;}
+.table_ty1 tr th a{font-size: 17px; color: #303030;	font-weight: 500;}
+.table_ty1 tr th a:after{content:''; display: inline-block; width: 10px; height: 6px;  background: url(../img/sub/ta_b.png) center no-repeat;vertical-align: top; margin-top: 27px; margin-left: 8px;}
+.table_ty1 tr th.on a:after{content:''; display: inline-block; width: 10px; height: 6px;  background: url(../img/sub/ta_t.png) center no-repeat;vertical-align: top; margin-top: 27px; margin-left: 8px;}
+.table_ty1 tr th:after{position: absolute; content:''; width: 100%; height: 2px; background: #77a581; left: 0; top: 0;}

@@ -1,0 +1,65 @@
+@import url(/css/dpl/sce/NotoSansKR-Hestia.css);
+@import '../css/Header.css';
+@import '../css/LoginForm.css';
+@import '../css/MainForm.css';
+@import '../css/Modify.css';
+@import '../css/MyPage.css';
+@import '../css/NboardList.css';
+@import '../css/NboardRead.css';
+@import '../css/NboardRegister.css';
+
+@font-face {
+  font-family: "GmarketSansTTFMedium";
+  src: url("../fonts/GmarketSansTTFMedium.ttf");
+  font-style: normal;
+}
+* {max-height:1000000px;margin:0;padding:0;}
+
+
+.catbtn{
+  text-align: center;
+}
+
+/* 기본 글씨 */
+body {
+  font-family: 'GmarketSansTTFMedium', sans-serif;
+  font-size:28px;
+}
+
+/*공통*/
+.sub_wrap{background: #f8f8f8; padding: 56px 0;}
+.s_tit1{ font-size: 30px; line-height: 38px; color: rgb(17, 88, 15); font-weight: 500; letter-spacing: -0.03em; margin-bottom: 27px; margin-left: -3px;}
+.input_ty1{font-size: 15px; color: #333; height: 45px; line-height: 43px; background: #fff; border: 1px solid #dedede; outline:none; text-indent: 20px; box-sizing: border-box; padding-right: 15px;}
+.input_ty1::placeholder{color: #cdcdcd;}
+
+.s_tit1{ font-size: 30px; line-height: 38px; color: rgb(17, 88, 15); font-weight: 500; letter-spacing: -0.03em; margin-bottom: 27px; margin-left: -3px;}
+
+a {display:block;font-weight:400;color:#505050;text-decoration:none;vertical-align:top;}
+a:hover, a:active, a:focus, a:visited {text-decoration:none;}
+ul, li {list-style:none;}
+input, select, button, textarea {font-family:'GmarketSansTTFMedium';font-size:15px;font-weight:400;color:#505050;line-height:30px;letter-spacing:-0.03em;box-sizing:border-box;vertical-align:middle;}
+img, fieldset, button {border:none;}
+
+.cat{margin-top: 15px; margin-bottom: 15px;}
+.ct1{max-width:1280px; margin: 0 auto;}
+.ct2{max-width:724px; margin: 0 auto; }
+.af:after{display: block; clear: both; content:'';}
+
+
+/*푸터*/
+.footer{text-align: center; letter-spacing: 0; padding: 60px 0;}
+.footer ul li{display: inline-block;}
+.footer ul li a{position: relative; font-size: 15px; line-height: 15px; color: #231f20; padding: 0px 18px; }
+.footer ul li a:after{position: absolute; content:''; width: 1px; height: 14px; background: #231f20; right: 0; top: 0;}
+.footer ul li:last-child a:after{display: none;}
+.footer ul li:first-child a{padding-left: 3px;}
+.footer ul li:last-child a{padding-right: 0; padding-left: 15px;}
+.footer .ft_p{font-size: 16px; line-height: 34px; color: #787878; margin-top: 10px;}
+.footer .ft_p span{display: inline-block; padding: 0px 16px; position: relative; letter-spacing: -0.03em;	}
+.footer .ft_p span:after{position: absolute; content:''; width: 2px; height: 12px; background: #787878; right: -5px; top: 50%; margin-top: -5px;}
+.footer .ft_p span:last-child:after{display: none;}
+.footer .ft_p span:last-child{padding-right: 0;}
+.footer .ft_p span:first-child{padding-left: 0;}
+.footer p{font-size: 16px; line-height: 34px; color: #787878;}
+.footer ul li:hover a{text-decoration: underline;}
+

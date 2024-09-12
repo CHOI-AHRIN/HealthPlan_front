@@ -1,0 +1,7 @@
+/*파일박스*/
+.fileBox .btn_file {box-sizing: border-box;display:inline-block;border:1px solid #ddd; font-size: 15px; color: #a1a1a1; background: url(../img/sub/file_bg.png) left center; border-radius: 5px;width:82px;height:30px; line-height:28px;text-align:center;vertical-align:middle; cursor: pointer; margin-right: 18px;}
+.fileBox .fileName {display:inline-block;width:300px; height:30px; line-height:30px; font-size: 15px; color: #303030; vertical-align:middle; border: 0; border-bottom: 1px solid #ddd;  margin-right: 18px;}
+.fileBox input[type="file"] {position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0}
+.fileBox input::placeholder {font-size: 15px; color: #cdcdcd;}
+.fileBox input:-ms-input-placeholder {color:#cdcdcd;} /* M$ */
+

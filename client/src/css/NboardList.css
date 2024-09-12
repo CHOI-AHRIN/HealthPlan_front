@@ -1,0 +1,106 @@
+/* NboardList.css */
+
+/* 글쓰기 버튼 */
+.sch_bt2{font-size: 16px; color: #fff; background: #103f05; border-radius: 5px; height: 45px; line-height: 45px; text-align: center; position: relative; width: 172px; font-weight: 400; transition:.3s;}
+.li_top_sch {margin-bottom: 19px;}
+.li_top_sch .sch_ty1{float: left; margin-right: 9px;}
+.li_top_sch .input_ty1{width: 402px; float: left;}
+.li_top_sch .sch_bt{float: left;}
+.li_top_sch .sch_bt2{float: right;}
+.sch_bt2:hover {
+  background-color: #77a581;
+}
+.listbtn{
+  font-size: 15px;
+  background-color: #517749;
+  color: #fff;
+  padding: 10px 8px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 5%;
+  margin-bottom: 5px;
+  margin-left: auto;
+  text-align: center;
+}
+.listbtn:hover {
+  background-color: #77a581;
+}
+.af:after{display: block; clear: both; content:'';}
+
+/* 검색 */
+.sch_bt99{font-size: 16px; color: #fff; background: #103f05; border-radius: 5px; height: 45px; line-height: 45px; text-align: center; position: relative; width: 172px; font-weight: 400; transition:.3s; cursor : pointer}
+.sch_bt99:hover{background: #517749;}
+
+.sch_bt{
+  font-size: 15px;
+  background-color: #517749;
+  color: #fff;
+  padding: 5px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.sch_bt:hover {
+  background-color: #77a581;
+}
+.sch_bt1{
+  font-size: 13px;
+  background-color: #517749;
+  color: #fff;
+  padding: 5px 15px;
+  margin-right: 2px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.sch_bt1:hover {
+  background-color: #77a581;
+}
+
+.Paging {
+  text-align: center;
+}
+
+.searchingForm {
+  text-align: center;
+}
+
+.searchzone {
+  padding: 10px 5px;
+}
+
+.search {
+  line-height: 40px;
+  margin: 5px;
+}
+
+/* 버튼 */
+img, fieldset, button {border:none;}
+.title_ty1{position: relative; font-size: 20px; line-height: 20px; font-weight: 500; color: #303030; padding-left: 22px; letter-spacing: -0.03em; margin-bottom: 19px;}
+.title_ty1:before{position: absolute; content:''; width: 11px; height: 11px; border-radius: 50%; box-sizing: border-box; border: 3px solid #2c2c92; left: 0; top: 50%; margin-top: -5px;}
+.title_ty1 a{display: block; width: 22px; height: 22px; background: #fff; border: 1px solid #ddd; position: absolute; right: 0; top: 0; box-sizing: border-box;}
+.title_ty1 a:after{position: absolute; content:''; width: 22px; height: 22px; background: url(../img/sub/f_more.png) center no-repeat; right: -1px; top: -1px; transition:1.2s}
+.title_ty1 a:hover:after{transform:rotate(360deg)}
+.wi_au{width: auto !important; padding: 0 15px;}
+
+
+/* 테이블 */
+.list_cont_admin .ad_tlist tr th:nth-child(2), .list_cont_admin .ad_tlist tr td:nth-child(2) {width: 50%; text-align: center; text-align: left; -webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box; padding-left: 20px;}
+
+.table_ty1 tr th{border: 1px solid #ddd; background: #fff; font-size: 17px; color: #303030;	font-weight: 500; height: 59px; line-height: 59px; box-sizing: border-box;}
+.table_ty1 tr th a{font-size: 17px; color: #303030;	font-weight: 500;}
+.table_ty1 tr th a:after{content:''; display: inline-block; width: 10px; height: 6px;  background: url(../img/sub/ta_b.png) center no-repeat;vertical-align: top; margin-top: 27px; margin-left: 8px;}
+.table_ty1 tr th.on a:after{content:''; display: inline-block; width: 10px; height: 6px;  background: url(../img/sub/ta_t.png) center no-repeat;vertical-align: top; margin-top: 27px; margin-left: 8px;}
+.table_ty1 tr th:after{position: absolute; content:''; width: 100%; height: 2px; background: #77a581; left: 0; top: 0;}
+
+.table_ty2 {font-size: 16px; border: 1px solid #ddd; margin-top: 9px;}
+.table_ty2 tr{background: #fff; }
+.table_ty2 tr:nth-child(2n+2){background: #f4f7f9;}
+.table_ty2 tr td{border-right: 1px solid #ddd; padding: 16px 0px 14px; position: relative; font-size: 16px; color: #606060;}
+.table_ty2 tr td:after{position: absolute; content:''; width: 100%; height: 1px; background: url(../img/sub/table_ddot.png) left center; left: 0; bottom: 0; z-index: 10;}
+.table_ty2 tr:last-child td:after{display: none;}
+.table_ty2 tr td:last-child{border-right: 0;}
+.table_ty2 tr td p{font-size: 15px; line-height: 15px; color: #a1a1a1; font-weight: 400;; text-overflow:ellipsis;white-space:nowrap;word-wrap:normal;overflow:hidden;}
+table {width:100%;table-layout:fixed;border-collapse:collapse;border-spacing:0;text-align:center;}
+
