@@ -1,158 +1,214 @@
-import React, {} from 'react';
+import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import axios from "axios";
 import Swal from 'sweetalert2';
 import $ from 'jquery';
 
 const Register = () => {
 
-    const submitClick = () => {
+    const [mtype, setMtype] = useState('');
 
-        const memId_val_checker = $('#memId_val').val();
-        const memPw_val_checker = $('#memPw_val').val();
-        const memPw_cnf_val_checker = $('#memPw_cnf_val').val();
-        const memName_val_checker = $('#memName_val').val();
-        const memNickName_val_checker = $('#memNickName_val').val();
+    // const navigate = useNavigate(); // useNavigate 훅 초기화
 
-        const fnValidate = () => { 
+    const history = useHistory();
+
+
+
+
+
+        // 데이터 검증
+        const fnValidate = () => {
+
+
+
+            const uuid_val_checker = $('#uuid_val').val();
+            const upw_val_checker = $('#upw_val').val();
+            const upw_cnf_val_checker = $('#upw_cnf_val').val();
+            const name_val_checker = $('#name_val').val();
+            const phone_val_checker = $('#phone_val').val();
+            const email_val_checker = $('#email_val').val();
+            const mtype_val_checker = mtype; // mtype 상태 값
+            
+
+
             const pattern1 = /[0-9]/;
             const pattern2 = /[a-zA-Z]/;
             const pattern3 = /[~!@#$%^&*()_+|<>?:{}]/;
 
-            if (memId_val_checker === '') {
-                $('#memId_val').addClass('border_validate_err');
-                sweetalert('이메일 주소를 다시 확인해주세요.', '', 'error', '닫기');
+            // 아이디
+            if (uuid_val_checker === '') {
+                $('#uuid_val').addClass('border_validate_err');
+                sweetalert('아이디를 다시 확인해주세요.', '', 'error', '닫기');
                 return false;
             }
-            if (memId_val_checker.search(/\s/) !== -1) {
-                $('#memId_val').addClass('border_validate_err');
-                sweetalert('이메일 공백을 제거해 주세요.', '', 'error', '닫기');
-                return false;
-            }
-            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-            if (!emailPattern.test(memId_val_checker)) {
-                $('#memId_val').addClass('border_validate_err');
-                sweetalert('올바른 이메일 형식을 입력해주세요.', '', 'error', '닫기');
+            if (uuid_val_checker.search(/\s/) !== -1) {
+                $('#uuid_val').addClass('border_validate_err');
+                sweetalert('아이디 공백을 제거해 주세요.', '', 'error', '닫기');
                 return false;
             }
 
-            $('#memId_val').removeClass('border_validate_err');
+            $('#uuid_val').removeClass('border_validate_err');
 
-
-            if (memPw_val_checker === '') {
-                $('#memPw_val').addClass('border_validate_err');
+            // 비밀번호
+            if (upw_val_checker === '') {
+                $('#upw_val').addClass('border_validate_err');
                 sweetalert('비밀번호를 입력해주세요.', '', 'error', '닫기');
                 return false;
             }
-            if (memPw_val_checker !== '') {
-                const str = memPw_val_checker;
+            if (upw_val_checker !== '') {
+                const str = upw_val_checker;
                 if (str.search(/\s/) !== -1) {
-                    $('#memPw_val').addClass('border_validate_err');
+                    $('#upw_val').addClass('border_validate_err');
                     sweetalert('비밀번호 공백을 제거해 주세요.', '', 'error', '닫기');
                     return false;
                 }
                 if (!pattern1.test(str) || !pattern2.test(str) || !pattern3.test(str)
                     || str.length < 8 || str.length > 16) {
-                    $('#memPw_val').addClass('border_validate_err');
+                    $('#upw_val').addClass('border_validate_err');
                     sweetalert('8~16자 영문 대 소문자\n숫자, 특수문자를 사용하세요.', '', 'error', '닫기');
                     return false;
                 }
             }
-            $('#memPw_val').removeClass('border_validate_err');
+            $('#upw_val').removeClass('border_validate_err');
 
-            if (memPw_cnf_val_checker === '') {
-                $('#memPw_cnf_val').addClass('border_validate_err');
+            if (upw_cnf_val_checker === '') {
+                $('#upw_cnf_val').addClass('border_validate_err');
                 sweetalert('비밀번호를 한번 더 입력해주세요.', '', 'error', '닫기');
                 return false;
             }
-            if (memPw_val_checker !== memPw_cnf_val_checker) {
-                $('#memPW_val').addClass('border_validate_err');
-                $('#memPw_cnf_val').addClass('border_validate_err');
+            if (upw_val_checker !== upw_cnf_val_checker) {
+                $('#upw_val').addClass('border_validate_err');
+                $('#upw_cnf_val').addClass('border_validate_err');
                 sweetalert('비밀번호가 일치하지 않습니다.', '', 'error', '닫기');
                 return false;
             }
-            $('#memPw_cnf_val').removeClass('border_validate_err');
+            $('#upw_cnf_val').removeClass('border_validate_err');
 
-            if (memName_val_checker === '') {
-                $('#memName_val').addClass('border_validate_err');
+            // 이름
+            if (name_val_checker === '') {
+                $('#name_val').addClass('border_validate_err');
                 sweetalert('이름을 입력해주세요.', '', 'error', '닫기');
                 return false;
             }
-            if (memName_val_checker.search(/\s/) !== -1) {
-                $('#memName_val').addClass('border_validate_err');
+            if (name_val_checker.search(/\s/) !== -1) {
+                $('#name_val').addClass('border_validate_err');
                 sweetalert('이름에 공백을 제거해 주세요.', '', 'error', '닫기');
                 return false;
             }
-            $('#memNickName_val').removeClass('border_validate_err');
-            if (memNickName_val_checker === '') {
-                $('#memNickName_val').addClass('border_validate_err');
-                sweetalert('닉네임을 입력해주세요.', '', 'error', '닫기');
+
+            // 이메일
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            if (!emailPattern.test(email_val_checker)) {
+                $('#email_val').addClass('border_validate_err');
+                sweetalert('올바른 이메일 형식을 입력해주세요.', '', 'error', '닫기');
                 return false;
             }
-            if (memNickName_val_checker.search(/\s/) !== -1) {
-                $('#memNickName_val').addClass('border_validate_err');
-                sweetalert('닉네임에 공백을 제거해 주세요.', '', 'error', '닫기');
+            $('#email_val').removeClass('border_validate_err');
+            if (email_val_checker === '') {
+                $('#email_val').addClass('border_validate_err');
+                sweetalert('이메일을 입력해주세요.', '', 'error', '닫기');
                 return false;
             }
-            $('#memNickName_val').removeClass('border_validate_err');
-            return true;
+            if (email_val_checker.search(/\s/) !== -1) {
+                $('#email_val').addClass('border_validate_err');
+                sweetalert('이메일에 공백을 제거해 주세요.', '', 'error', '닫기');
+                return false;
+            }
+            $('#email_val').removeClass('border_validate_err');
+
+        // 핸드폰 번호
+        if (phone_val_checker === '') {
+            $('#phone_val').addClass('border_validate_err');
+            sweetalert('핸드폰 번호를 입력해주세요.', '', 'error', '닫기');
+            return false;
+        }
+        if (phone_val_checker.search(/\s/) !== -1) {
+            $('#phone_val').addClass('border_validate_err');
+            sweetalert('핸드폰 번호에 공백을 제거해 주세요.', '', 'error', '닫기');
+            return false;
         }
 
+        return true;
 
-        if (fnValidate()) {
-            axios.post('/api/members/emailCk', {
-                memId: memId_val_checker
-            })
-                .then(response => {
-                    try {
-                        const memIdCk = response.data.memId;
-
-                        if (memIdCk != null) {
-                            $('#memId_val').addClass('border_validate_err');
-                            sweetalert('이미 존재하는 이메일입니다.', '', 'error', '닫기');
-                        } else {
-                            $('#memId_val').removeClass('border_validate_err');
-                        }
-                    } catch (error) {
-                        sweetalert('작업중 오류가 발생하였습니다.', error, 'error', '닫기');
-                    }
-                })
-                .catch(response => { return false; });
-
-            axios.post('/api/members/ninameCk', {
-                memNickName: memNickName_val_checker
-            })
-                .then(response => {
-                    try {
-                        const memNickNameCk = response.data.memNickName;
-
-                        if (memNickNameCk != null) {
-                            $('#memNickName_val').addClass('border_validate_err');
-                            sweetalert('이미 존재하는 닉네임입니다.', '', 'error', '닫기');
-                        } else {
-                            $('#memNickName_val').removeClass('border_validate_err');
-                            fnSignInsert();
-                        }
-                    } catch (error) {
-                        sweetalert('작업중 오류가 발생하였습니다.', error, 'error', '닫기');
-                    }
-                })
-                .catch(response => { return false; });
         }
 
+        
+    const uuidKeyPress = () => {
+        $('#uuid_val').removeClass('border_validate_err');
+    };
+
+    const upwKeyPress = () => {
+        $('#upw_val').removeClass('border_validate_err');
+    };
+
+    const memPwCnfKeyPress = () => {
+        $('#memPw_cnf_val').removeClass('border_validate_err');
+    };
+
+    const nameKeyPress = () => {
+        $('#name_val').removeClass('border_validate_err');
+    };
+
+    const emailKeyPress = () => {
+        $('#email_val').removeClass('border_validate_err');
+    };
+
+    const phoneKeyPress = () => {
+        $('#phone_val').removeClass('border_validate_err');
+    };
+
+    const mtypeKeyPress = () => {
+        $('#mtype_val').removeClass('border_validate_err');
+    };
+
+
+        // 가입유형
+
+
+        /*         if (fnValidate()) {
+                    axios.post('/member/uuidCk', {
+                        uuid : uuid_val_checker
+                    })
+                        .then(response => {
+                            try {
+                                const uuidCk = response.data.uuid;
+        
+                                if (uuidCk != null) {
+                                    $('#uuid_val').addClass('border_validate_err');
+                                    sweetalert('이미 존재하는 아이디입니다.', '', 'error', '닫기');
+                                } else {
+                                    $('#uuid_val').removeClass('border_validate_err');
+                                }
+                            } catch (error) {
+                                sweetalert('작업중 오류가 발생하였습니다.', error, 'error', '닫기');
+                            }
+                        })
+                        .catch(response => { return false; }); 
+        
+                }*/
+                    
+   
+                    
+
+        // 최종적으로 실행됨, 서버에 데이터 전송, success를 받으면 알럿 실행됨
         const fnSignInsert = () => {
+
+            // 데이터의 직렬화, 아래 form[name='frm'] 이 name 값에 해당하는 녀석들을 json 데이터로 보낸다는 의미임 
 
             let jsonstr = $("form[name='frm']").serialize();
             jsonstr = decodeURIComponent(jsonstr);
             let Json_form = JSON.stringify(jsonstr).replace(/\"/gi, '');
             Json_form = "{\"" + Json_form.replace(/\&/g, '\",\"').replace(/=/gi, '\":"') + "\"}";
+            alert(Json_form);
             let Json_data = JSON.parse(Json_form);
 
-            axios.post('/api/members/register', Json_data)
+            axios.post('http://localhost:8080/member/register', Json_data)
                 .then(response => {
                     try {
                         if (response.data == "success") {
-                            sweetalertRegister('회원가입 되었습니다.', '', 'success', '확인');
+                            sweetalertRegister('회원가입 되었습니다.', '', 'success', '확인')
+                                .then(() => { history.push('/LoginForm'); });
                         }
                     }
                     catch (error) {
@@ -160,29 +216,21 @@ const Register = () => {
                     }
                 })
                 .catch(error => { alert('2. 작업중 오류가 발생하였습니다.'); return false; });
-        }
+        };
+
+
+        const submitClick = (e) => {
+
+            e.preventDefault(); // 페이지 새로고침 방지
+                                
+            if (fnValidate()) {
+                fnSignInsert();  // 데이터 전송 함수 호출
+            }
+    
+
     };
 
-    const memIdKeyPress = () => {
-        $('#memId_val').removeClass('border_validate_err');
-    };
-
-    const memPwKeyPress = () => {
-        $('#memPw_val').removeClass('border_validate_err');
-    };
-
-    const memPwCnfKeyPress = () => {
-        $('#memPw_cnf_val').removeClass('border_validate_err');
-    };
-
-    const memNameKeyPress = () => {
-        $('#memName_val').removeClass('border_validate_err');
-    };
-
-    const memNickNameKeyPress = () => {
-        $('#memNickName_val').removeClass('border_validate_err');
-    };
-
+    // SweetAlert 알림 함수
     const sweetalert = (title, contents, icon, confirmButtonText) => {
         Swal.fire({
             title: title,
@@ -191,7 +239,7 @@ const Register = () => {
             confirmButtonText: confirmButtonText
         });
     };
-
+    
     const sweetalertRegister = (title, contents, icon, confirmButtonText) => {
         Swal.fire({
             title: title,
@@ -201,6 +249,10 @@ const Register = () => {
         }).then(function () {
             window.location.href = '/';
         });
+    };
+
+    const handleMtypeChange = (e) => {
+        setMtype(e.target.value); // 선택된 값을 mtype 상태에 저장
     };
 
     return (
@@ -214,53 +266,71 @@ const Register = () => {
                                 <div className="re_cnt ct2">
                                     <table className="table_ty1">
                                         <tr>
-                                            <th>이메일</th>
+                                            <th>아이디</th>
                                             <td className='displayflex'>
-                                                <input id="memId_val" type="text" name="memId"
-                                                    placeholder="이메일을 입력해주세요." onKeyPress={memIdKeyPress} />
+                                                <input id="uuid_val" type="text" name="uuid"
+                                                    placeholder="아이디를 입력해주세요." onKeyPress={(e) => uuidKeyPress(e)} />
+                                                {/*  <button>중복확인</button> */}
                                             </td>
                                         </tr>
                                         <tr>
                                             <th>비밀번호</th>
                                             <td>
-                                                <input id="memPw_val" type="password" name="memPw"
-                                                    placeholder="비밀번호를 입력해주세요." onKeyPress={memPwKeyPress} />
+                                                <input id="upw_val" type="password" name="upw"
+                                                    placeholder="비밀번호를 입력해주세요." onKeyPress={upwKeyPress} />
                                             </td>
                                         </tr>
                                         <tr>
                                             <th>비밀번호 확인</th>
                                             <td>
-                                                <input id="memPw_cnf_val" type="password"
+                                                <input id="upw_cnf_val" type="password"
                                                     placeholder="비밀번호를 다시 입력해주세요." onKeyPress={memPwCnfKeyPress} />
                                             </td>
                                         </tr>
                                         <tr>
                                             <th>이름</th>
                                             <td>
-                                                <input id="memName_val" type="text" name="memName"
-                                                    placeholder="이름을 입력해주세요." onKeyPress={memNameKeyPress} />
+                                                <input id="name_val" type="text" name="name"
+                                                    placeholder="이름을 입력해주세요." onKeyPress={nameKeyPress} />
                                             </td>
                                         </tr>
                                         <tr>
-                                            <th>닉네임</th>
+                                            <th>이메일</th>
                                             <td>
-                                                <input id="memNickName_val" type="text" name="memNickName"
-                                                    placeholder="닉네임을 입력해주세요." onKeyPress={memNickNameKeyPress} />
+                                                <input id="email_val" type="text" name="email"
+                                                    placeholder="you@example.com" onKeyPress={emailKeyPress} />
                                             </td>
                                         </tr>
-
+                                        <tr>
+                                            <th>핸드폰 번호</th>
+                                            <td>
+                                                <input id="phone_val" type="text" name="phone"
+                                                    placeholder="핸드폰 번호를 입력해주세요." onKeyPress={phoneKeyPress} />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>회원유형</th>
+                                            <td>
+                                                <select value={mtype} onChange={handleMtypeChange} id="mtype_val" name="mtype" className="" >
+                                                    <option value="">회원유형을 선택하세요.</option>
+                                                    <option value='t'>전문가</option>
+                                                    <option value='m'>일반회원</option>
+                                                </select>
+                                            </td>
+                                        </tr>
                                     </table>
                                 </div>
                             </div>
                             <div className="btn_confirm">
-                                <a href="javascript:" className="bt_ty bt_ty2 submit_ty1 modifyclass"
-                                    onClick={() => submitClick()}>회원가입</a>
+                                {/* <a href="javascript:" className="bt_ty bt_ty2 submit_ty1 modifyclass"
+                            onClick={() => submitClick()}>회원가입</a> */}
+                                <button className="bt_ty bt_ty2 submit_ty1 modifyclass" onClick={submitClick}>회원가입</button>
                             </div>
                         </form>
                     </div>
-                </article>
-            </section>
-        </div>
+                </article >
+            </section >
+        </div >
     );
 }
 

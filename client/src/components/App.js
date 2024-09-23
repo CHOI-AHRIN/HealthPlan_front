@@ -19,19 +19,19 @@ import Footer from './Footer/Footer';
 import LoginForm from './LoginForm';
 
 // 회원 관리 컴포넌트 import
-import CarRegister from './Member/CarRegister';
+// import CarRegister from './Member/CarRegister';
 import Register from './Member/Register';
-import Modify from './Member/Modify';
-import MyPage from './Member/MyPage';
+// import Modify from './Member/Modify';
+ import MyPage from './Member/MyPage';
 
 // 충전소 찾기 컴포넌트 import
-import FindStation from './FindStation/App';
+// import FindStation from './FindStation/App';
 
 // 게시판 컴포넌트 import
-import NboardList from './Nboard/NboardList';
-import NboardRegister from './Nboard/NboardRegister';
-import NboardRead from './Nboard/NboardRead';
-import NboardModify from './Nboard/NboardModify';
+// import NboardList from './Nboard/NboardList';
+// import NboardRegister from './Nboard/NboardRegister';
+// import NboardRead from './Nboard/NboardRead';
+// import NboardModify from './Nboard/NboardModify';
 
 
 
@@ -40,24 +40,23 @@ const App = () => {
   useEffect(() => {
     
     if (
-      window.location.pathname.includes('/MainForm') ||
+      window.location.pathname.includes('/MainForm')  ||
       window.location.pathname.includes('/MyPage') ||
-      window.location.pathname.includes('/MyPage') ||
-      window.location.pathname.includes('/Modify/') ||
-      window.location.pathname.includes('/CarRegister') ||
-      window.location.pathname.includes('/findStation') ||
-      window.location.pathname.includes('/NboardList') ||
-      window.location.pathname.includes('/NboardRegister') ||
-      window.location.pathname.includes('/NboardRead') ||
-      window.location.pathname.includes('/NboardModify')
+      window.location.pathname.includes('/MyPage')
+      // window.location.pathname.includes('/Modify/') 
+      // window.location.pathname.includes('/CarRegister') ||
+      // window.location.pathname.includes('/findStation') ||
+      // window.location.pathname.includes('/NboardList') ||
+      // window.location.pathname.includes('/NboardRegister') ||
+      // window.location.pathname.includes('/NboardRead') ||
+      // window.location.pathname.includes('/NboardModify')
     ) {
       axios
-        .post('/api/members/loginCookie', {
-          memId: cookie.load('memId'),
-          memPw: cookie.load('memPw')
+        .post('http://localhost:8080/member/loginCookie', {
+          token: cookie.load('token') 
         })
         .then(response => {
-          if (response.data.memId === undefined) {
+          if (response.data.uuid === undefined) {
             noPermission();
           } 
         })
@@ -75,9 +74,9 @@ const App = () => {
   };
 
   const removeCookie = () => {
-    cookie.remove('memId', { path: '/' });
-    cookie.remove('memNickName', { path: '/' });
-    cookie.remove('memPw', { path: '/' });
+    cookie.remove('uuid', { path: '/' });
+    cookie.remove('name', { path: '/' });
+    cookie.remove('upw', { path: '/' });
   };
 
   return (
@@ -88,13 +87,12 @@ const App = () => {
       <Route path='/MainForm' component={MainForm} />
       <Route path='/Register' component={Register} />
       <Route path='/MyPage' component={MyPage} />
-      <Route path='/Modify/' component={Modify} />
-      <Route path='/CarRegister' component={CarRegister} />
+      {/* <Route path='/Modify/' component={Modify} /> */}
+      {/* <Route path='/CarRegister' component={CarRegister} />
       <Route path='/FindStation' component={FindStation} />
-      <Route path='/NboardList' component={NboardList} />
       <Route path='/NboardRegister' component={NboardRegister} />
       <Route path='/NboardRead/:bno' component={NboardRead} />
-      <Route path='/NboardModify/:bno' component={NboardModify} />
+      <Route path='/NboardModify/:bno' component={NboardModify} /> */}
       <Footer />
     </div>
   );

@@ -1,15 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'; // useEffect> state가 변경되면 도는 componentDidMount
 import { Link, useHistory } from 'react-router-dom';
 import axios from "axios";
 import $ from 'jquery';
 import Swal from 'sweetalert2'
 import cookie from 'react-cookies';
 
-const NboardRegister = () => {
+const NboardRegister = () => { // 함수적 컴포넌트
 
     
     let history = useHistory();
 
+
+    // useState > 이름하고 이것저것 세팅해주는 함수!
     const [selectedFile, setSelectedFile] = useState(null);
     const [memNickName] = useState(cookie.load('memNickName'));
     const [imageDTOList, setImageDTOList] = useState([]);
@@ -85,14 +87,14 @@ const NboardRegister = () => {
 
     useEffect(() => {
         if (selectedFile) {
-                handlePostImage();
+                handlePostImage(); //
             }
     }, [selectedFile]);
     
 
     const handlePostImage = async () => {
         const formData = new FormData();
-        formData.append('uploadFiles', selectedFile);
+        formData.append('uploadFiles', selectedFile); // key와 value 이용, 업로드 컨트롤러 확인!!
 
         try {
             const res = await axios.post("/uploadAjax", formData);

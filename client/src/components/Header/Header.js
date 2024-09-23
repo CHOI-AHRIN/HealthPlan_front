@@ -5,10 +5,12 @@ import $ from 'jquery';
 
 const Header = () => {
 
-    const [memId, setMemId] = useState(cookie.load('memId'))
-    const [memNickName, setMemNickName] = useState(cookie.load('memNickName'));
+    const [uuid, setUuid] = useState(cookie.load('uuid'))
+    const [name, setName] = useState(cookie.load('name'));
     const [activeMenu, setActiveMenu] = useState('/');
     const [menuVisible, setMenuVisible] = useState(false);
+
+    
 
     useEffect(() => {
 
@@ -20,7 +22,7 @@ const Header = () => {
             $('header').hide();
         }
 
-        if (memId !== undefined) {
+        if (uuid !== undefined) {
             $('.menulist').show();
             $('.hd_top').show();
         } else {
@@ -30,9 +32,9 @@ const Header = () => {
     }, []);
 
     const logout = () => {
-        cookie.remove('memId', { path: '/' });
-        cookie.remove('memNickName', { path: '/' });
-        cookie.remove('memPw', { path: '/' });
+        cookie.remove('uuid', { path: '/' });
+        cookie.remove('name', { path: '/' });
+        cookie.remove('upw', { path: '/' });
         window.location.href = '/login';
     };
 
@@ -52,7 +54,7 @@ const Header = () => {
                     <span>HealthPlan</span>
                     <div className="hd_right">
                         <p>
-                            <span>'{memNickName}'</span>님 안녕하세요.
+                            <span>'{name}'</span>님 안녕하세요.
                         </p>
                         <button type="button" onClick={logout}>
                             로그아웃
@@ -79,34 +81,29 @@ const Header = () => {
                                 </Link>
                             </li>
                             <li className={`menulist ${window.location.pathname === '/findStation' ? 'active' : ''}`}>
-                                <Link to={'/findStation'} onClick={() => handleMenuClick('/findStation')}>
-                                    충전소 검색
-                                </Link>
+                                {/* <Link to={'/findStation'} onClick={() => handleMenuClick('/findStation')}> */}
+                                    커뮤니티
+                                {/* </Link> */}
                             </li>
                             <li className={`menulist ${window.location.pathname === '/NboardList' ? 'active' : ''}`}>
-                                <Link to={'/NboardList'} onClick={() => handleMenuClick('/NboardList')}>
-                                    공지사항
-                                </Link>
+                                {/* <Link to={'/NboardList'} onClick={() => handleMenuClick('/NboardList')}> */}
+                                    챌린지
+                                {/* </Link> */}
                             </li>
                             <li className="menulist">
                                 <Link to={'/FboardList'} onClick={() => handleMenuClick('')}>
-                                    커뮤니티
+                                    구독
                                 </Link>
                             </li>
                             <li className="menulist">
-                                <Link to={'/VboardList'} onClick={() => handleMenuClick('')}>
-                                    리뷰쓰기
-                                </Link>
-                            </li>
-                            <li className="menulist">
-                                <Link to={'/QboardList'} onClick={() => handleMenuClick('')}>
-                                    문의하기
-                                </Link>
+                                {/* <Link to={'/VboardList'} onClick={() => handleMenuClick('')}> */}
+                                    FAQ
+                                {/* </Link> */}
                             </li>
                             <li className={`menulist ${window.location.pathname === '/MyPage' ? 'active' : ''}`}>
-                                <Link to={'/MyPage'} onClick={() => handleMenuClick('/MyPage')}>
+                                {/* <Link to={'/MyPage'} onClick={() => handleMenuClick('/MyPage')}> */}
                                     마이페이지
-                                </Link>
+                                {/* </Link> */}
                             </li>
                         </ul>
                     </nav>

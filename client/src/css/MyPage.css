@@ -2,9 +2,11 @@
 
 /* 버튼 */
 .bt_ty{display: inline-block; overflow: hidden;position: relative; width: 157px; height: 62px; line-height: 62px; color: #fff; font-size: 16px; font-weight: 400; text-align: center; margin-right: 8px; transition:.3s;}
-.bt_ty2{background: #77a581; border-radius: 5px; text-align: center;}
-.bt_ty2:hover {background-color: #517749;}
+.bt_ty2{background: #004AAD; border-radius: 5px; text-align: center;}
+.bt_ty2:hover {background-color: #004AAD;}
 .re_1 .btn_confirm{text-align: center; margin-top: 50px;}
+
+.bt_ty3{display: inline-block; overflow: hidden;position: relative; width: 120px; height: 30px; line-height: 0px; color: #fff; font-size: 10px; font-weight: 400; text-align: center; margin-right: 8px; transition:.3s; background-color: #004AAD;}
 
 
 /*회원 약관동의*/
@@ -35,4 +37,4 @@
 .table_ty1 tr th a{font-size: 17px; color: #303030;	font-weight: 500;}
 .table_ty1 tr th a:after{content:''; display: inline-block; width: 10px; height: 6px;  background: url(../img/sub/ta_b.png) center no-repeat;vertical-align: top; margin-top: 27px; margin-left: 8px;}
 .table_ty1 tr th.on a:after{content:''; display: inline-block; width: 10px; height: 6px;  background: url(../img/sub/ta_t.png) center no-repeat;vertical-align: top; margin-top: 27px; margin-left: 8px;}
-.table_ty1 tr th:after{position: absolute; content:''; width: 100%; height: 2px; background: #77a581; left: 0; top: 0;}
+.table_ty1 tr th:after{position: absolute; content:''; width: 100%; height: 2px; background: #004AAD; left: 0; top: 0;}

@@ -2,7 +2,7 @@
 
 /* 배경색 */
 .main { 
-  background-color: #e0faeb;
+  background-color: #f3fcff; /* 로그인폼 전체 배경색 */
 }
 
 /* 배경 구역 */
@@ -15,7 +15,7 @@
 }
 
 /* login 글씨 */
-.m_login h3{font-size: 55px; line-height: 67px; color: rgb(17, 88, 15); font-weight: 400; letter-spacing: 0; vertical-align: middle; margin-bottom: 39px;}
+.m_login h3{font-size: 55px; line-height: 67px; color: #004AAD; font-weight: 400; letter-spacing: 0; vertical-align: middle; margin-bottom: 39px;}
 
 
 /* 어디야로고이미지 */
@@ -25,7 +25,7 @@
 
 /* 로그인박스 구역 */
 .log_box {
-  background-color: rgb(119, 165, 129);
+  background-color: #2b76d8;
   padding: 20px;
   border-radius: 8px;
 }
@@ -39,8 +39,8 @@
 .s_bt {
   font-size: 17.5px; /* 원하는 글자 크기로 조절 */
   font-weight: bold; /* 글자를 진하게 만들기 */
-  background-color: #d1e6cd;
-  color: rgb(17, 88, 15);
+  background-color: #edf0ff; /* 로그인, 회원가입 버튼색 */
+  color: #004AAD; /* 글씨색 */
   padding: 15px 20px;
   border: none;
   border-radius: 5px;
