@@ -44,19 +44,19 @@ const MainForm = () => {
     return (
         <div className="maincontainer">
             {/* 첫 번째 이미지와 텍스트 */}
-            <ImageTextContainer imagePath={require("../../img/gif/01.gif")} altText="Background" labelText="I'm going in a car." />
+            <ImageTextContainer imagePath={require("../../img/gif/001.gif")} altText="Background" labelText="Eat Well" />
 
             {/* 두 번째 이미지와 텍스트 */}
-            <ImageTextContainer imagePath={require("../../img/gif/02.gif")} altText="Background" labelText="I arrived at the charging station." />
+            <ImageTextContainer imagePath={require("../../img/gif/002.gif")} altText="Background" labelText="Exercise Regularly" />
 
             {/* 세 번째 이미지와 텍스트 */}
-            <ImageTextContainer imagePath={require("../../img/gif/05.gif")} altText="Background" labelText="I charge my electric car." />
+            <ImageTextContainer imagePath={require("../../img/gif/003.gif")} altText="Background" labelText="Workout Together" />
 
             {/* 하단 이미지1 */}
             <div className={`bottom-image-container ${showBottomImage ? 'visible' : ''}`}>
                 <img src={require(`../../img/고흐/고흐0.png`)} alt="" className="bottom-image" />
                 <div className="bottom-text">
-                    "온실가스 감축"
+                    "다양한 운동 프로그램 제공 "
                     <br />
                     <br />
                     가장 큰 환경적 이점 중 하나는
@@ -74,7 +74,7 @@ const MainForm = () => {
             <div className={`bottom-image-container ${showBottomImage ? 'visible' : ''}`}>
                 <img src={require(`../../img/고흐/고흐7.png`)} alt="Bottom Image2" className="bottom-image2" />
                 <div className="bottom-text2">
-                    "공기질 개선"
+                    "개인 맞춤형 피드백 시스템 제공"
                     <br />
                     <br />
                     전기 자동차는 배기가스를
@@ -92,7 +92,7 @@ const MainForm = () => {
             <div className={`bottom-image-container ${showBottomImage ? 'visible' : ''}`}>
                 <img src={require(`../../img/고흐/고흐3.png`)} alt="" className="bottom-image" />
                 <div className="bottom-text">
-                    "자원 절약"
+                    "커뮤니티 기능 강화"
                     <br />
                     <br />
                     재생 가능한 에너지원과
@@ -114,7 +114,7 @@ const MainForm = () => {
             <div className={`bottom-image-container ${showBottomImage ? 'visible' : ''}`}>
                 <img src={require(`../../img/고흐/고흐1.png`)} alt="Bottom Image2" className="bottom-image2" />
                 <div className="bottom-text2">
-                    "소음공해 감소"
+                    "유연한 접근성"
                     <br />
                     <br />
                     전기모터를 사용하여 운행 시

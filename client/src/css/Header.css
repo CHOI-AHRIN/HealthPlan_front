@@ -74,11 +74,14 @@ img {
 
 
 /* 제목 css */
+
 .health-plan-title {
   /* span에 대한 스타일 */
-  font-size: 20px;
+  font-size: 30px;
   font-weight: bold;
-  font-weight: 400;
+  font-weight: 400 !important;
+  display: inline-block !important ; 
+  margin-left: 10px;
 }
 
 .health-plan-link {
@@ -114,7 +117,7 @@ img {
   font-size: 20px;
   line-height: 50px;
   color: rgb(255, 255, 255);
-  background: #a4d1ae;
+  background: #0062ff;
   padding: 5px 18px;
   letter-spacing: -0.03em;
   transition: .3s;
@@ -127,8 +130,8 @@ img {
   margin-right: 1px;
   font-size: 20px;
   line-height: 50px;
-  color: rgb(255, 255, 255);
-  background: #77a581;
+  color: rgb(2, 0, 109);
+  background:  rgb(151, 188, 249);
   padding: 5px 18px;
   letter-spacing: -0.03em;
   transition: .3s;

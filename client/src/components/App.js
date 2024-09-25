@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import cookie from 'react-cookies';
 import axios from "axios";
 
@@ -25,6 +25,11 @@ import MyPage from './Member/MyPage';
 
 
 // 게시판 컴포넌트 import
+import SubscribeLList   from './subscribe/SubscribeLList';
+import SubscribeLInsert from './subscribe/SubscribeLInsert';
+import SubscribeLRead   from './subscribe/SubscribeLRead';
+import SubscribeLUpdate from './subscribe/SubscribeLUpdate';
+
 
 
 const App = () => {
@@ -39,18 +44,18 @@ const App = () => {
         .then(response => {
           const uuid = response.data.uuid;
           if (uuid) {
-            // uuid로 사용자 이름 가져오기
-            axios.post('http://localhost:8080/member/readName', { uuid })
-              .then(response => {
-                setName(response.data.name); // 서버로부터 받은 이름 설정
-              })
-              .catch(error => {
-                console.error('Error fetching user data:', error);
-                noPermission();
-              });
-          } else {
-            noPermission();
-          }
+            axios.post('http://localhost:8080/member/read', { uuid })
+                .then(response => {
+                    const data = response.data;
+                    setToken(token);  // uuid 상태 값 설정
+                    setName(data.name);  // mno 값 설정
+                })
+                .catch(error => {
+                    console.error('회원 정보를 가져오는 중 오류 발생:', error);
+                });
+        } else {
+            console.error('아이디를 가져오는 데 실패했습니다.');
+        }
         })
         .catch(error => {
           noPermission();
@@ -102,17 +107,18 @@ const App = () => {
   return (
     <div className="App">
       <Header />
-      <Route exact path='/' component={LoginForm} />
-      <Route path='/login' component={LoginForm} />
-      <Route path='/MainForm' component={MainForm} />
-      <Route path='/Register' component={Register} />
-      <Route path='/MyPage' component={MyPage} />
-      <Route path='/Modify/' component={Modify} />
-      {/* <Route path='/CarRegister' component={CarRegister} />
-      <Route path='/FindStation' component={FindStation} />
-      <Route path='/NboardRegister' component={NboardRegister} />
-      <Route path='/NboardRead/:bno' component={NboardRead} />
-      <Route path='/NboardModify/:bno' component={NboardModify} /> */}
+      <Routes>
+        <Route path='/' element={<LoginForm />} />
+        <Route path='/login' element={<LoginForm />} />
+        <Route path='/MainForm' element={<MainForm />} />
+        <Route path='/Register' element={<Register />} />
+        <Route path='/MyPage' element={<MyPage />} />
+        <Route path='/Modify' element={<Modify />} />
+        <Route path='/SubscribeLList' element={<SubscribeLList />} />
+        <Route path='/SubscribeLInsert' element={<SubscribeLInsert />} />
+        <Route path='/SubscribeLRead/:sno' element={<SubscribeLRead />} />
+        <Route path='/SubscribeLUpdate/:sno' element={<SubscribeLUpdate />} />
+      </Routes>
       <Footer />
     </div>
   );

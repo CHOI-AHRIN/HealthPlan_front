@@ -103,7 +103,7 @@ const Header = () => {
                                 {/* </Link> */}
                             </li>
                             <li className="menulist">
-                                <Link to={'/FboardList'} onClick={() => handleMenuClick('')}>
+                                <Link to={'/SubscribeLList'} onClick={() => handleMenuClick('')}>
                                     구독
                                 </Link>
                             </li>

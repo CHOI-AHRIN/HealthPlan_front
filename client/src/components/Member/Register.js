@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 import Swal from 'sweetalert2';
-import $ from 'jquery';
 
 const Register = () => {
 
@@ -13,7 +12,7 @@ const Register = () => {
     const [phone, setPhone] = useState('');
     const [email, setEmail] = useState('');
     const [mtype, setMtype] = useState('');
-    const history = useHistory();
+    const navigate = useNavigate(); // useNavigate로 변경
 
 
     // 입력값 초기화 함수
@@ -101,7 +100,7 @@ const Register = () => {
             .then(response => {
                 if (response && response.data === "success") {
                     sweetalert('회원가입 되었습니다.', '', 'success', '확인')
-                        .then(() => { history.push('/login'); });
+                    .then(() => { navigate('/login'); }); 
                 } else {
                     sweetalert('회원가입 중 오류가 발생했습니다.', '', 'error', '닫기');
                 }

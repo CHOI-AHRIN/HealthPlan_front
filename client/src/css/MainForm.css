@@ -55,7 +55,7 @@
   top: 45%;
   width: 50%; /* 텍스트의 너비를 조절 */
   transform: translateY(-50%);
-  color: rgb(57, 87, 46);
+  color: #004AAD;;
   font-size: 1em;
   font-weight: bold;
   text-shadow: 2px 2px 4px rgba(0, 0.5, 0.5, 0.5);
