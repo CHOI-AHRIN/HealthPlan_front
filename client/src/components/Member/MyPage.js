@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
-
 import cookie from 'react-cookies';
+import axios from 'axios';
 
 const MyPage = () => {
 
@@ -18,123 +17,77 @@ const MyPage = () => {
     // const [appendCarList, setAppendCarList] = useState([]);
 
 
-    useEffect(() => {
-        // 쿠키에서 토큰을 가져온 후, JWT 디코딩을 통해 uuid 추출
-        const token = cookie.load('token');  // 쿠키에서 JWT 토큰 불러오기
-        if (token) {
-            try {
-                const decodedToken = jwt_decode(token);  // JWT 토큰 디코딩
-                setUuid(decodedToken.sub);  // 디코딩된 토큰에서 uuid 추출
-            } catch (error) {
-                console.error('토큰 디코딩 실패:', error);
-            }
-        }
 
-        if (uuid) {
-            callMemberInfoApi();
-        }
-    }, [uuid]);  // uuid가 설정된 후 API 호출
+    // 날짜 형식을 변환하는 함수
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        // const seconds = String(date.getSeconds()).padStart(2, '0');
+        return `${year}-${month}-${day}   ${hours}:${minutes} `; // ${hours}:${minutes}:${seconds}
+    };
+
+
 
     const callMemberInfoApi = () => {
-        axios.post('http://localhost:8080/member/read', {
-            uuid: uuid  // 추출한 uuid를 API로 전송
-        })
-        .then(response => {
-            try {
-                setMno(response.data.mno);
-                setName(response.data.name);
-                setEmail(response.data.email);
-                setPhone(response.data.phone);
-                setMtype(response.data.mtype);
-                setRegdate(response.data.regdate);
-                setSstype(response.data.sstype);
-                setPcount(response.data.pcount);
-            } catch (error) {
-                alert('회원데이터 받기 오류');
-            }
-        })
-        .catch(error => { 
-            alert('회원데이터 받기 오류2'); 
-        });
-    }
 
-/*     const callMemberInfoApi = () => {
+        // 1. 쿠키에서 토큰 가져오기 
+        const token = cookie.load('token');
+        
+        // 2. token을 서버로 보내고 uuid를 받아오기
+        axios
+            .post('http://localhost:8080/member/loginCookie', {
 
-        axios.post('http://localhost:8080/member/read', {
-            uuid: uuid,
-            name: name,
-            email : email,
-            mno: mno,
-            phone : phone,
-            mtype:mtype,
-            regdate :regdate,
-            sstype:sstype,
-            pcount:pcount
-        })
-            .then(response => {
-                try {
-                    setName(response.data.uuid);
-                    setName(response.data.name);
-                    setName(response.data.email);
-                }
-                catch (error) {
-                    alert('회원데이터 받기 오류');
-                }
+                token: token
+
+            }).then(response => {
+                
+                const uuid = response.data.uuid;
+
+                // 3. 받아온 데이터를 통해 정보 조회
+                axios.post('http://localhost:8080/member/read', {
+                    uuid: uuid // 받은 uuid를 다시 서버로 전송
+
+                }) .then(response => {
+                    try {
+                        const data = response.data;
+                        setUuid(data.uuid);      // 회원 아이디
+                        setName(data.name);      // 회원 이름
+                        setEmail(data.email);    // 회원 이메일
+                        setMtype(data.mtype);    // 회원 타입
+                        setPhone(data.phone);    // 연락처
+                        setRegdate(formatDate(data.regdate)); // 가입 일자
+                        setMno(data.mno);        // 회원 번호
+                        setSstype(data.sstype);  // 구독 타입
+                        setPcount(data.pcount);  // 잔여 포인트
+                    }
+                    catch (error) {
+                        alert('회원데이터를 읽어오는 중에 오류가 발생했습니다.');
+                    }
+            }) .catch(error => { alert('토큰을 확인하는 중에 오류가 발생했습니다.'); return false; });
             })
-            .catch(error => { alert('회원데이터 받기 오류2'); return false; });
+    };
 
 
-/*         axios.post('/api/cars/read', {
-            memId: memId,
-        })
-            .then(response => {
-                try {
-                    setAppendCarList(carListAppend(response.data));
-                }
-                catch (error) {
-                    alert('차량데이터 받기 오류');
-                }
-            })
-            .catch(error => { return false; });  }*/
+
+    useEffect(() => {
+        callMemberInfoApi(); // 컴포넌트 마운트 시 API 호출
+    }, []); // 빈 배열을 전달하여 최초 한 번만 실행되도록 설정
 
 
- 
-
-/*     const carListAppend = (carList) => {
-        const result = [];
-
-        for (let i = 0; i < carList.length; i++) {
-            let data = carList[i];
-
-            result.push(
-                <tr class="hidden_type">
-                    <th>차량{'['}{i + 1}{']'}</th>
-                    <td className='name-container'>
-                        <input name="carInfo" id="carInfo_val" readOnly="readonly"
-                            value={`${data.carBrand} / ${data.carModel} / ${data.carNum} / 충전타입 : ${data.charType}`} />
-                        <button type="button" onClick={() => deleteCar(data.carNum)}>X</button>
-                    </td>
-                </tr>
-            );
-        };
-        return result;
-    } */
-
-/*     const deleteCar = (carNum) => {
-        axios.post('/api/cars/remove', {
-            memId: memId,
-            carNum: carNum
-        })
-            .then(response => {
-                if (response.data == 'succ') {
-
-                    window.location.replace("/MyPage")
-                } else {
-                    alert('오류가 발생했습니다.')
-                    return false;
-                }
-            });
-    }; */
+    // mtype을 변환하는 함수
+    const displayMtype = () => {
+        if (mtype === 't') {
+            return '전문가';
+        } else if (mtype === 'm') {
+            return '일반회원';
+        } else {
+            return '알 수 없는 타입'; // 다른 값이 있을 때 대비
+        }
+    };
 
     return (
         <div>
@@ -146,7 +99,7 @@ const MyPage = () => {
                             <div className="re1_wrap">
                                 <div className="re_cnt ct2">
                                     <table className="table_ty1">
-                                    <tr>
+                                        <tr>
                                             <th>회원번호</th>
                                             <td>
                                                 <input name="mno" id="mno" readOnly="readonly" value={mno} />
@@ -171,7 +124,7 @@ const MyPage = () => {
                                                 />
                                             </td>
                                         </tr>
-                                        <tr>
+                                        <tr className="re_email">
                                             <th>이메일</th>
                                             <td>
                                                 <input id="email" type="text" name="email" readOnly="readonly" value={email}
@@ -179,29 +132,29 @@ const MyPage = () => {
                                             </td>
                                         </tr>
                                         <tr>
-                                        <th>회원타입</th>
+                                            <th>회원타입</th>
                                             <td>
-                                                <input id="mtype" type="text" name="mtype" readOnly="readonly" value={mtype}
+                                                <input id="mtype" type="text" name="mtype" readOnly="readonly" value={displayMtype()}
                                                 />
                                             </td>
                                         </tr>
                                         <tr>
-                                        <th>가입일자</th>
+                                            <th>가입일자</th>
                                             <td>
                                                 <input id="regdate" type="text" name="regdate" readOnly="readonly" value={regdate}
                                                 />
                                             </td>
                                         </tr>
                                         <tr>
-                                        <th>구독타입</th>
+                                            <th>구독타입</th>
                                             <td>
-                                                <input id="sstype" type="text" name="sstype"  readOnly="readonly" value={sstype}
+                                                <input id="sstype" type="text" name="sstype" readOnly="readonly" value={sstype}
                                                 />
                                             </td>
                                             <button className="bt_ty3 bt_ty2 submit_ty1">구독타입 변경하기</button>
                                         </tr>
                                         <tr>
-                                        <th>잔여 포인트</th>
+                                            <th>잔여 포인트</th>
                                             <td>
                                                 <input id="pcount" type="text" name="pcount" readOnly="readonly" value={pcount}
                                                 />

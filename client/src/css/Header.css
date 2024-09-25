@@ -73,6 +73,24 @@ img {
 }
 
 
+/* 제목 css */
+.health-plan-title {
+  /* span에 대한 스타일 */
+  font-size: 20px;
+  font-weight: bold;
+  font-weight: 400;
+}
+
+.health-plan-link {
+  color: inherit;  /* 부모 요소의 텍스트 색상 상속 */
+  text-decoration: none; /* 링크의 밑줄 제거 */
+}
+
+.health-plan-link:hover {
+  color: rgb(151, 188, 249); /* 링크에 마우스 올렸을 때 색상 변경 */
+  display: inline-block !important ; 
+}
+
 
 /* 햄버거 */
 

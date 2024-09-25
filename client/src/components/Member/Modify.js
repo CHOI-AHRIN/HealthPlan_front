@@ -6,53 +6,124 @@ import cookie from 'react-cookies';
 
 const Modify = () => {
 
-    const [memId, setMemId] = useState(cookie.load('memId'));
-    const [memName, setMemName] = useState(cookie.load('memName'));
-    const [memNickName, setMemNickName] = useState(cookie.load('memNickName'));
+    const [uuid, setUuid] = useState(cookie.load('uuid'));
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [mno, setMno] = useState('');
+    const [phone, setPhone] = useState('');
+
+    const [isEditingEmail, setIsEditingEmail] = useState(false);
+    const [isEditingPhone, setIsEditingPhone] = useState(false);
 
     useEffect(() => {
         callModifyInfoApi();
     }, []);
 
+
     const callModifyInfoApi = () => {
-        axios.post('/api/members/read', {
-            memId: memId,
-        })
+
+        // 1. 쿠키에서 토큰 가져오기 
+        const token = cookie.load('token');
+
+        // 2. token을 서버로 보내고 uuid를 받아오기
+        axios
+            .post('http://localhost:8080/member/loginCookie', {
+
+                token: token
+            }).then(response => { // then 함수 안에서 다시 호출
+                const uuid = response.data.uuid;
+
+                // 3. 받아온 데이터를 통해 정보 조회
+                axios.post('http://localhost:8080/member/read', {
+                    uuid: uuid // 받은 uuid를 다시 서버로 전송
+
+                }).then(response => {
+                    try {
+                        const data = response.data;
+                        setUuid(data.uuid);      // 회원 아이디
+                        setName(data.name);      // 회원 이름
+                        setEmail(data.email);    // 회원 이메일
+                        setPhone(data.phone);    // 연락처
+                        setMno(data.mno);        // 회원 번호
+                    }
+                    catch (error) {
+                        alert('회원데이터를 읽어오는 중에 오류가 발생했습니다.');
+                    }
+                }).catch(error => { alert('토큰을 확인하는 중에 오류가 발생했습니다.'); return false; });
+            })
+    };
+
+    const fnSignInsert = (type, e) => {
+        let jsonstr = $("form[name='frm']").serialize();
+        jsonstr = decodeURIComponent(jsonstr);
+        let Json_form = JSON.stringify(jsonstr).replace(/\"/gi, '');
+        Json_form = "{\"" + Json_form.replace(/\&/g, '\",\"').replace(/=/gi, '\":"') + "\"}";
+        let Json_data = JSON.parse(Json_form);
+
+        axios.post('http://localhost:8080/member/modify', Json_data)
             .then(response => {
                 try {
-                    setMemName(response.data.memName);
-                    setMemNickName(response.data.memNickName);
-                    $('#is_memNickName').val(response.data.memNickName);
-                }
-                catch (error) {
-                    alert('1. 작업중 오류가 발생하였습니다.')
+                    if (response.data === "SUCCESS") {
+                        if (type === 'modify') {
+                            sweetalertModify('수정되었습니다. \n 다시 로그인해주세요.', '', 'success', '확인');
+                        }
+                    }
+                } catch (error) {
+                    alert('1. 작업중 오류가 발생하였습니다.');
                 }
             })
-            .catch(error => { alert('2. 작업중 오류가 발생하였습니다.'); return false; });
-    }
+            .catch(error => { 
+                alert('2. 작업중 오류가 발생하였습니다 (서버).'); 
+                return false; 
+            });
+    };
 
-    const submitClick = (type, e) => {
-        const memPw_val_checker = $('#memPw_val').val();
-        const memPw_cnf_val_checker = $('#memPw_cnf_val').val();
-        const memNickName_val_checker = $('#memNickName_val').val();
+        const submitClick = (type, e) => {
+        const memPw_val_checker = $('#upw').val();
+        const memPw_cnf_val_checker = $('#upw_cnf_val').val();
+        const email_val_checker = $('#email_val').val();
+        const phone_val_checker = $('#phone_val').val();
 
         const fnValidate = (e) => {
             const pattern1 = /[0-9]/;
             const pattern2 = /[a-zA-Z]/;
             const pattern3 = /[~!@#$%^&*()_+|<>?:{}]/;
 
-            if (memNickName_val_checker === '') {
-                $('#memNickName_val').addClass('border_validate_err');
-                sweetalert('닉네임을 입력해주세요.', '', 'error', '닫기');
+            // 연락처
+            if (phone_val_checker === '') {
+                $('#phone_val').addClass('border_validate_err');
+                sweetalert('핸드폰 번호를 입력해주세요.', '', 'error', '닫기');
                 return false;
             }
-            if (memNickName_val_checker.search(/\s/) !== -1) {
-                $('#memNickName_val').addClass('border_validate_err');
-                sweetalert('닉네임에 공백을 제거해 주세요.', '', 'error', '닫기');
+            if (phone_val_checker.search(/\s/) !== -1) {
+                $('#phone_val').addClass('border_validate_err');
+                sweetalert('핸드폰 번호에 공백을 제거해 주세요.', '', 'error', '닫기');
                 return false;
             }
-            $('#memNickName_val').removeClass('border_validate_err');
 
+            // 이메일
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            if (!emailPattern.test(email_val_checker)) {
+                $('#email_val').addClass('border_validate_err');
+                sweetalert('올바른 이메일 형식을 입력해주세요.', '', 'error', '닫기');
+                return false;
+            }
+            $('#email_val').removeClass('border_validate_err');
+            if (email_val_checker === '') {
+                $('#email_val').addClass('border_validate_err');
+                sweetalert('이메일을 입력해주세요.', '', 'error', '닫기');
+                return false;
+            }
+            if (email_val_checker.search(/\s/) !== -1) {
+                $('#email_val').addClass('border_validate_err');
+                sweetalert('이메일에 공백을 제거해 주세요.', '', 'error', '닫기');
+                return false;
+            }
+            $('#email_val').removeClass('border_validate_err');
+
+
+            // 비밀번호
             if (memPw_val_checker === '') {
                 $('#memPw_val').addClass('border_validate_err');
                 sweetalert('비밀번호를 입력해주세요.', '', 'error', '닫기');
@@ -90,65 +161,27 @@ const Modify = () => {
         }
 
         if (fnValidate()) {
-            setMemNickName(memNickName_val_checker)
-            axios.post('/api/members/ninameCk', {
-                memNickName: memNickName
-            })
-                .then(response => {
-                    try {
-                        const memNickNameCk = response.data.memNickName;
-
-                        if (memNickNameCk != null) {
-                            $('#memNickName_val').addClass('border_validate_err');
-                            sweetalert('이미 존재하는 닉네임입니다.', '', 'error', '닫기');
-                        } else {
-                            $('#memNickName_val').removeClass('border_validate_err');
-                            fnSignInsert('modify', e);
-                        }
-                    } catch (error) {
-                        sweetalert('작업중 오류가 발생하였습니다.', error, 'error', '닫기');
-                    }
-                })
-                .catch(response => { return false; });
+            fnSignInsert('modify', e);
         }
+    }; 
 
-        const fnSignInsert = (type, e) => {
-            let jsonstr = $("form[name='frm']").serialize();
-            jsonstr = decodeURIComponent(jsonstr);
-            let Json_form = JSON.stringify(jsonstr).replace(/\"/gi, '');
-            Json_form = "{\"" + Json_form.replace(/\&/g, '\",\"').replace(/=/gi, '\":"') + "\"}";
-            let Json_data = JSON.parse(Json_form);
-
-
-            axios.post('/api/members/modify', Json_data)
-                .then(response => {
-                    try {
-                        if (response.data == "SUCCESS") {
-                            if (type == 'modify') {
-                                sweetalertModify('수정되었습니다. \n 다시 로그인해주세요.', '', 'success', '확인');
-                            }
-                        }
-                    }
-                    catch (error) {
-                        alert('1. 작업중 오류가 발생하였습니다.');
-                    }
-                })
-                .catch(error => { alert('2. 작업중 오류가 발생하였습니다.'); return false; });
-
-        }
-    };
 
     const memPwKeyPress = (e) => {
-        $('#memPw_val').removeClass('border_validate_err');
+        $('#upw').removeClass('border_validate_err');
     };
 
     const memPwCnfKeyPress = (e) => {
-        $('#memPw_cnf_val').removeClass('border_validate_err');
+        $('#upw_cnf_val').removeClass('border_validate_err');
     };
 
-    const memNickNameKeyPress = (e) => {
-        $('#memNickName_val').removeClass('border_validate_err');
+    const emailKeyPress = () => {
+        $('#email_val').removeClass('border_validate_err');
     };
+
+    const phoneKeyPress = () => {
+        $('#phone_val').removeClass('border_validate_err');
+    };
+
 
     const sweetalert = (title, contents, icon, confirmButtonText) => {
         Swal.fire({
@@ -166,17 +199,17 @@ const Modify = () => {
             icon: icon,
             confirmButtonText: confirmButtonText
         }).then(function () {
-            cookie.remove('memId', { path: '/' });
-            cookie.remove('memNickName', { path: '/' });
-            cookie.remove('memPw', { path: '/' });
+            cookie.remove('uuid', { path: '/' });
+            cookie.remove('name', { path: '/' });
+            cookie.remove('upw', { path: '/' });
             window.location.href = '/';
         });
     };
 
     const deleteMember = () => {
         sweetalertDelete('정말 탈퇴하시겠습니까?', function () {
-            axios.post('/api/members/remove', {
-                memId: memId
+            axios.post('http://localhost:8080/member/remove', {
+                uuid: uuid
             })
                 .then(response => {
                 }).catch(error => { alert('작업중 오류가 발생하였습니다.'); return false; });
@@ -199,16 +232,30 @@ const Modify = () => {
                     '',
                     'success'
                 );
-                cookie.remove('memId', { path: '/' });
-                cookie.remove('memNickName', { path: '/' });
-                cookie.remove('memPw', { path: '/' });
-                window.location.href = '/MainForm';
+                cookie.remove('uuid', { path: '/' });
+                cookie.remove('name', { path: '/' });
+                cookie.remove('upw', { path: '/' });
+                window.location.href = '/login';
             } else {
                 return false;
             }
             callbackFunc();
         });
     };
+
+
+
+    const toggleEditEmail = () => {
+        setIsEditingEmail(!isEditingEmail);
+    };
+
+    const toggleEditPhone = () => {
+        setIsEditingPhone(!isEditingPhone);
+    };
+
+
+
+
     return (
         <div>
             <section className="sub_wrap" >
@@ -219,48 +266,70 @@ const Modify = () => {
                             <div className="re1_wrap">
                                 <div className="re_cnt ct2">
                                     <table className="table_ty1">
-                                        <tr className="re_email">
-                                            <th>이메일</th>
+                                        <tr>
+                                            <th>회원번호</th>
                                             <td>
-                                                <input name="memId" id="memId_val" readOnly="readonly" value={memId} />
+                                                <input name="mno" id="mno" readOnly="readonly" value={mno} />
+                                            </td>
+                                        </tr>
+                                        <tr className="re_email">
+                                            <th>아이디</th>
+                                            <td>
+                                                <input name="uuid" id="uuid" readOnly="readonly" value={uuid} />
                                             </td>
                                         </tr>
                                         <tr>
                                             <th>이름</th>
                                             <td>
-                                                <input name="memName" id="memName_val" readOnly="readonly" value={memName} />
+                                                <input name="name" id="name" readOnly="readonly" value={name} />
                                             </td>
                                         </tr>
                                         <tr>
-                                            <th>닉네임</th>
+                                            <th>연락처</th>
                                             <td>
-                                                <input id="memNickName_val" type="text" name="memNickName" placeholder="닉네임을 입력해주세요."
-                                                    onKeyPress={memNickNameKeyPress} />
+                                                <input id="phone_val" value={phone} type="text" name="phone" placeholder="숫자만 입력해주세요."   readOnly={!isEditingPhone} onChange={(e) => setPhone(e.target.value)}
+                                                    onKeyPress={phoneKeyPress} />
+                                                     <button className='bt_ty3 bt_ty2 submit_ty1' type="button" onClick={toggleEditPhone}>
+                                                    {isEditingPhone ? "수정 완료" : "수정"}
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>이메일</th>
+                                            <td>
+                                                <input id="email_val" value={email} type="text" name="email" placeholder="변경할 이메일을 입력해주세요." readOnly={!isEditingEmail} onChange={(e) => setEmail(e.target.value)}
+                                                    onKeyPress={emailKeyPress} />
+                                                     <button className='bt_ty3 bt_ty2 submit_ty1' type="button" onClick={toggleEditEmail}>
+                                                     {isEditingEmail ? "수정 완료" : "수정"} </button>
                                             </td>
                                         </tr>
                                         <tr>
                                             <th>새 비밀번호</th>
                                             <td>
-                                                <input id="memPw_val" type="password" name="memPw"
+                                                <input id="upw" type="password" name="upw"
                                                     placeholder="비밀번호를 입력해주세요." onKeyPress={memPwKeyPress} />
                                             </td>
                                         </tr>
                                         <tr>
                                             <th>비밀번호 확인</th>
                                             <td>
-                                                <input id="memPw_cnf_val" type="password"
+                                                <input id="upw_cnf_val" type="password"
                                                     placeholder="비밀번호를 한번 더 입력해주세요." onKeyPress={memPwCnfKeyPress} />
                                             </td>
                                         </tr>
                                     </table>
                                 </div>
                             </div>
-                            <div className="btn_confirm">
-                                <a href="javascript:" className="bt_ty bt_ty2 submit_ty1 modifyclass"
-                                    onClick={(e) => submitClick('modify', e)}>수정</a>
-
-                                <a href="javascript:" className="bt_ty bt_ty2 submit_ty1 deleteclass"
-                                    onClick={(e) => deleteMember()}>탈퇴</a>
+                            <div>
+                            <div className="btn_confirm bt_ty bt_ty2 submit_ty1 modifyclass"  type="button" onClick={(e) => submitClick('modify', e)} >수정</div>
+                                {/* <a href="javascript:" className="bt_ty bt_ty2 submit_ty1 modifyclass"
+                                    onClick={(e) => submitClick('modify', e)}>수정</a> */}
+                            <div className="bt_ty bt_ty2 submit_ty1 deleteclass"  type="button" onClick={(e) => deleteMember()} >탈퇴</div>
+                                {/* <a href="javascript:" className="bt_ty bt_ty2 submit_ty1 modifyclass"
+                                    onClick={(e) => submitClick('modify', e)}>수정</a> */}
+                           
+                                {/* <a href="javascript:" className="bt_ty bt_ty2 submit_ty1 deleteclass"
+                                    onClick={(e) => deleteMember()}>탈퇴</a> */}
                             </div>
                         </form>
                     </div>

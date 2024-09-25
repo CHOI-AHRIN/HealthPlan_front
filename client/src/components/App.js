@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Route } from "react-router-dom";
 import cookie from 'react-cookies';
 import axios from "axios";
@@ -19,31 +19,51 @@ import Footer from './Footer/Footer';
 import LoginForm from './LoginForm';
 
 // 회원 관리 컴포넌트 import
-// import CarRegister from './Member/CarRegister';
 import Register from './Member/Register';
-// import Modify from './Member/Modify';
- import MyPage from './Member/MyPage';
+import Modify from './Member/Modify';
+import MyPage from './Member/MyPage';
 
-// 충전소 찾기 컴포넌트 import
-// import FindStation from './FindStation/App';
 
 // 게시판 컴포넌트 import
-// import NboardList from './Nboard/NboardList';
-// import NboardRegister from './Nboard/NboardRegister';
-// import NboardRead from './Nboard/NboardRead';
-// import NboardModify from './Nboard/NboardModify';
-
 
 
 const App = () => {
+  const [name, setName] = useState(''); // 사용자 이름 저장
+  const [token, setToken] = useState(cookie.load('token'));
  
   useEffect(() => {
     
-    if (
+    if (token) {
+      axios
+        .post('http://localhost:8080/member/loginCookie', { token })
+        .then(response => {
+          const uuid = response.data.uuid;
+          if (uuid) {
+            // uuid로 사용자 이름 가져오기
+            axios.post('http://localhost:8080/member/readName', { uuid })
+              .then(response => {
+                setName(response.data.name); // 서버로부터 받은 이름 설정
+              })
+              .catch(error => {
+                console.error('Error fetching user data:', error);
+                noPermission();
+              });
+          } else {
+            noPermission();
+          }
+        })
+        .catch(error => {
+          noPermission();
+        });
+    }
+  }, [token]);
+
+
+/*     if (
       window.location.pathname.includes('/MainForm')  ||
       window.location.pathname.includes('/MyPage') ||
-      window.location.pathname.includes('/MyPage')
-      // window.location.pathname.includes('/Modify/') 
+      window.location.pathname.includes('/MyPage') ||
+      window.location.pathname.includes('/Modify/') 
       // window.location.pathname.includes('/CarRegister') ||
       // window.location.pathname.includes('/findStation') ||
       // window.location.pathname.includes('/NboardList') ||
@@ -64,7 +84,7 @@ const App = () => {
           noPermission();
         });
     }
-  }, []);
+  }, []); */
 
   const noPermission = () => {
     if (window.location.hash !== 'nocookie') {
@@ -87,7 +107,7 @@ const App = () => {
       <Route path='/MainForm' component={MainForm} />
       <Route path='/Register' component={Register} />
       <Route path='/MyPage' component={MyPage} />
-      {/* <Route path='/Modify/' component={Modify} /> */}
+      <Route path='/Modify/' component={Modify} />
       {/* <Route path='/CarRegister' component={CarRegister} />
       <Route path='/FindStation' component={FindStation} />
       <Route path='/NboardRegister' component={NboardRegister} />

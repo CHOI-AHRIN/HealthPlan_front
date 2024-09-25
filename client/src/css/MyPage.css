@@ -6,7 +6,7 @@
 .bt_ty2:hover {background-color: #004AAD;}
 .re_1 .btn_confirm{text-align: center; margin-top: 50px;}
 
-.bt_ty3{display: inline-block; overflow: hidden;position: relative; width: 120px; height: 30px; line-height: 0px; color: #fff; font-size: 10px; font-weight: 400; text-align: center; margin-right: 8px; transition:.3s; background-color: #004AAD;}
+.bt_ty3{display: inline-block; overflow: hidden;position: relative; width: 120px; height: 30px; line-height: 0px; color: #fff; font-size: 10px; font-weight: 400; text-align: center; margin-right: 8px; margin-top: 10px; transition:.3s; background-color: #004AAD;}
 
 
 /*회원 약관동의*/
