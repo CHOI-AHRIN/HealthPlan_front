@@ -24,9 +24,9 @@
 .bt_ty2:hover {
     background-color: #004AAD;
   }
-.bt_ty3{background: rgb(151, 188, 249); border-radius: 5px; color:rgb(5, 0, 78)}
+.bt_ty3{background:rgb(0, 98, 255); border-radius: 5px; color:rgb(5, 0, 78)}
 .bt_ty3:hover {
-    background-color: #004AAD;
+    background-color:rgb(151, 188, 249) ;
   }
 
 .bt_ty{display: inline-block; overflow: hidden;position: relative; width: 157px; height: 62px; line-height: 62px; color: #fff; font-size: 16px; font-weight: 400; text-align: center; margin-right: 8px; transition:.3s;}

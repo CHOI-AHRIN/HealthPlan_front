@@ -36,7 +36,7 @@ const MyPage = () => {
 
         // 1. 쿠키에서 토큰 가져오기 
         const token = cookie.load('token');
-        
+
         // 2. token을 서버로 보내고 uuid를 받아오기
         axios
             .post('http://localhost:8080/member/loginCookie', {
@@ -44,14 +44,13 @@ const MyPage = () => {
                 token: token
 
             }).then(response => {
-                
+
                 const uuid = response.data.uuid;
 
                 // 3. 받아온 데이터를 통해 정보 조회
                 axios.post('http://localhost:8080/member/read', {
                     uuid: uuid // 받은 uuid를 다시 서버로 전송
-
-                }) .then(response => {
+                }).then(response => {
                     try {
                         const data = response.data;
                         setUuid(data.uuid);      // 회원 아이디
@@ -63,11 +62,10 @@ const MyPage = () => {
                         setMno(data.mno);        // 회원 번호
                         setSstype(data.sstype);  // 구독 타입
                         setPcount(data.pcount);  // 잔여 포인트
-                    }
-                    catch (error) {
+                    } catch (error) {
                         alert('회원데이터를 읽어오는 중에 오류가 발생했습니다.');
                     }
-            }) .catch(error => { alert('토큰을 확인하는 중에 오류가 발생했습니다.'); return false; });
+                }).catch(error => { alert('토큰을 확인하는 중에 오류가 발생했습니다.'); return false; });
             })
     };
 

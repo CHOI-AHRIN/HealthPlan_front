@@ -27,6 +27,8 @@ const SubscribeLRead = (props) => {
     const [editedContent, setEditedContent] = useState('');
     const [selectRno, setSelectRno] = useState('');
 
+    const [uuidMap, setUuidMap] = useState({}); // mno와 uuid 매핑을 저장
+
 
     /*     useEffect(() => {
             callNboardInfoApi();
@@ -63,6 +65,56 @@ const SubscribeLRead = (props) => {
         }
     }, [sno]);
 
+    useEffect(() => {
+        console.log("uuidMap이 업데이트되었습니다:", uuidMap);
+        setAppend_ReplyList(ReplyListAppend(responseReplyList));
+    }, [uuidMap]);  // uuidMap이 변경될 때마다 댓글 목록을 다시 렌더링
+
+
+    // 2. 댓글 목록에서 mno로 uuid 가져오기
+    useEffect(() => {
+
+        if (!responseReplyList || responseReplyList.length === 0) {
+            console.log('댓글 데이터가 없습니다.');
+            return;
+        }
+    
+    
+        console.log("responseReplyList 변경됨!!!! 2:", responseReplyList);
+
+
+        const fetchUuids = async () => {
+            if (responseReplyList && responseReplyList.length > 0) {
+                console.log("fetchUuids 호출됨, responseReplyList:", responseReplyList);
+        
+                const requests = responseReplyList.map((data) =>
+                    axios.post('http://localhost:8080/member/getUuidByMno', { mno: data.mno })
+                );
+        
+                try {
+                    const responses = await Promise.all(requests);
+                    console.log("응답 확인", responses); // 응답 확인용 콘솔 로그
+        
+                    const uuidMapping = responseReplyList.reduce((acc, data, index) => {
+                        console.log("응답에서 받은 uuid:", responses[index].data.uuid);
+                        acc[data.mno] = responses[index].data.uuid; // mno에 해당하는 uuid 매핑
+                        return acc;
+                    }, {});
+        
+                    console.log("매핑된 uuidMap: ", uuidMapping); // uuidMap 확인
+                    setUuidMap(uuidMapping); // 상태 업데이트
+        
+                } catch (error) {
+                    console.error('UUID 조회 중 오류 발생:', error);
+                }
+            }
+        };
+
+
+        fetchUuids(); // 비동기 작업 호출
+    }, [responseReplyList]); // responseReplyList가 변경될 때마다 실행
+
+
 
     // 2. 게시글 정보 API 호출, 게시글 작성자 UUID와 로그인한 사용자의 UUID를 비교
     const callNboardInfoApi = async () => {
@@ -95,6 +147,21 @@ const SubscribeLRead = (props) => {
                 <div id="modifyButton" className="btn_confirm mt20" style={{ marginBottom: '44px', textAlign: 'center' }}>
                     <Link to={`/SubscribeLUpdate/${sno}`} className="bt_ty bt_ty2 submit_ty1 saveclass">수정</Link>
                     <a href="javascript:" className="bt_ty bt_ty2 submit_ty1 saveclass" onClick={deleteArticle}>삭제</a>
+                </div>
+            );
+        }
+        return null; // 작성자가 아니면 수정/삭제 버튼을 숨김
+    };
+
+      // 4. 댓글 작성자와 로그인한 사용자의 UUID가 일치하면 수정/삭제 버튼을 보여줌
+      const renderReplyModifyDeleteButtons = (data) => {
+        // data.replyer를 uuidMap에서 찾아서 현재 로그인한 uuid와 비교
+        if (uuidMap[data.mno] && uuidMap[data.mno] === uuid) {
+            return (
+                <div>
+                    <button className="catbtn bt_ty2 submit_ty1 saveclass" onClick={() => modifyComment(`${data.rno}`)}>수정</button>
+                    <button className="catbtn bt_ty2 submit_ty1 saveclass" onClick={() => openEditModal(`${data.rno}`)}>모달</button>
+                    <button className="catbtn bt_ty2 submit_ty1 saveclass" onClick={() => deleteComment(`${data.rno}`)}>삭제</button>
                 </div>
             );
         }
@@ -180,14 +247,7 @@ const SubscribeLRead = (props) => {
         }
 
         if (fnValidate()) {
-            /*             let jsonstr = $("form[name='frm2']").serialize();
-                        alert('Serialized form: ' + jsonstr); 
-            
-                        jsonstr = decodeURIComponent(jsonstr);
-                        let Json_form = JSON.stringify(jsonstr).replace(/\"/gi, '')
-                        Json_form = "{\"" + Json_form.replace(/\&/g, '\",\"').replace(/=/gi, '\":"') + "\"}";
-                        let Json_data = JSON.parse(Json_form);
-                        alert(JSON.stringify(Json_data)); */
+
 
             // 폼 데이터를 객체로 수집
             const Json_data = {
@@ -197,7 +257,7 @@ const SubscribeLRead = (props) => {
                 rcomment: $('#replyTextVal').val()
             };
 
-           //  alert(JSON.stringify(Json_data));
+            //  alert(JSON.stringify(Json_data));
             axios.post('http://localhost:8080/sreplies/add', Json_data)
                 .then(response => {
                     try {
@@ -225,9 +285,12 @@ const SubscribeLRead = (props) => {
 
     const callReplyListApi = (sno) => {
         axios.get(`http://localhost:8080/sreplies/list/${sno}`) // 게시글 번호에서 댓글 달꺼니까!
+        
             .then(response => {
+                console.log("댓글 데이터 수신:", response.data); // 서버로부터 받은 데이터를 확인
+               // console.log(response.data);
                 try {
-                    setResponseReplyList(response);
+                    setResponseReplyList(response.data);
                     setAppend_ReplyList(ReplyListAppend(response.data));
                 } catch (error) {
                     alert('작업중 오류가 발생하였습니다1.');
@@ -238,49 +301,33 @@ const SubscribeLRead = (props) => {
 
 
     const ReplyListAppend = (replyList) => {
+
+        if (!replyList || replyList.length === 0) {
+            return <li>댓글이 없습니다.</li>;
+        }
         let result = []
-        const [uuidMap, setUuidMap] = useState({}); // mno와 uuid 매핑을 저장
-
-     // replyList의 mno 리스트를 기반으로 uuid 한 번에 조회
-     useEffect(() => {
-        const fetchUuids = async () => {
-            if (replyList && replyList.length > 0) {
-                const requests = replyList.map((data) =>
-                    axios.post('http://localhost:8080/member/getUuidByMno', { mno: data.mno })
-                );
-                try {
-                    const responses = await Promise.all(requests);
-                    const uuidMapping = replyList.reduce((acc, data, index) => {
-                        acc[data.mno] = responses[index].data.uuid; // mno에 해당하는 uuid 매핑
-                        return acc;
-                    }, {});
-                    setUuidMap(uuidMapping); // uuid 매핑을 상태로 저장
-                } catch (error) {
-                    console.error('UUID 조회 중 오류 발생:', error);
-                }
-            }
-        };
-
-        fetchUuids(); // 비동기 작업 호출
-    }, [replyList]); // replyList가 변경될 때마다 실행
 
         for (let i = 0; i < replyList.length; i++) {
             let data = replyList[i]
             const isCurrentUserCommentOwner = true; // 작성자 여부 판단
             // const isCurrentUserCommentOwner = data.replyer === currentUser;
             // const formattedDate = moment(data.regdate).fromNow();
+            console.log("댓글에서 보여줄 내용:", data); // 댓글 목록 확인
 
-
+            console.log("uuidMap 확인:", uuidMap);
+            console.log("현재 mno 확인:", data.mno);
             result.push(
-                <li style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '19px' }}>
+                <li key={data.rno} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '19px' }}>
                     <div style={{ display: 'flex', alignItems: 'center' }}>
                         <div style={{ width: '80px', height: '80px' }}>
                             <img src={require(`../../img/댓글2.gif`)} alt="댓글 이미지" />
                         </div>
                         <div className="cat">
                             <p style={{ fontSize: '19px' }}>
-                               {/*  {data.userUuid} */}{/* {' '} */}
-                               {uuidMap[data.mno] ? uuidMap[data.mno] : '아이디 누락'} {/* uuid 표시 */}
+                                {/*  {data.userUuid} */}{/* {' '} */}
+                                
+                                {uuidMap[data.mno] ? uuidMap[data.mno] : '아이디 누락'} {/* uuid 표시 */}
+                                {data.mno}
                                 <span style={{ fontSize: '12px' }}>
                                     {/* {formattedDate} */}
                                     {/*  {data.modidate && ( */}
@@ -297,13 +344,15 @@ const SubscribeLRead = (props) => {
                         </div>
                     </div>
                     <div>
-                        {isCurrentUserCommentOwner && (
+{/*                         {isCurrentUserCommentOwner && (
                             <div>
                                 <button className="catbtn bt_ty2 submit_ty1 saveclass" onClick={() => modifyComment(`${data.rno}`)}>수정</button>
                                 <button className="catbtn bt_ty2 submit_ty1 saveclass" onClick={() => openEditModal(`${data.rno}`)}>modal</button>
                                 <button className="catbtn bt_ty2 submit_ty1 saveclass" onClick={() => deleteComment(`${data.rno}`)}>삭제</button>
                             </div>
-                        )}
+              
+                        )} */}
+                        {renderReplyModifyDeleteButtons(data)}
                     </div>
                 </li>
             );
@@ -348,12 +397,18 @@ const SubscribeLRead = (props) => {
         console.log("=====================> " + rno);
     };
 
+    /*     const openEditModal = (rno) => {
+            this.setState({
+                selectRno: rno,
+                isEditModalOpen: true,
+                editedContent: rno,
+            });
+        }; */
+
     const openEditModal = (rno) => {
-        this.setState({
-            selectRno: rno,
-            isEditModalOpen: true,
-            editedContent: rno,
-        });
+        setSelectRno(rno);  // 선택한 댓글 번호 설정
+        setIsEditModalOpen(true);  // 모달 열기
+        setEditedContent(rno);  // 수정할 댓글 내용 설정 (현재는 rno를 넣고 있는데, 이 부분에 실제 수정할 댓글 내용을 넣어야 할 수도 있습니다)
     };
 
     const closeEditModal = () => {
@@ -483,6 +538,7 @@ const SubscribeLRead = (props) => {
                                 </table>
                                 {/* 조건에 맞으면 수정/삭제 버튼 표시 */}
                                 {renderModifyDeleteButtons()}
+
                                 {/*                                 <div id="modifyButton" class="btn_confirm mt20" style={{ "margin-bottom": "44px", textAlign: "center" }}>
                                     <Link to={`/SubscribeLUpdate/${sno}`} className="bt_ty bt_ty2 submit_ty1 saveclass">수정</Link>
                                     <a href='javascript:' className="bt_ty bt_ty2 submit_ty1 saveclass" onClick={(e) => deleteArticle(e)}>삭제</a>
