@@ -3,9 +3,7 @@ import { Link, useHistory } from 'react-router-dom';
 import axios from "axios";
 import $ from 'jquery';
 
-const SubscribeLList = () => {
-
-    //const history = useHistory();
+const ChallengeList = () => {
 
     const [append_SboardList, setAppend_SboardList] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
@@ -22,7 +20,8 @@ const SubscribeLList = () => {
     }, []);
 
     const callSboardListApi = (page) => {
-        axios.get(`http://localhost:8080/subscribe/subscribeLessionList?page=${page}&searchType=${searchtype}&keyword=${keyword}`)
+        /* axios.get(`http://localhost:8080/challenge/challengelist?page=${page}&searchType=${searchtype}&keyword=${keyword}`) */
+        axios.get(`http://localhost:8080/challenge/challengelist`)
             .then(response => {
                 try {
                     setAppend_SboardList(subscribeListAppend(response.data));
@@ -57,7 +56,7 @@ const SubscribeLList = () => {
                 <tr className="hidden_type">
                     {/* <td> {data.sno} </td> */}
                     <td> {num} </td>
-                    <td><Link to={`/SubscribeLRead/${data.sno}`}>{data.title}{data.replycnt > 0 && `[${data.replycnt}]`}</Link></td>
+                    <td><Link to={`/challengList/${data.bno}`}>{data.title}{data.replyCnt > 0 && `[${data.replyCnt}]`}</Link></td>
                     <td> {data.uuid} </td>
                     <td> {data.counts} </td>
                     <td> {reg_date} </td>
@@ -120,7 +119,7 @@ const SubscribeLList = () => {
         <section className="sub_wrap" >
             <article className="s_cnt mp_pro_li ct1 mp_pro_li_admin">
                 <div className="li_top">
-                    <h2 className="s_tit1">강의수강</h2>
+                    <h2 className="s_tit1">챌린지</h2>
                 </div>
 
                 <div className="searchingForm" >
@@ -156,11 +155,11 @@ const SubscribeLList = () => {
                 </div>
 
                 <div className="li_top_sch af">
-                    <Link to={'/SubscribeLInsert'} className="sch_bt2 wi_au">글쓰기</Link>
+                    <Link to={'/ChallengeInsert'} className="sch_bt2 wi_au">글쓰기</Link>
                 </div>
             </article>
         </section>
     );
 }
 
-export default SubscribeLList;
+export default ChallengeList;
