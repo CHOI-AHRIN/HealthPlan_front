@@ -5,7 +5,9 @@ import $ from 'jquery';
 
 const ChallengeList = () => {
 
-    const [append_SboardList, setAppend_SboardList] = useState([]);
+    //const history = useHistory();
+
+    const [append_sChallengeList, setAppend_sChallengeList] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState('');
     const [startPage, setStartPage] = useState('');
@@ -15,21 +17,26 @@ const ChallengeList = () => {
     const [keyword, setKeyword] = useState('');
     const [searchtype, setSearchtype] = useState('');
 
+    const [uuidMap, setUuidMap] = useState({});
+
     useEffect(() => {
-        callSboardListApi(currentPage);
+        callChallengeListApi(currentPage);
     }, []);
 
-    const callSboardListApi = (page) => {
-        /* axios.get(`http://localhost:8080/challenge/challengelist?page=${page}&searchType=${searchtype}&keyword=${keyword}`) */
-        axios.get(`http://localhost:8080/challenge/challengelist`)
+    const callChallengeListApi = (page) => {
+        axios.get(`http://localhost:8080/challenge/challengeList?page=${page}&searchType=${searchtype}&keyword=${keyword}`)
             .then(response => {
                 try {
-                    setAppend_SboardList(subscribeListAppend(response.data));
+                    setAppend_sChallengeList(challengeListAppend(response.data));
                     setTotalPages(response.data.pageMaker.totalCount);
                     setStartPage(response.data.pageMaker.startPage);
                     setEndPage(response.data.pageMaker.endPage);
                     setPrev(response.data.pageMaker.prev);
                     setNext(response.data.pageMaker.next);
+
+                    // API 응답에서 얻은 Challenge 데이터에 대해 UUID 조회
+                    fetchUuids(response.data.clist);
+                    
                 } catch (error) {
                     alert('작업중 오류가 발생하였습니다1.');
                 }
@@ -37,12 +44,43 @@ const ChallengeList = () => {
             .catch(error => { alert('작업중 오류가 발생하였습니다2.'); return false; });
     };
 
-    const subscribeListAppend = (nBoard) => {
-        let result = [];
-        let nBoardList = nBoard.list;
+    // mno로 uuid 조회
+        const fetchUuids = async (challengeList) => {
+            if (challengeList  && challengeList.length > 0 ) {
+                console.log("challengeListAppend, : ", challengeListAppend);
+
+            // 각 챌린지의 mno에 대해 UUID 조회
+            const requests = challengeList.map((challenge) =>
+                axios.post('http://localhost:8080/member/getUuidByMno', { mno: challenge.mno })
+            );
+
+                try {
+                    const responses = await Promise.all(requests);
+                    console.log("응답 확인", responses); // 응답 확인용 콘솔 로그
         
-        for (let i = 0; i < nBoardList.length; i++) {
-            let data = nBoardList[i];
+                    const uuidMapping = challengeList.reduce((acc, challenge, index) => {
+                        console.log("응답에서 받은 uuid:", responses[index].data.uuid);
+                        acc[challenge.mno] = responses[index].data.uuid; // mno에 해당하는 uuid 매핑
+                        return acc;
+                    }, {});
+        
+                    console.log("매핑된 uuidMap: ", uuidMapping); // uuidMap 확인
+                    setUuidMap(uuidMapping);  // 상태 업데이트
+
+                } catch (error) {
+                    console.error('uuid 조회 중 오류 발생:', error);
+                }
+            }
+        };
+
+
+    const challengeListAppend = (Challenge) => {
+        let result = [];
+        let ChallengeList = Challenge.clist;
+        // alert("ChallengeList : " + ChallengeList);
+        
+        for (let i = 0; i < ChallengeList.length; i++) {
+            let data = ChallengeList[i];
             
             var date = data.wdate;
             var year = date.substr(0,4);
@@ -50,15 +88,19 @@ const ChallengeList = () => {
             var day = date.substr(8,2);
             var reg_date = year +'.'+month+'.'+day;
 
-            var num = (nBoard.pageMaker.totalCount - (nBoard.pageMaker.cri.page - 1) * nBoard.pageMaker.cri.perPageNum - i);
+            var num = (Challenge.pageMaker.totalCount - (Challenge.pageMaker.cri.page - 1) * Challenge.pageMaker.cri.perPageNum - i);
+
+
+            let uuid = uuidMap[data.mno] || '조회 중...';  // uuidMap에 없으면 '조회 중...' 표시
+
 
             result.push(
                 <tr className="hidden_type">
                     {/* <td> {data.sno} </td> */}
                     <td> {num} </td>
-                    <td><Link to={`/challengList/${data.bno}`}>{data.title}{data.replyCnt > 0 && `[${data.replyCnt}]`}</Link></td>
-                    <td> {data.uuid} </td>
-                    <td> {data.counts} </td>
+                    <td><Link to={`/challengeRead/${data.bno}`}>{data.title}{data.replycnt > 0 && `[${data.replycnt}]`}</Link></td>
+                    <td> {uuid} </td>
+                    <td> {data.bcounts} </td>
                     <td> {reg_date} </td>
                 </tr>
             )
@@ -77,12 +119,12 @@ const ChallengeList = () => {
     const handleSearchButtonClick = (e) => {
         e.preventDefault();
         setCurrentPage(1);
-        callSboardListApi(1);
+        callChallengeListApi(1);
     };
 
     const handlePageClick = (page) => {
         setCurrentPage(page);
-        callSboardListApi(page);
+        callChallengeListApi(page);
     };
 
     const renderSearchPagination = () => {
@@ -127,7 +169,7 @@ const ChallengeList = () => {
                         <select value={searchtype} onChange={handleSearchTypeChange} id="searchtype" className="searchzone">
                             <option value="total">전체</option>
                             <option value="TITLE">제목</option>
-                            <option value="CONTENTS">내용</option>
+                            <option value="bcontents">내용</option>
                             <option value="uuid">작성자</option>
                         </select>
                         <input className='search' type="text" placeholder="검색어를 입력해주세요."
@@ -146,8 +188,8 @@ const ChallengeList = () => {
                             <th>작성일</th>
                         </tr>
                     </table>
-                    <table id="appendNboardList" className="table_ty2 ad_tlist">
-                        {append_SboardList}
+                    <table id="appendChallengeList" className="table_ty2 ad_tlist">
+                        {append_sChallengeList}
                     </table>
                     <div id="spaging">
                         {renderSearchPagination()}

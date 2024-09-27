@@ -5,7 +5,7 @@ import $ from 'jquery';
 import Swal from 'sweetalert2'
 import cookie from 'react-cookies';
 
-const ChallengeInsert = () => {
+const SubscribeLInsert = () => {
 
     const navigate = useNavigate();
 
@@ -70,6 +70,7 @@ const ChallengeInsert = () => {
 
         if (fnValidate()) {
             let jsonstr = $("form[name='frm']").serialize();
+            alert(jsonstr);
 
             axios.post('http://localhost:8080/challenge/challengeinsert', jsonstr)
                 .then(response => {
@@ -77,6 +78,7 @@ const ChallengeInsert = () => {
                         if (response.data == "success") {
                             sweetalert('등록되었습니다.', '', 'success', '확인')
                             setTimeout(function () {
+                                // history.push('/SubscribeLList');
                                 navigate('/ChallengeList');
                             }, 1000
                             );
@@ -88,7 +90,7 @@ const ChallengeInsert = () => {
                 })
                 .catch(error => { alert('2. 작업중 오류가 발생하였습니다.'); return false; });
         }
-    };
+    }; 
 
     const sweetalert = (title, contents, icon, confirmButtonText) => {
         Swal.fire({
@@ -157,7 +159,8 @@ const ChallengeInsert = () => {
                                             <label for="writer">작성자</label>
                                         </th>
                                         <td>
-                                            <input type="text" name="uuid" id="writerVal" value={uuid} readonly="readonly"/>
+                                            {/* <input type="text" name="writer" id="writerVal" readOnly="readonly" value={memNickName} /> */}
+                                            <input type="text"  id="writerVal" value={uuid} readonly="readonly"/>
                                             <input type="text" name="mno" id="" value={mno} readonly="readonly"/>
                                         </td>
                                     </tr>
@@ -198,7 +201,7 @@ const ChallengeInsert = () => {
                                 <div className="btn_confirm mt20" style={{ "margin-bottom": "44px", textAlign: "center" }}>
                                     <a href="javascript:" className="bt_ty bt_ty2 submit_ty1 saveclass"
                                         onClick={(e) => submitClick('file', e)}>저장 </a>
-                                    <Link to={'/ChallengeList'} className="bt_ty bt_ty2 submit_ty1 saveclass">취소</Link>
+                                    <Link to={'/SubscribeLList'} className="bt_ty bt_ty2 submit_ty1 saveclass">취소</Link>
                                 </div>
                             </div>
                         </article>
@@ -209,4 +212,4 @@ const ChallengeInsert = () => {
     );
 }
 
-export default ChallengeInsert;
+export default SubscribeLInsert;

@@ -41,6 +41,7 @@ const SubscribeLList = () => {
     const subscribeListAppend = (nBoard) => {
         let result = [];
         let nBoardList = nBoard.list;
+       //  alert(nBoardList);
         
         for (let i = 0; i < nBoardList.length; i++) {
             let data = nBoardList[i];

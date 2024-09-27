@@ -43,7 +43,9 @@ const Modify = () => {
                         setUuid(data.uuid);      // 회원 아이디
                         setName(data.name);      // 회원 이름
                         setEmail(data.email);    // 회원 이메일
+                        $('#email_val').val(data.email);
                         setPhone(data.phone);    // 연락처
+                        $('#phone_val').val(data.phone);
                         setMno(data.mno);        // 회원 번호
                     }
                     catch (error) {
@@ -287,20 +289,14 @@ const Modify = () => {
                                         <tr>
                                             <th>연락처</th>
                                             <td>
-                                                <input id="phone_val" value={phone} type="text" name="phone" placeholder="숫자만 입력해주세요."   readOnly={!isEditingPhone} onChange={(e) => setPhone(e.target.value)}
-                                                    onKeyPress={phoneKeyPress} />
-                                                     <button className='bt_ty3 bt_ty2 submit_ty1' type="button" onClick={toggleEditPhone}>
-                                                    {isEditingPhone ? "수정 완료" : "수정"}
-                                                </button>
+                                                <input id="phone_val"  type="text" name="phone"  />
+       
                                             </td>
                                         </tr>
                                         <tr>
                                             <th>이메일</th>
                                             <td>
-                                                <input id="email_val" value={email} type="text" name="email" placeholder="변경할 이메일을 입력해주세요." readOnly={!isEditingEmail} onChange={(e) => setEmail(e.target.value)}
-                                                    onKeyPress={emailKeyPress} />
-                                                     <button className='bt_ty3 bt_ty2 submit_ty1' type="button" onClick={toggleEditEmail}>
-                                                     {isEditingEmail ? "수정 완료" : "수정"} </button>
+                                                <input id="email_val" type="text" name="email" />
                                             </td>
                                         </tr>
                                         <tr>

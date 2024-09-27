@@ -70,7 +70,7 @@ const SubscribeLInsert = () => {
 
         if (fnValidate()) {
             let jsonstr = $("form[name='frm']").serialize();
-
+            alert(jsonstr);
             axios.post('http://localhost:8080/subscribe/subscribeLessionInsert', jsonstr)
                 .then(response => {
                     try {
