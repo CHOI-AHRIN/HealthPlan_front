@@ -61,7 +61,7 @@ const LoginForm = () => { // memId와 memPw는 화면이나 로직에서 사용�
                 <span className="logo-image">
                     <img src={require("../img/layout/HealthPlan logo.png")} style={{ width: '350px', height: 'auto', marginBottom: '0px' }} alt="메인로고" />
                 </span>
-                <h2>LOGIN</h2>
+                {/* <h2>LOGIN</h2> */}
 
                 <div className="log_box">
                     <div className="in_ty1">
