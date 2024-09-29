@@ -18,6 +18,7 @@ const ChallengeList = () => {
     const [searchtype, setSearchtype] = useState('');
 
     const [uuidMap, setUuidMap] = useState({});
+    const [wuuid, setWuuid] = useState(''); // 게시글 작성자 아이디
 
     useEffect(() => {
         callChallengeListApi(currentPage);
@@ -34,6 +35,7 @@ const ChallengeList = () => {
                     setPrev(response.data.pageMaker.prev);
                     setNext(response.data.pageMaker.next);
 
+                    
                     // API 응답에서 얻은 Challenge 데이터에 대해 UUID 조회
                     fetchUuids(response.data.clist);
                     
@@ -73,6 +75,18 @@ const ChallengeList = () => {
             }
         };
 
+// mno로 uuid 조회 함수
+const getUuidByMno = (mno) => {
+    axios.post('http://localhost:8080/member/getUuidByMno', { mno })
+        .then(response => {
+            // 서버에서 받은 uuid를 Wuuid 상태로 저장
+            setWuuid(response.data.uuid); 
+        })
+        .catch(error => {
+            console.error('UUID 조회 중 오류 발생:', error);
+            alert('UUID 조회 중 오류 발생');
+        });
+}
 
     const challengeListAppend = (Challenge) => {
         let result = [];
@@ -91,14 +105,14 @@ const ChallengeList = () => {
             var num = (Challenge.pageMaker.totalCount - (Challenge.pageMaker.cri.page - 1) * Challenge.pageMaker.cri.perPageNum - i);
 
 
-            let uuid = uuidMap[data.mno] || '조회 중...';  // uuidMap에 없으면 '조회 중...' 표시
+            let uuid = uuidMap[data.mno] || '조회 중';  // uuidMap에 없으면 '조회 중...' 표시
 
 
             result.push(
                 <tr className="hidden_type">
                     {/* <td> {data.sno} </td> */}
                     <td> {num} </td>
-                    <td><Link to={`/challengeRead/${data.bno}`}>{data.title}{data.replycnt > 0 && `[${data.replycnt}]`}</Link></td>
+                    <td><Link to={`/ChallengeRead/${data.bno}`}>{data.title}{data.replycnt > 0 && `[${data.replycnt}]`}</Link></td>
                     <td> {uuid} </td>
                     <td> {data.bcounts} </td>
                     <td> {reg_date} </td>

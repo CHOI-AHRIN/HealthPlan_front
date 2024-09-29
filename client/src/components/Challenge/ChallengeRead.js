@@ -16,6 +16,7 @@ const ChallengeRead = (props) => {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [writer, setWriter] = useState(''); // 게시글 작성자 정보
+    const [wuuid, setWuuid] = useState(''); // 게시글 작성자 아이디
     const [viewCnt, setViewCnt] = useState('');
     const [regidate, setRegidate] = useState('');
     const [imageDTOList, setImageDTOList] = useState([]);
@@ -107,16 +108,20 @@ const ChallengeRead = (props) => {
 
 
 
+
+
     // 2. 게시글 정보 API 호출, 게시글 작성자 UUID와 로그인한 사용자의 UUID를 비교
     const callChallengeInfoApi = async () => {
-        axios.get(`http://localhost:8080/subscribe/subscribeLessionRead/${bno}`, {
+        axios.get(`http://localhost:8080/challenge/challengeRead/${bno}`, {
             //bno: bno,
         }).then(response => {
             try {
                 setTitle(response.data.title);
-                setContent(response.data.contents);
-                setWriter(response.data.uuid); // 사용자의 uuid 저장
-                setViewCnt(response.data.counts);
+                setContent(response.data.bcontents);
+                // setWriter(response.data.mno); // 사용자의 uuid 저장
+               // mno로 uuid 조회
+               getUuidByMno(response.data.mno);
+                setViewCnt(response.data.bcounts);
                 setRegidate(response.data.wdate);
                 //setImageDTOList(response.data.imageDTOList);
             }
@@ -129,14 +134,25 @@ const ChallengeRead = (props) => {
         }).catch(error => { alert('게시글 데이터 받기 오류2'); return false; });
     }
 
-
+// mno로 uuid 조회 함수
+const getUuidByMno = (mno) => {
+    axios.post('http://localhost:8080/member/getUuidByMno', { mno })
+        .then(response => {
+            // 서버에서 받은 uuid를 Wuuid 상태로 저장
+            setWriter(response.data.uuid); 
+        })
+        .catch(error => {
+            console.error('UUID 조회 중 오류 발생:', error);
+            alert('UUID 조회 중 오류 발생');
+        });
+}
 
     // 3. 게시글 작성자와 로그인한 사용자의 UUID가 일치하면 수정/삭제 버튼을 보여줌
     const renderModifyDeleteButtons = () => {
         if (uuid === writer) {
             return (
                 <div id="modifyButton" className="btn_confirm mt20" style={{ marginBottom: '44px', textAlign: 'center' }}>
-                    <Link to={`/SubscribeLUpdate/${bno}`} className="bt_ty bt_ty2 submit_ty1 saveclass">수정</Link>
+                    <Link to={`/challengeupdate/${bno}`} className="bt_ty bt_ty2 submit_ty1 saveclass">수정</Link>
                     <a href="javascript:" className="bt_ty bt_ty2 submit_ty1 saveclass" onClick={deleteArticle}>삭제</a>
                 </div>
             );
@@ -188,7 +204,7 @@ const ChallengeRead = (props) => {
 
     const deleteArticle = (e) => {
         sweetalertDelete1('삭제하시겠습니까?', () => {
-            axios.delete(`http://localhost:8080/subscribe/subscribeLessionDelete/${bno}`, {
+            axios.delete(`http://localhost:8080/challenge/challengedelete/${bno}`, {
                 // bno: bno
             }).then(response => {
 
@@ -214,7 +230,7 @@ const ChallengeRead = (props) => {
                     '',
                     'success'
                 ).then(() => {
-                    window.location.href = '/SubscribeLList';
+                    window.location.href = '/ChallengeList';
                 });
             } else {
                 return false;
@@ -249,7 +265,7 @@ const ChallengeRead = (props) => {
             };
 
             //  alert(JSON.stringify(Json_data));
-            axios.post('http://localhost:8080/sreplies/add', Json_data)
+            axios.post('http://localhost:8080/breplies/add', Json_data)
                 .then(response => {
                     try {
                         if (response.data == "SUCCESS") {
@@ -275,7 +291,7 @@ const ChallengeRead = (props) => {
     }
 
     const callReplyListApi = (bno) => {
-        axios.get(`http://localhost:8080/sreplies/list/${bno}`) // 게시글 번호에서 댓글 달꺼니까!
+        axios.get(`http://localhost:8080/breplies/list/${bno}`) // 게시글 번호에서 댓글 달꺼니까!
         
             .then(response => {
                 console.log("댓글 데이터 수신:", response.data); // 서버로부터 받은 데이터를 확인
@@ -353,7 +369,7 @@ const ChallengeRead = (props) => {
 
     const deleteComment = (rno) => {
         sweetalertDelete2('삭제하시겠습니까?', () => {
-            axios.delete(`http://localhost:8080/sreplies/delete/${rno}`, {
+            axios.delete(`http://localhost:8080/breplies/delete/${rno}`, {
                 /*  rNo: responseReplyList.data[index].rno,
                  bno: bno */
             })
@@ -433,14 +449,14 @@ const ChallengeRead = (props) => {
         <section class="sub_wrap">
             <article class="s_cnt mp_pro_li ct1">
                 <div class="li_top">
-                    <h2 class="s_tit1">강의수강</h2>
+                    <h2 class="s_tit1">오늘의 챌린지!</h2>
                 </div>
                 <div class="bo_w re1_wrap re1_wrap_writer">
                     <form name="frm" id="frm" action="" onsubmit="" method="post" >
                         <article class="res_w">
                             <div class="tb_outline">
                                 <div style={{ textAlign: "Right" }}>
-                                    <Link to={`/SubscribeLList`} className="bt_ty bt_ty2 submit_ty1 saveclass">목록</Link>
+                                    <Link to={`/ChallengeList`} className="bt_ty bt_ty2 submit_ty1 saveclass">목록</Link>
                                 </div>
                                 <table class="table_ty1">
                                     <tr>
