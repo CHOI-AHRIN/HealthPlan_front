@@ -10,8 +10,8 @@
 @import '../css/NboardRegister.css';
 
 @font-face {
-  font-family: "GmarketSansTTFMedium";
-  src: url("../fonts/GmarketSansTTFMedium.ttf");
+  font-family: "Paperlogy-5Medium";
+  src: url("../fonts/Paperlogy-5Medium.ttf");
   font-style: normal;
 }
 * {max-height:1000000px;margin:0;padding:0;}
@@ -23,7 +23,7 @@
 
 /* 기본 글씨 */
 body {
-  font-family: 'GmarketSansTTFMedium', sans-serif;
+  font-family: 'Paperlogy-5Medium', sans-serif;
   font-size:28px;
 }
 
@@ -38,7 +38,9 @@ body {
 a {display:block;font-weight:400;color:#505050;text-decoration:none; /* vertical-align:top; */}
 a:hover, a:active, a:focus, a:visited {text-decoration:none;}
 ul, li {list-style:none;}
-input, select, button, textarea {font-family:'GmarketSansTTFMedium';font-size:15px;font-weight:400;color:#505050;line-height:30px;letter-spacing:-0.03em;box-sizing:border-box;vertical-align:middle;}
+input, select, button, textarea {   font-family:'Paperlogy-5Medium';font-size:15px;font-weight:400;color:#505050;line-height:30px;letter-spacing:-0.03em;box-sizing:border-box;vertical-align:middle;}
+img, fieldset, button {border:none;}
+input_2 {   margin-bottom: 20px !important;  font-family:'Paperlogy-5Medium';font-size:15px;font-weight:400;color:#505050;line-height:30px;letter-spacing:-0.03em;box-sizing:border-box;vertical-align:middle;}
 img, fieldset, button {border:none;}
 
 .cat{margin-top: 15px; margin-bottom: 15px;}

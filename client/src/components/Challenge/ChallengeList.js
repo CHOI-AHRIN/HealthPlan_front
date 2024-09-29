@@ -133,7 +133,7 @@ const ChallengeList = () => {
         for (let i = startPage; i <= endPage; i++) {
             const isCurrentPage = i === currentPage;
             pageNumbers.push(
-                <button style={{ margin: 5, backgroundColor: isCurrentPage ? '#a4d1ae' : '' }}
+                <button style={{ margin: 5, backgroundColor: isCurrentPage ? '#20217d' : '' }}
                     className={`sch_bt99 wi_au ${isCurrentPage ? 'current-page' : ''}`} key={i} onClick={() => handlePageClick(i)}>
                     {i}
                 </button>
