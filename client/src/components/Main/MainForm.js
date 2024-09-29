@@ -54,83 +54,105 @@ const MainForm = () => {
 
             {/* 하단 이미지1 */}
             <div className={`bottom-image-container ${showBottomImage ? 'visible' : ''}`}>
-                <img src={require(`../../img/고흐/고흐0.png`)} alt="" className="bottom-image" />
+                <img src={require(`../../img/MainImage/001.webp`)} alt="" className="bottom-image" />
                 <div className="bottom-text">
-                    "다양한 운동 프로그램 제공 "
+                    <h2>"다양한 운동 프로그램 제공 "</h2>
+                    <br />
+
+                    {/**사용자 개개인의 운동 목적과 체력 수준에 맞는 프로그램을 선택할 수 있음
+                     * 근력 강화, 유산소 운동, 스트레칭, 요가 등 다양한 운동 종류가 포함되어, 사용자가 자신의 목표에 맞는 운동을 꾸준히 할 수 있도록 지원
+                     */}
+                    <br />
+                    이용자 개개인의 운동 목적과 체력 수준에 맞는
+                    <br />
+                    프로그램을 선택할 수 있습니다.
                     <br />
                     <br />
-                    가장 큰 환경적 이점 중 하나는
+                    근력 강화, 유산소 운동, 스트레칭, 요가 등 다양한 운동을
                     <br />
-                    전기 자동차의 온실가스 배출 감소입니다.
+                    제공하며 이용자가 자신의 목표에 맞는 운동을
                     <br />
-                    휘발유나 경유를 사용하지 않아
-                    <br />
-                    이산화탄소와 기타 오염물질을
-                    <br />
-                    배출하지 않습니다.
+                    꾸준히 할 수 있도록 지원합니다.
                 </div>
             </div>
             {/* 하단 이미지2 */}
             <div className={`bottom-image-container ${showBottomImage ? 'visible' : ''}`}>
-                <img src={require(`../../img/고흐/고흐7.png`)} alt="Bottom Image2" className="bottom-image2" />
+                <img src={require(`../../img/MainImage/002.png`)} alt="Bottom Image2" className="bottom-image2" />
                 <div className="bottom-text2">
-                    "개인 맞춤형 피드백 시스템 제공"
+                   <h2>"개인 맞춤형 피드백 시스템 제공"</h2> 
+                    <br />
+                    {/*사용자별 맞춤 운동 계획을 제공하며, 개별 체력과 운동 습관에 맞춘 피드백을 통해 더 효과적인 운동을 할 수 있도록 돕*/}
+                    <br />
+                    구독 서비스에 있는 전문가 1:1 티칭을 통해
+                    <br />
+                    개인 맞춤형 피드백 시스템을 제공합니다.
                     <br />
                     <br />
-                    전기 자동차는 배기가스를
+                    이용자별 맞춤 운동 계획을 제공하며,
                     <br />
-                    배출하지 않으며,
+                    개별 체력과 운동 습관에 맞춘 피드백을 통해
                     <br />
-                    대기 질 개선에 도움이 될 수 있습니다.
-                    <br />
-                    깨끗한 공기는 모든 사람의
-                    <br />
-                    건강에 긍정적인 영향을 미칩니다.
+                    더 효과적인 운동을 할 수 있도록 돕습니다.
                 </div>
             </div>
             {/* 하단 이미지3 */}
             <div className={`bottom-image-container ${showBottomImage ? 'visible' : ''}`}>
-                <img src={require(`../../img/고흐/고흐3.png`)} alt="" className="bottom-image" />
+                <img src={require(`../../img/MainImage/003.png`)} alt="" className="bottom-image" />
                 <div className="bottom-text">
-                    "커뮤니티 기능 강화"
+                    <h2>"커뮤니티 기능 강화"</h2>
+                    {/*운동 프로그램을 함께하는 사용자들 간의 상호작용을 촉진하기 위해 커뮤니티 기능을 강화합니다.
+                    사용자는 자신의 성과를 공유하거나, 다른 사용자들과 운동 관련 정보를 교류하며 동기부여를 받을 수 있습니다. 
+                    그룹 챌린지나 운동 그룹을 형성하여 함께 목표를 달성하는 등 협력적인 운동 환경을 제공합니다. */}
                     <br />
                     <br />
-                    재생 가능한 에너지원과
+                    사용자들 간의 상호작용을 촉진하기 위해 
                     <br />
-                    혁신적인 배터리 기술 덕분에
+                    커뮤니티를 위한 공간이 있습니다.
                     <br />
-                    에너지를 보다 효율적으로 사용하고
                     <br />
-                    에너지를 절약합니다.
+                    이용자는 식단과 운동에 관련된 내용을 공유하거나,
                     <br />
-                    이를 통해 에너지 자원 소비를 줄이고
+                    다른 이용자들과 관련 정보를 교류하며 
                     <br />
-                    환경에 대한 부정적인 영향을
+                    동기부여를 받을 수 있습니다.
                     <br />
-                    최소화합니다.
+                    <br />
+                   챌린지를 통해 달성한 목표를 공유하는 등
+                    <br />
+                    협력적인 운동 환경을 제공합니다.
                 </div>
             </div>
             {/* 하단 이미지4 */}
             <div className={`bottom-image-container ${showBottomImage ? 'visible' : ''}`}>
-                <img src={require(`../../img/고흐/고흐1.png`)} alt="Bottom Image2" className="bottom-image2" />
+                <img src={require(`../../img/MainImage/004.png`)} alt="Bottom Image2" className="bottom-image2" />
                 <div className="bottom-text2">
-                    "유연한 접근성"
+                    <h2>"유연한 접근성"</h2>
+                    {/* 다양한 디바이스(스마트폰, 태블릿, PC 등)를 통해 언제 어디서나 운동 프로그램에 접근할 수 있도록 지원합니다. 
+                    이를 통해 시간과 장소에 구애받지 않고 운동을 지속할 수 있으며, 바쁜 일상 속에서도 효율적으로 건강을 관리할 수 있는 환경을 제공합니다. 
+                    온라인, 오프라인 모두 활용 가능한 운동 프로그램을 통해 유연한 운동 경험을 제공합니다. */}
                     <br />
                     <br />
-                    전기모터를 사용하여 운행 시
+                    다양한 디바이스(스마트폰, 태블릿, PC 등)를 통해
                     <br />
-                    소음이 거의 발생하지 않습니다.
+                    언제 어디서나 온라인, 오프라인 모든 환경에서 
                     <br />
-                    이는 도시 및 주거 지역의
+                    모두 활용 가능한 운동 프로그램을 통해 
                     <br />
-                    소음 공해를 크게 줄이고
+                    유연한 운동 경험을 제공합니다.
                     <br />
-                    거주자의 편안함을 향상시킵니다.
+                    <br />
+                    이를 통해 시간과 장소에 구애받지 않고 
+                    <br />
+                    운동을 지속할 수 있으며,
+                    <br />
+                    바쁜 일상 속에서도 효율적을 건강을 관리할 수 있는
+                    <br />
+                    환경을 제공합니다.
                 </div>
             </div>
             {/* 하단 이미지5 */}
-            <div className={`bottom-image-container ${showBottomImage ? 'visible' : ''}`}>
-                <img src={require(`../../img/고흐/고흐8.png`)} alt="" className="bottom-image" />
+{/*             <div className={`bottom-image-container ${showBottomImage ? 'visible' : ''}`}>
+                <img src={require(`../../img/MainImage/MainImage8.png`)} alt="" className="bottom-image" />
                 <div className="bottom-text">
                     "에너지 효율성"
                     <br />
@@ -149,10 +171,10 @@ const MainForm = () => {
                     <br />
                     에너지를 덜 사용할 수 있습니다.
                 </div>
-            </div>
+            </div> */}
             {/* 하단 이미지6 */}
-            <div className={`bottom-image-container ${showBottomImage ? 'visible' : ''}`}>
-                <img src={require(`../../img/고흐/고흐9.png`)} alt="" className="bottom-image2" />
+{/*             <div className={`bottom-image-container ${showBottomImage ? 'visible' : ''}`}>
+                <img src={require(`../../img/MainImage/MainImage9.png`)} alt="" className="bottom-image2" />
                 <div className="bottom-text2">
                     "지속가능한 미래"
                     <br />
@@ -167,7 +189,7 @@ const MainForm = () => {
                     <br />
                     지속적으로 성장, 발전할 것으로 예상됩니다.
                 </div>
-            </div>
+            </div> */}
         </div>
     );
 }
