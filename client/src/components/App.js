@@ -33,6 +33,7 @@ import SubscribeLUpdate from './subscribe/SubscribeLUpdate';
 import ChallengeList from './Challenge/ChallengeList';
 import ChallengeInsert from './Challenge/ChallengeInsert';
 import ChallengeRead from './Challenge/ChallengeRead';
+import ChallengeUpdate from './Challenge/ChallengeUpdate';
 
 
 
@@ -125,6 +126,7 @@ const App = () => {
         <Route path='/ChallengeList' element={<ChallengeList />} />
         <Route path='/ChallengeRead/:bno' element={<ChallengeRead/>}/>
         <Route path='/ChallengeInsert' element={<ChallengeInsert />} />
+        <Route path='/ChallengeUpdate/:bno' element={<ChallengeUpdate />} />
       </Routes>
       <Footer />
     </div>

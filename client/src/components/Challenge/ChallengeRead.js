@@ -143,7 +143,7 @@ const getUuidByMno = (mno) => {
         })
         .catch(error => {
             console.error('UUID 조회 중 오류 발생:', error);
-            alert('UUID 조회 중 오류 발생');
+            alert('uuid 조회 중 오류 발생');
         });
 }
 
@@ -152,7 +152,7 @@ const getUuidByMno = (mno) => {
         if (uuid === writer) {
             return (
                 <div id="modifyButton" className="btn_confirm mt20" style={{ marginBottom: '44px', textAlign: 'center' }}>
-                    <Link to={`/challengeupdate/${bno}`} className="bt_ty bt_ty2 submit_ty1 saveclass">수정</Link>
+                    <Link to={`/ChallengeUpdate/${bno}`} className="bt_ty bt_ty2 submit_ty1 saveclass">수정</Link>
                     <a href="javascript:" className="bt_ty bt_ty2 submit_ty1 saveclass" onClick={deleteArticle}>삭제</a>
                 </div>
             );
@@ -167,7 +167,7 @@ const getUuidByMno = (mno) => {
             return (
                 <div>
                     <button className="catbtn bt_ty2 submit_ty1 saveclass" onClick={() => modifyComment(`${data.rno}`)}>수정</button>
-                    <button className="catbtn bt_ty2 submit_ty1 saveclass" onClick={() => openEditModal(`${data.rno}`)}>모달</button>
+                    {/* <button className="catbtn bt_ty2 submit_ty1 saveclass" onClick={() => openEditModal(`${data.rno}`)}>모달</button> */}
                     <button className="catbtn bt_ty2 submit_ty1 saveclass" onClick={() => deleteComment(`${data.rno}`)}>삭제</button>
                 </div>
             );
@@ -400,8 +400,11 @@ const getUuidByMno = (mno) => {
         })
     }
 
-    const modifyComment = (rno) => {
+    const modifyComment = (rno, rco) => {
         console.log("=====================> " + rno);
+        setIsEditModalOpen(true);
+        setSelectRno(rno);
+        setEditedContent(rco);
     };
 
     /*     const openEditModal = (rno) => {
@@ -424,14 +427,15 @@ const getUuidByMno = (mno) => {
     };
 
     const handleEditSubmit = () => {
-        axios.put(`http://localhost:8080/sreplies/update/${selectRno}`, {
-            rNo: selectRno,
-            replyText: editedContent,
+        axios.put(`http://localhost:8080/breplies/update/${selectRno}`, {
+            rno: selectRno,
+            rcomment: editedContent,
         })
             .then(response => {
                 if (response.data == "SUCCESS") {
                     setIsEditModalOpen(false);
                     callReplyListApi(bno);
+                    sweetalert('댓글 수정이 완료되었습니다', '', 'success', '닫기');
                 }
             })
             .catch(error => { alert('댓글수정오류'); return false; });
@@ -649,7 +653,7 @@ const getUuidByMno = (mno) => {
                     <div id="replyDiv">
                         <h2>댓글 수정</h2>
                         <br></br>
-                        <input style={{ height: '30%', width: '80%', padding: '15px' }}
+                        <input style={{ height: '30%', width: '80%', padding: '15px' ,marginBottom:'20px'}}
                             value={editedContent}
                             onChange={(e) => setEditedContent(e.target.value)} ></input>
                         <br></br>

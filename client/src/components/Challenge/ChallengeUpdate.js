@@ -4,10 +4,10 @@ import axios from "axios";
 import $ from 'jquery';
 import Swal from 'sweetalert2'
 
-const SubscribeLUpdate = (props) => {
+const ChallengeUpdate = (props) => {
     const navigate = useNavigate();
 
-    const { sno } = useParams();
+    const { bno } = useParams();
     const [selectedFile, setSelectedFile] = useState(null);
     const [imageDTOList, setImageDTOList] = useState([]);
     const [imageList, setImageList] = useState([]);
@@ -16,19 +16,20 @@ const SubscribeLUpdate = (props) => {
     const [writer, setWriter] = useState();
 
     useEffect(() => {
-        callNboardInfoApi();
+        callChallengeInfoApi();
         // $('#articleNo').hide();
     }, [])
 
 
-    const callNboardInfoApi = () => {
-        axios.get(`http://localhost:8080/subscribe/subscribeLessionRead/${sno}`, {
-            // sno: sno
+    const callChallengeInfoApi = () => {
+        axios.get(`http://localhost:8080/challenge/challengeRead/${bno}`, {
+            // bno: bno
         }).then(response => {
             try {
+                getUuidByMno(response.data.mno);
                 setTitle(response.data.title);
-                setContent(response.data.contents);
-                setWriter(response.data.uuid);
+                setContent(response.data.bcontents);
+               // setWriter(response.data.uuid);
                 setImageDTOList(response.data.imageDTOList);
                 setImageList(response.data.imageDTOList.map(image => ({
                     thumbnailURL: image.thumbnailURL
@@ -40,6 +41,20 @@ const SubscribeLUpdate = (props) => {
         }).catch(error => { alert('게시글데이터 받기 오류2'); return false; });
 
     }
+
+    
+// mno로 uuid 조회 함수
+const getUuidByMno = (mno) => {
+    axios.post('http://localhost:8080/member/getUuidByMno', { mno })
+        .then(response => {
+            // 서버에서 받은 uuid를 Wuuid 상태로 저장
+            setWriter(response.data.uuid); 
+        })
+        .catch(error => {
+            console.error('UUID 조회 중 오류 발생:', error);
+            alert('uuid 조회 중 오류 발생');
+        });
+}
 
     const renderImages = () => {
         return imageList.map((image, index) => (
@@ -78,14 +93,14 @@ const SubscribeLUpdate = (props) => {
         if (fnValidate()) {
             let jsonstr = $("form[name='frm']").serialize();
 
-            axios.put(`http://localhost:8080/subscribe/subscribeLessionUpdate`, jsonstr)
+            axios.put(`http://localhost:8080/challenge/challengeupdate`, jsonstr)
                 .then(response => {
                     try {
                         if (response.data == "success") {
                             sweetalert('수정되었습니다.', '', 'success', '확인')
                             setTimeout(() => {
-                                // history.push(`/NboardRead/${sno}`);
-                                navigate(`/SubscribeLRead/${sno}`);
+                                // history.push(`/ChallengeRead/${bno}`);
+                                navigate(`/ChallengeRead/${bno}`);
                             }, 1000
                             );
                         }
@@ -152,7 +167,7 @@ const SubscribeLUpdate = (props) => {
         <section class="sub_wrap">
             <article class="s_cnt mp_pro_li ct1">
                 <div class="li_top">
-                    <h2 class="s_tit1">강의수정</h2>
+                    <h2 class="s_tit1">챌린지 수정</h2>
                 </div>
                 <div class="bo_w re1_wrap re1_wrap_writer">
                     <form name="frm" id="frm" action="" onsubmit="" method="put" >
@@ -161,11 +176,11 @@ const SubscribeLUpdate = (props) => {
                                 <table class="table_ty1">
                                     <tr id="articleNo">
                                         <th>
-                                            <label for="sno">글번호</label>
+                                            <label for="bno">글번호</label>
                                         </th>
                                         <td>
-                                            <input type="text" name="sno" id="snoVal" value={sno} readonly="readonly" />
-                                           {/*  <input type="text" name="mno" id="snoVal" value="1" /> */}
+                                            <input type="text" name="bno" id="bnoVal" value={bno} readonly="readonly" />
+                                          {/*   <input type="text" name="mno" id="bnoVal" value="1" / >*/}
                                         </td>
                                     </tr>
                                     <tr>
@@ -181,7 +196,7 @@ const SubscribeLUpdate = (props) => {
                                             <label for="Content">내용</label>
                                         </th>
                                         <td>
-                                            <textarea style={{ padding: '15px' }} name="contents" id="contentVal" rows="" cols="" defaultValue={content} ></textarea>
+                                            <textarea style={{ padding: '15px' }} name="bcontents" id="contentVal" rows="" cols="" defaultValue={content} ></textarea>
                                         </td>
                                     </tr>
                                     <tr>
@@ -206,7 +221,7 @@ const SubscribeLUpdate = (props) => {
                                 <div class="btn_confirm mt20" style={{ "margin-bottom": "44px", textAlign: "center" }}>
                                     <a href="javascript:" className="bt_ty bt_ty2 submit_ty1 saveclass"
                                         onClick={(e) => submitClick('file', e)}>저장</a>
-                                    <Link to={`/SubscribeLRead/${sno}`} className="bt_ty bt_ty2 submit_ty1 saveclass">취소</Link>
+                                    <Link to={`/ChallengeRead/${bno}`} className="bt_ty bt_ty2 submit_ty1 saveclass">취소</Link>
                                 </div>
                             </div>
                         </article>
@@ -217,4 +232,4 @@ const SubscribeLUpdate = (props) => {
     );
 }
 
-export default SubscribeLUpdate;
+export default ChallengeUpdate;
