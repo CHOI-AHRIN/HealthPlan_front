@@ -35,10 +35,10 @@ const ChallengeList = () => {
                     setPrev(response.data.pageMaker.prev);
                     setNext(response.data.pageMaker.next);
 
-                    
+
                     // API 응답에서 얻은 Challenge 데이터에 대해 UUID 조회
                     fetchUuids(response.data.clist);
-                    
+
                 } catch (error) {
                     alert('작업중 오류가 발생하였습니다1.');
                 }
@@ -47,65 +47,68 @@ const ChallengeList = () => {
     };
 
     // mno로 uuid 조회
-        const fetchUuids = async (challengeList) => {
-            if (challengeList  && challengeList.length > 0 ) {
-                console.log("challengeListAppend, : ", challengeListAppend);
+    const fetchUuids = async (challengeList) => {
+        if (challengeList && challengeList.length > 0) {
+            console.log("challengeListAppend, : ", challengeListAppend);
 
             // 각 챌린지의 mno에 대해 UUID 조회
             const requests = challengeList.map((challenge) =>
                 axios.post('http://localhost:8080/member/getUuidByMno', { mno: challenge.mno })
             );
 
-                try {
-                    const responses = await Promise.all(requests);
-                    console.log("응답 확인", responses); // 응답 확인용 콘솔 로그
-        
-                    const uuidMapping = challengeList.reduce((acc, challenge, index) => {
-                        console.log("응답에서 받은 uuid:", responses[index].data.uuid);
-                        acc[challenge.mno] = responses[index].data.uuid; // mno에 해당하는 uuid 매핑
-                        return acc;
-                    }, {});
-        
-                    console.log("매핑된 uuidMap: ", uuidMapping); // uuidMap 확인
-                    setUuidMap(uuidMapping);  // 상태 업데이트
+            try {
+                const responses = await Promise.all(requests);
+                console.log("응답 확인", responses); // 응답 확인용 콘솔 로그
 
-                } catch (error) {
-                    console.error('uuid 조회 중 오류 발생:', error);
-                }
+                const uuidMapping = challengeList.reduce((acc, challenge, index) => {
+                    console.log("응답에서 받은 uuid:", responses[index].data.uuid);
+                    acc[challenge.mno] = responses[index].data.uuid; // mno에 해당하는 uuid 매핑
+                    return acc;
+                }, {});
+
+                console.log("매핑된 uuidMap: ", uuidMapping); // uuidMap 확인
+                setUuidMap(uuidMapping);  // 상태 업데이트
+
+            } catch (error) {
+                console.error('uuid 조회 중 오류 발생:', error);
             }
-        };
-
-// mno로 uuid 조회 함수
-const getUuidByMno = (mno) => {
-    axios.post('http://localhost:8080/member/getUuidByMno', { mno })
-        .then(response => {
-            // 서버에서 받은 uuid를 Wuuid 상태로 저장
-            setWuuid(response.data.uuid); 
-        })
-        .catch(error => {
-            console.error('UUID 조회 중 오류 발생:', error);
-            alert('UUID 조회 중 오류 발생');
-        });
-}
+        }
+    };
+    /* 
+    // mno로 uuid 조회 함수
+    const getUuidByMno = (mno) => {
+        axios.post('http://localhost:8080/member/getUuidByMno', { mno })
+            .then(response => {
+                // 서버에서 받은 uuid를 Wuuid 상태로 저장
+                setWuuid(response.data.uuid); 
+            })
+            .catch(error => {
+                console.error('UUID 조회 중 오류 발생:', error);
+                alert('uuid 조회 중 오류 발생');
+            });
+    } */
 
     const challengeListAppend = (Challenge) => {
         let result = [];
         let ChallengeList = Challenge.clist;
         // alert("ChallengeList : " + ChallengeList);
-        
+
+        // 작성일(wdate)을 기준으로 내림차순 정렬
+        // ChallengeList.sort((a, b) => new Date(b.wdate) - new Date(a.wdate));
+
         for (let i = 0; i < ChallengeList.length; i++) {
             let data = ChallengeList[i];
-            
+
             var date = data.wdate;
-            var year = date.substr(0,4);
-            var month = date.substr(5,2);
-            var day = date.substr(8,2);
-            var reg_date = year +'.'+month+'.'+day;
+            var year = date.substr(0, 4);
+            var month = date.substr(5, 2);
+            var day = date.substr(8, 2);
+            var reg_date = year + '.' + month + '.' + day;
 
             var num = (Challenge.pageMaker.totalCount - (Challenge.pageMaker.cri.page - 1) * Challenge.pageMaker.cri.perPageNum - i);
 
 
-            let uuid = uuidMap[data.mno] || '조회 중';  // uuidMap에 없으면 '조회 중...' 표시
+            let uuid = uuidMap[data.mno] || '조회 중..';  // uuidMap에 없으면 '조회 중...' 표시
 
 
             result.push(
@@ -143,7 +146,7 @@ const getUuidByMno = (mno) => {
 
     const renderSearchPagination = () => {
         const pageNumbers = [];
-        
+
         for (let i = startPage; i <= endPage; i++) {
             const isCurrentPage = i === currentPage;
             pageNumbers.push(
@@ -157,7 +160,7 @@ const getUuidByMno = (mno) => {
         return (
             <div className="Paging">
                 {prev == true && (
-                    <button style={{ margin: 5, backgroundColor: '#004AAD !important'}} className="sch_bt99 wi_au" onClick={() => handlePageClick(startPage - 1)}>
+                    <button style={{ margin: 5, backgroundColor: '#004AAD !important' }} className="sch_bt99 wi_au" onClick={() => handlePageClick(startPage - 1)}>
                         {'<'}
                     </button>
                 )}

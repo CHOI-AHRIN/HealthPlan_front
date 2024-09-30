@@ -102,7 +102,7 @@ const Register = () => {
                     sweetalert('회원가입 되었습니다.', '', 'success', '확인')
                     .then(() => { navigate('/login'); }); 
                 } else {
-                    sweetalert('회원가입 중 오류가 발생했습니다.', '', 'error', '닫기');
+                    sweetalert('회원가입 중 오류가 발생했습니다.1', '', 'error', '닫기');
                 }
             })
             .catch(error => {

@@ -9,18 +9,23 @@ const LoginForm = () => { // memId와 memPw는 화면이나 로직에서 사용�
     const [upw, setUpw] = useState('');
     const [name, setName] = useState('');
 
-    const sweetalert = (title, contents, icon, confirmButtonText) => {
+    const sweetalert = (title, contents, icon, confirmButtonText, timer = 0) => {
         Swal.fire({
             title: title,
             text: contents,
             icon: icon,
-            confirmButtonText: confirmButtonText
+            confirmButtonText: confirmButtonText,
+            timer: timer, // 타이머 추가
+            timerProgressBar: true, // 타이머 진행바 추가
+            willClose: () => {
+                clearTimeout(timer); // 타이머 클리어
+            }
         });
     };
 
     const submitClick = () => {
         if (uuid === '' || upw === '') {
-            sweetalert('이메일과 비밀번호를 입력해주세요.', '', 'error', '닫기');
+            sweetalert('아이디와 비밀번호를 입력해 주세요.', '', 'error', '닫기');
         } else {
             axios.post('http://localhost:8080/member/loginPost', {
                 uuid: uuid, // 서버에 전달될 객체의 키 : 리액트 상태 변수 (사용자가 선언한 값을 담음)
@@ -35,7 +40,10 @@ const LoginForm = () => { // memId와 memPw는 화면이나 로직에서 사용�
                         cookie.save('token', response.data.token, { path: '/', expires });
                         cookie.save('name', response.data.name, { path: '/', expires });
                         window.location.href = '/MainForm';
-                        sweetalert('로그인 성공', '', 'success', '닫기');
+                        sweetalert('로그인 성공', '', 'success', '닫기', 5000);
+                        setTimeout(() => {
+                            window.location.href ='/MainForm';
+                        }, 5000 )
                     } else {
                         sweetalert('아이디와 비밀번호를 확인해주세요.', '', 'error', '닫기');
                         console.log(response);  // 응답 데이터 확인
@@ -43,7 +51,7 @@ const LoginForm = () => { // memId와 memPw는 화면이나 로직에서 사용�
                     }
                 })
                 .catch(error => {
-                    sweetalert('아이디와 비밀번호를 확인해주세요(서버 에러).', '', 'error', '닫기');
+                    sweetalert('아이디와 비밀번호를 확인해주세요.', '', 'error', '닫기');
                 });
 
         }

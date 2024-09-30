@@ -339,7 +339,7 @@ const getUuidByMno = (mno) => {
                                     {/* {formattedDate} */}
                                     {/*  {data.modidate && ( */}
                                     {/* <> */}
-                                    <span style={{ marginLeft: '5px', color: 'grey' }}>(수정됨)</span>
+                                    <span style={{ marginLeft: '5px', color: 'grey' }}>{/* (수정됨) */}</span>
                                     <span style={{ fontSize: '10px', color: 'grey' }}>
                                         {/* {moment(data.modidate).fromNow()} */}
                                     </span>
@@ -438,7 +438,7 @@ const getUuidByMno = (mno) => {
                     sweetalert('댓글 수정이 완료되었습니다', '', 'success', '닫기');
                 }
             })
-            .catch(error => { alert('댓글수정오류'); return false; });
+            .catch(error => { sweetalert('수정할 댓글을 입력해 주세요.', '', 'error', '닫기'); return false; });
     };
 
     const formattedRegidate = new Date(regidate).toLocaleDateString('ko-KR', {
