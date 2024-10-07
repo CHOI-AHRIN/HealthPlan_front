@@ -97,13 +97,13 @@ const Header = () => {
                                 커뮤니티
                                 </Link>
                             </li>
-                            <li className={`menulist ${window.location.pathname === '/' ? 'active' : ''}`}>
+                            <li className={`menulist ${window.location.pathname === '/ChallengeList' ? 'active' : ''}`}>
                                 <Link to={'/ChallengeList'} onClick={() => handleMenuClick('/ChallengeList')}>
                                 챌린지
                                 </Link>
                             </li>
-                            <li className="menulist">
-                                <Link to={'/SubscribeLList'} onClick={() => handleMenuClick('')}>
+                            <li className= {`menulist ${window.location.pathname === '/SubscribeLList' ? 'active' : ''}`} >
+                                <Link to={'/SubscribeLList'} onClick={() => handleMenuClick('/SubscribeLList')}>
                                     구독
                                 </Link>
                             </li>
