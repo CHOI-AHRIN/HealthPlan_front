@@ -1,0 +1,21 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hpf-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: hpf-app
+  template:
+    metadata:
+      labels:
+        app: hpf-app
+    spec:
+      containers:
+        - name: hpf-app
+          image: 192.168.1.10:8443/hpf-app  # 여기에서 React 프로젝트의 이미지로 변경
+          #command: ["sh", "-c", "cd /099 && npm install && npm start"]
+          ports:
+            - containerPort: 80

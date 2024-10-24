@@ -1,0 +1,27 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: react-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: react
+  template:
+    metadata:
+      labels:
+        app: react
+    spec:
+      containers:
+        - name: react-app
+          image: kshelp/react-app # 여기에서 React 프로젝트의 이미지로 변경
+          command: ["sh", "-c", "cd /app && npm install && npm start"]
+          ports:
+            - containerPort: 3000
+          volumeMounts:
+            - name: react-source
+              mountPath: /app
+      volumes:
+        - name: react-source
+          emptyDir: {}
