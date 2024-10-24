@@ -76,7 +76,7 @@ const LoginForm = () => { // memId와 memPw는 화면이나 로직에서 사용�
                         <label htmlFor="uuid">
                             <span><img src={require("../img/main/m_log_i3.png")} alt="아이디 입력 아이콘" /></span>
                         </label>
-                        <input type="text" id="uuid" placeholder="아이디" onChange={e => setUuid(e.target.value)} />   {/* 사용자 입력에 따라 memId 값을 업데이트 */}
+                        <input type="text" id="uuid" placeholder="아이디를 입력해주세요" onChange={e => setUuid(e.target.value)} />   {/* 사용자 입력에 따라 memId 값을 업데이트 */}
                     </div>
                     <div className="in_ty1">
                         <label htmlFor="upw">
