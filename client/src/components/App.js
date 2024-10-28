@@ -45,11 +45,11 @@ const App = () => {
     
     if (token) {
       axios
-        .post('http://localhost:8080/member/loginCookie', { token })
+        .post('/api/member/loginCookie', { token })
         .then(response => {
           const uuid = response.data.uuid;
           if (uuid) {
-            axios.post('http://localhost:8080/member/read', { uuid })
+            axios.post('/api/member/read', { uuid })
                 .then(response => {
                     const data = response.data;
                     setToken(token);  // uuid 상태 값 설정
@@ -82,7 +82,7 @@ const App = () => {
       // window.location.pathname.includes('/NboardModify')
     ) {
       axios
-        .post('http://localhost:8080/member/loginCookie', {
+        .post('/api/member/loginCookie', {
           token: cookie.load('token') 
         })
         .then(response => {
