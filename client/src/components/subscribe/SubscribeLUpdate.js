@@ -22,7 +22,7 @@ const SubscribeLUpdate = (props) => {
 
 
     const callNboardInfoApi = () => {
-        axios.get(`http://localhost:8080/subscribe/subscribeLessionRead/${sno}`, {
+        axios.get(`/api/subscribe/subscribeLessionRead/${sno}`, {
             // sno: sno
         }).then(response => {
             try {
@@ -78,7 +78,7 @@ const SubscribeLUpdate = (props) => {
         if (fnValidate()) {
             let jsonstr = $("form[name='frm']").serialize();
 
-            axios.put(`http://localhost:8080/subscribe/subscribeLessionUpdate`, jsonstr)
+            axios.put(`/api/subscribe/subscribeLessionUpdate`, jsonstr)
                 .then(response => {
                     try {
                         if (response.data == "success") {

@@ -22,7 +22,7 @@ const ChallengeUpdate = (props) => {
 
 
     const callChallengeInfoApi = () => {
-        axios.get(`http://localhost:8080/challenge/challengeRead/${bno}`, {
+        axios.get(`/api/challenge/challengeRead/${bno}`, {
             // bno: bno
         }).then(response => {
             try {
@@ -45,7 +45,7 @@ const ChallengeUpdate = (props) => {
     
 // mno로 uuid 조회 함수
 const getUuidByMno = (mno) => {
-    axios.post('http://localhost:8080/member/getUuidByMno', { mno })
+    axios.post('/api/member/getUuidByMno', { mno })
         .then(response => {
             // 서버에서 받은 uuid를 Wuuid 상태로 저장
             setWriter(response.data.uuid); 
@@ -93,7 +93,7 @@ const getUuidByMno = (mno) => {
         if (fnValidate()) {
             let jsonstr = $("form[name='frm']").serialize();
 
-            axios.put(`http://localhost:8080/challenge/challengeupdate`, jsonstr)
+            axios.put(`/api/challenge/challengeupdate`, jsonstr)
                 .then(response => {
                     try {
                         if (response.data == "success") {

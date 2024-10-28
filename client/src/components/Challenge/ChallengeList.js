@@ -25,7 +25,7 @@ const ChallengeList = () => {
     }, []);
 
     const callChallengeListApi = (page) => {
-        axios.get(`http://localhost:8080/challenge/challengeList?page=${page}&searchType=${searchtype}&keyword=${keyword}`)
+        axios.get(`/api/challenge/challengeList?page=${page}&searchType=${searchtype}&keyword=${keyword}`)
             .then(response => {
                 try {
                     setAppend_sChallengeList(challengeListAppend(response.data));
@@ -53,7 +53,7 @@ const ChallengeList = () => {
 
             // 각 챌린지의 mno에 대해 UUID 조회
             const requests = challengeList.map((challenge) =>
-                axios.post('http://localhost:8080/member/getUuidByMno', { mno: challenge.mno })
+                axios.post('/api/member/getUuidByMno', { mno: challenge.mno })
             );
 
             try {
@@ -77,7 +77,7 @@ const ChallengeList = () => {
     /* 
     // mno로 uuid 조회 함수
     const getUuidByMno = (mno) => {
-        axios.post('http://localhost:8080/member/getUuidByMno', { mno })
+        axios.post('/api/member/getUuidByMno', { mno })
             .then(response => {
                 // 서버에서 받은 uuid를 Wuuid 상태로 저장
                 setWuuid(response.data.uuid); 

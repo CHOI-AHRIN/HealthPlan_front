@@ -20,11 +20,11 @@ const SubscribeLInsert = () => {
         const token = cookie.load('token');
     
         if (token) {
-            axios.post('http://localhost:8080/member/loginCookie', { token })
+            axios.post('/api/member/loginCookie', { token })
                 .then(response => {
                     const uuid = response.data.uuid;
                     if (uuid) {
-                        axios.post('http://localhost:8080/member/read', { uuid })
+                        axios.post('/api/member/read', { uuid })
                             .then(response => {
                                 const data = response.data;
                                 setUuid(uuid);  // uuid 상태 값 설정
@@ -72,7 +72,7 @@ const SubscribeLInsert = () => {
             let jsonstr = $("form[name='frm']").serialize();
             //alert(jsonstr);
 
-            axios.post('http://localhost:8080/challenge/challengeinsert', jsonstr)
+            axios.post('/api/challenge/challengeinsert', jsonstr)
                 .then(response => {
                     try {
                         if (response.data == "success") {

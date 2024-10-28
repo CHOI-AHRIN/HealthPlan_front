@@ -27,7 +27,7 @@ const Header = () => {
         // 토큰이 있으면 서버에서 uuid 값을 가져와 설정
         if (token) {
             axios
-                .post('http://localhost:8080/member/loginCookie', { token })
+                .post('/api/member/loginCookie', { token })
                 .then(response => {
                     if (response.data && response.data.uuid) {
                         setUuid(response.data.uuid); // uuid 설정
