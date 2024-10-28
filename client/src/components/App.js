@@ -82,7 +82,7 @@ const App = () => {
       // window.location.pathname.includes('/NboardModify')
     ) {
       axios
-        .post('http://localhost:8080/member/loginCookie', {
+        .post('/api/member/loginCookie', {
           token: cookie.load('token') 
         })
         .then(response => {
