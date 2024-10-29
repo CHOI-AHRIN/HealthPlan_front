@@ -81,7 +81,7 @@ const SubscribeLInsert = () => {
                 imageDTOList: imageDTOList,
             };
 
-            axios.post('http://localhost:8080/subscribe/subscribeLessionInsert', Json_data)
+            axios.post('http://localhost:8080/api/subscribe/subscribeLessionInsert', Json_data)
                 .then(response => {
                     try {
                         if (response.data == "success") {
@@ -129,7 +129,7 @@ const SubscribeLInsert = () => {
         formData.append('uploadFiles', selectedFile);
 
         try {
-            const res = await axios.post("http://localhost:8080/subscribe/uploadAjax", formData);
+            const res = await axios.post("http://localhost:8080/api/subscribe/uploadAjax", formData);
             const { fileName, uuid, folderPath, imageURL, thumbnailURL, imgType } = res.data[0];
 
             setImageDTOList((prevImageDTOList) => [
@@ -138,7 +138,7 @@ const SubscribeLInsert = () => {
             ]);
 
             const str = `<li data-name='${fileName}' data-path='${folderPath}' data-uuid='${uuid} data-imageURL='${imageURL}'>
-                            <img src='http://localhost:8080/subscribe/display?fileName=${thumbnailURL}'>
+                            <img src='http://localhost:8080/api/subscribe/display?fileName=${thumbnailURL}'>
                           </li>`;
             $('#upload_img').append(str);
         } catch (error) {

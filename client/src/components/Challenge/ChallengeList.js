@@ -17,15 +17,13 @@ const ChallengeList = () => {
     const [keyword, setKeyword] = useState('');
     const [searchtype, setSearchtype] = useState('');
 
-    const [uuidMap, setUuidMap] = useState({});
-    const [wuuid, setWuuid] = useState(''); // 게시글 작성자 아이디
-
     useEffect(() => {
         callChallengeListApi(currentPage);
     }, []);
 
+    /* 페이지 정보 조회 */
     const callChallengeListApi = (page) => {
-        axios.get(`http://localhost:8080/challenge/challengeList?page=${page}&searchType=${searchtype}&keyword=${keyword}`)
+        axios.get(`http://localhost:8080/api/challenge/challengeList?page=${page}&searchType=${searchtype}&keyword=${keyword}`)
             .then(response => {
                 try {
                     setAppend_sChallengeList(challengeListAppend(response.data));
@@ -37,7 +35,7 @@ const ChallengeList = () => {
 
 
                     // API 응답에서 얻은 Challenge 데이터에 대해 UUID 조회
-                    fetchUuids(response.data.clist);
+                    // fetchUuids(response.data.clist);
 
                 } catch (error) {
                     alert('작업중 오류가 발생하였습니다1.');
@@ -47,33 +45,33 @@ const ChallengeList = () => {
     };
 
     // mno로 uuid 조회
-    const fetchUuids = async (challengeList) => {
-        if (challengeList && challengeList.length > 0) {
-            console.log("challengeListAppend, : ", challengeListAppend);
-
-            // 각 챌린지의 mno에 대해 UUID 조회
-            const requests = challengeList.map((challenge) =>
-                axios.post('http://localhost:8080/member/getUuidByMno', { mno: challenge.mno })
-            );
-
-            try {
-                const responses = await Promise.all(requests);
-                console.log("응답 확인", responses); // 응답 확인용 콘솔 로그
-
-                const uuidMapping = challengeList.reduce((acc, challenge, index) => {
-                    console.log("응답에서 받은 uuid:", responses[index].data.uuid);
-                    acc[challenge.mno] = responses[index].data.uuid; // mno에 해당하는 uuid 매핑
-                    return acc;
-                }, {});
-
-                console.log("매핑된 uuidMap: ", uuidMapping); // uuidMap 확인
-                setUuidMap(uuidMapping);  // 상태 업데이트
-
-            } catch (error) {
-                console.error('uuid 조회 중 오류 발생:', error);
+    /*     const fetchUuids = async (challengeList) => {
+            if (challengeList && challengeList.length > 0) {
+                console.log("challengeListAppend, : ", challengeListAppend);
+    
+                // 각 챌린지의 mno에 대해 UUID 조회
+                const requests = challengeList.map((challenge) =>
+                    axios.post('http://localhost:8080/member/getUuidByMno', { mno: challenge.mno })
+                );
+    
+                try {
+                    const responses = await Promise.all(requests);
+                    console.log("응답 확인", responses); // 응답 확인용 콘솔 로그
+    
+                    const uuidMapping = challengeList.reduce((acc, challenge, index) => {
+                        console.log("응답에서 받은 uuid:", responses[index].data.uuid);
+                        acc[challenge.mno] = responses[index].data.uuid; // mno에 해당하는 uuid 매핑
+                        return acc;
+                    }, {});
+    
+                    console.log("매핑된 uuidMap: ", uuidMapping); // uuidMap 확인
+                    setUuidMap(uuidMapping);  // 상태 업데이트
+    
+                } catch (error) {
+                    console.error('uuid 조회 중 오류 발생:', error);
+                }
             }
-        }
-    };
+        }; */
     /* 
     // mno로 uuid 조회 함수
     const getUuidByMno = (mno) => {
@@ -93,8 +91,6 @@ const ChallengeList = () => {
         let ChallengeList = Challenge.clist;
         // alert("ChallengeList : " + ChallengeList);
 
-        // 작성일(wdate)을 기준으로 내림차순 정렬
-        // ChallengeList.sort((a, b) => new Date(b.wdate) - new Date(a.wdate));
 
         for (let i = 0; i < ChallengeList.length; i++) {
             let data = ChallengeList[i];
@@ -107,9 +103,8 @@ const ChallengeList = () => {
 
             var num = (Challenge.pageMaker.totalCount - (Challenge.pageMaker.cri.page - 1) * Challenge.pageMaker.cri.perPageNum - i);
 
-
-            let uuid = uuidMap[data.mno] || '조회 중..';  // uuidMap에 없으면 '조회 중...' 표시
-
+            // 기존의 uuidMap을 사용하지 않고, data에 포함된 uuid를 그대로 사용합니다.
+            let uuid = data.uuid || '조회 중..';
 
             result.push(
                 <tr className="hidden_type">
