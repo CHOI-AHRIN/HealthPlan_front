@@ -5,8 +5,6 @@ import $ from 'jquery';
 
 const ChallengeList = () => {
 
-    //const history = useHistory();
-
     const [append_sChallengeList, setAppend_sChallengeList] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState('');
@@ -33,58 +31,12 @@ const ChallengeList = () => {
                     setPrev(response.data.pageMaker.prev);
                     setNext(response.data.pageMaker.next);
 
-
-                    // API 응답에서 얻은 Challenge 데이터에 대해 UUID 조회
-                    // fetchUuids(response.data.clist);
-
                 } catch (error) {
                     alert('작업중 오류가 발생하였습니다1.');
                 }
             })
             .catch(error => { alert('작업중 오류가 발생하였습니다2.'); return false; });
     };
-
-    // mno로 uuid 조회
-    /*     const fetchUuids = async (challengeList) => {
-            if (challengeList && challengeList.length > 0) {
-                console.log("challengeListAppend, : ", challengeListAppend);
-    
-                // 각 챌린지의 mno에 대해 UUID 조회
-                const requests = challengeList.map((challenge) =>
-                    axios.post('http://localhost:8080/member/getUuidByMno', { mno: challenge.mno })
-                );
-    
-                try {
-                    const responses = await Promise.all(requests);
-                    console.log("응답 확인", responses); // 응답 확인용 콘솔 로그
-    
-                    const uuidMapping = challengeList.reduce((acc, challenge, index) => {
-                        console.log("응답에서 받은 uuid:", responses[index].data.uuid);
-                        acc[challenge.mno] = responses[index].data.uuid; // mno에 해당하는 uuid 매핑
-                        return acc;
-                    }, {});
-    
-                    console.log("매핑된 uuidMap: ", uuidMapping); // uuidMap 확인
-                    setUuidMap(uuidMapping);  // 상태 업데이트
-    
-                } catch (error) {
-                    console.error('uuid 조회 중 오류 발생:', error);
-                }
-            }
-        }; */
-    /* 
-    // mno로 uuid 조회 함수
-    const getUuidByMno = (mno) => {
-        axios.post('/api/member/getUuidByMno', { mno })
-            .then(response => {
-                // 서버에서 받은 uuid를 Wuuid 상태로 저장
-                setWuuid(response.data.uuid); 
-            })
-            .catch(error => {
-                console.error('UUID 조회 중 오류 발생:', error);
-                alert('uuid 조회 중 오류 발생');
-            });
-    } */
 
     const challengeListAppend = (Challenge) => {
         let result = [];
@@ -103,12 +55,11 @@ const ChallengeList = () => {
 
             var num = (Challenge.pageMaker.totalCount - (Challenge.pageMaker.cri.page - 1) * Challenge.pageMaker.cri.perPageNum - i);
 
-            // 기존의 uuidMap을 사용하지 않고, data에 포함된 uuid를 그대로 사용합니다.
+            // data에 포함된 uuid를 그대로 사용
             let uuid = data.uuid || '조회 중..';
 
             result.push(
                 <tr className="hidden_type">
-                    {/* <td> {data.sno} </td> */}
                     <td> {num} </td>
                     <td><Link to={`/ChallengeRead/${data.bno}`}>{data.title}{data.replycnt > 0 && `[${data.replycnt}]`}</Link></td>
                     <td> {uuid} </td>
