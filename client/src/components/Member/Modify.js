@@ -27,14 +27,14 @@ const Modify = () => {
 
         // 2. token을 서버로 보내고 uuid를 받아오기
         axios
-            .post('/api/member/loginCookie', {
+            .post('http://localhost:8080/api/member/loginCookie', {
 
                 token: token
             }).then(response => { // then 함수 안에서 다시 호출
                 const uuid = response.data.uuid;
 
                 // 3. 받아온 데이터를 통해 정보 조회
-                axios.post('/api/member/read', {
+                axios.post('http://localhost:8080/api/member/read', {
                     uuid: uuid // 받은 uuid를 다시 서버로 전송
 
                 }).then(response => {
@@ -62,7 +62,7 @@ const Modify = () => {
         Json_form = "{\"" + Json_form.replace(/\&/g, '\",\"').replace(/=/gi, '\":"') + "\"}";
         let Json_data = JSON.parse(Json_form);
 
-        axios.post('/api/member/modify', Json_data)
+        axios.post('http://localhost:8080/api/member/modify', Json_data)
             .then(response => {
                 try {
                     if (response.data === "SUCCESS") {
@@ -210,7 +210,7 @@ const Modify = () => {
 
     const deleteMember = () => {
         sweetalertDelete('정말 탈퇴하시겠습니까?', function () {
-            axios.post('/api/member/remove', {
+            axios.post('http://localhost:8080/api/member/remove', {
                 uuid: uuid
             })
                 .then(response => {

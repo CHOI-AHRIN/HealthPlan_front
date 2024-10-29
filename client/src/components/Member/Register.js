@@ -71,7 +71,7 @@ const Register = () => {
 
         if (!fnValidate()) return;
 
-        axios.post('/api/member/uuidCk', { uuid })
+        axios.post('http://localhost:8080/api/member//uuidCk', { uuid })
             .then(response => {
                 if (response.data !== 0) { // 중복된 아이디가 있을 경우
                     sweetalert('이미 존재하는 아이디입니다.', '', 'error', '닫기');
@@ -96,7 +96,7 @@ const Register = () => {
             mtype
         };
 
-        axios.post('/api/member/register', userData)
+        axios.post('http://localhost:8080/api/member//register', userData)
             .then(response => {
                 if (response && response.data === "success") {
                     sweetalert('회원가입 되었습니다.', '', 'success', '확인')

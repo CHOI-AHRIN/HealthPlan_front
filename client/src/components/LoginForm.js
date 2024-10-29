@@ -27,7 +27,7 @@ const LoginForm = () => { // memId와 memPw는 화면이나 로직에서 사용�
         if (uuid === '' || upw === '') {
             sweetalert('아이디와 비밀번호를 입력해 주세요.', '', 'error', '닫기');
         } else {
-            axios.post('/api/member/loginPost', {
+            axios.post('http://localhost:8080/api/member/loginPost', {
                 uuid: uuid, // 서버에 전달될 객체의 키 : 리액트 상태 변수 (사용자가 선언한 값을 담음)
                 upw: upw
             })

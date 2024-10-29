@@ -118,7 +118,7 @@ const SubscribeLRead = (props) => {
 
     // 2. 게시글 정보 API 호출, 게시글 작성자 UUID와 로그인한 사용자의 UUID를 비교
     const callNboardInfoApi = async () => {
-        axios.get(`/api/subscribe/subscribeLessionRead/${sno}`, {
+        axios.get(`http://localhost:8080/api/subscribe/subscribeLessionRead/${sno}`, {
             //sno: sno,
         }).then(response => {
             try {
@@ -197,7 +197,7 @@ const SubscribeLRead = (props) => {
 
     const deleteArticle = (e) => {
         sweetalertDelete1('삭제하시겠습니까?', () => {
-            axios.delete(`/api/subscribe/subscribeLessionDelete/${sno}`, {
+            axios.delete(`http://localhost:8080/api/subscribe/subscribeLessionDelete/${sno}`, {
                 // sno: sno
             }).then(response => {
 
@@ -258,7 +258,7 @@ const SubscribeLRead = (props) => {
             };
 
             //  alert(JSON.stringify(Json_data));
-            axios.post('/api/sreplies/add', Json_data)
+            axios.post('http://localhost:8080/api/sreplies/add', Json_data)
                 .then(response => {
                     try {
                         if (response.data == "SUCCESS") {
@@ -284,7 +284,7 @@ const SubscribeLRead = (props) => {
     }
 
     const callReplyListApi = (sno) => {
-        axios.get(`/api/sreplies/list/${sno}`) // 게시글 번호에서 댓글 달꺼니까!
+        axios.get(`http://localhost:8080/api/sreplies/list/${sno}`) // 게시글 번호에서 댓글 달꺼니까!
         
             .then(response => {
                 console.log("댓글 데이터 수신:", response.data); // 서버로부터 받은 데이터를 확인
@@ -362,7 +362,7 @@ const SubscribeLRead = (props) => {
 
     const deleteComment = (rno) => {
         sweetalertDelete2('삭제하시겠습니까?', () => {
-            axios.delete(`/api/sreplies/delete/${rno}`, {
+            axios.delete(`http://localhost:8080/api/sreplies/delete/${rno}`, {
                 /*  rNo: responseReplyList.data[index].rno,
                  sno: sno */
             })
@@ -422,7 +422,7 @@ const SubscribeLRead = (props) => {
     };
 
     const handleEditSubmit = () => {
-        axios.put(`/api/sreplies/update/${selectRno}`, {
+        axios.put(`http://localhost:8080/api/sreplies/update/${selectRno}`, {
             rno: selectRno,
             rcomment: editedContent,
         })

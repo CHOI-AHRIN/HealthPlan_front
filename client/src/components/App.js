@@ -45,11 +45,11 @@ const App = () => {
     
     if (token) {
       axios
-        .post('/api/member/loginCookie', { token })
+        .post('http://localhost:8080/api/member/loginCookie', { token })
         .then(response => {
           const uuid = response.data.uuid;
           if (uuid) {
-            axios.post('/api/member/read', { uuid })
+            axios.post('http://localhost:8080/apimember/read', { uuid })
                 .then(response => {
                     const data = response.data;
                     setToken(token);  // uuid 상태 값 설정
