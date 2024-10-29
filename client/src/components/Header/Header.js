@@ -11,6 +11,8 @@ const Header = () => {
     const [name, setName] = useState('');
     const [activeMenu, setActiveMenu] = useState('/');
     const [menuVisible, setMenuVisible] = useState(false);
+    const [activeIndex, setActiveIndex] = useState(null); // 활성화된 메뉴 인덱스
+
 
     useEffect(() => {
         // 특정 경로에서만 헤더를 숨기기
@@ -94,15 +96,15 @@ const Header = () => {
                             </li>
                             <li className={`menulist ${window.location.pathname === '/' ? 'active' : ''}`}>
                                 <Link to={'/'} onClick={() => handleMenuClick('/')}>
-                                커뮤니티
+                                    커뮤니티
                                 </Link>
                             </li>
                             <li className={`menulist ${window.location.pathname === '/ChallengeList' ? 'active' : ''}`}>
                                 <Link to={'/ChallengeList'} onClick={() => handleMenuClick('/ChallengeList')}>
-                                챌린지
+                                    챌린지
                                 </Link>
                             </li>
-                            <li className= {`menulist ${window.location.pathname === '/SubscribeLList' ? 'active' : ''}`} >
+                            <li className={`menulist ${window.location.pathname === '/SubscribeLList' ? 'active' : ''}`} >
                                 <Link to={'/SubscribeLList'} onClick={() => handleMenuClick('/SubscribeLList')}>
                                     구독
                                 </Link>
@@ -119,9 +121,9 @@ const Header = () => {
                             </li>
                         </ul>
                     </nav>
-                </div>
-            </div>
-        </header>
+                </div >
+            </div >
+        </header >
     );
 };
 
