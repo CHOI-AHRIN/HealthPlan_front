@@ -11,7 +11,16 @@ const Header = () => {
     const [name, setName] = useState('');
     const [activeMenu, setActiveMenu] = useState('/');
     const [menuVisible, setMenuVisible] = useState(false);
-    const [activeIndex, setActiveIndex] = useState(null); // 활성화된 메뉴 인덱스
+    /*  const [activeIndex, setActiveIndex] = useState(null); // 활성화된 메뉴 인덱스 */
+    const [submenuVisible, setSubmenuVisible] = useState(false); // 서브메뉴
+
+    /*     const MENU_LIST = [
+            { title: '커뮤니티', list: [ '식단', '운동' ] },
+            { title: '챌린지', list: [ '챌린지'] },
+            { title: '구독', list: [ '구독', '강의' ] },
+            { title: 'FAQ', list: [ 'FAQ' ] },
+            { title: '마이페이지', list: [ '마이페이지' ] }
+        ]; */
 
 
     useEffect(() => {
@@ -43,6 +52,7 @@ const Header = () => {
     }, [token]); // token이 변경될 때마다 실행
 
 
+    /* 로그아웃 */
     const logout = () => {
         cookie.remove('token', { path: '/' });
         cookie.remove('name', { path: '/' });
@@ -50,14 +60,21 @@ const Header = () => {
         window.location.href = '/login';
     };
 
+    /* 메뉴 클릭 핸들러 */
     const handleMenuClick = (path) => {
         setActiveMenu(path);
         setMenuVisible(false);
     };
 
+
     const toggleMenu = () => {
         setMenuVisible(!menuVisible);
     };
+
+    /* 서브메뉴 클릭 핸들러 */
+    const toggleSubmenu = () => {
+        setSubmenuVisible(!submenuVisible);
+    }
 
     return (
         <header className="gnb_box">
@@ -104,10 +121,24 @@ const Header = () => {
                                     챌린지
                                 </Link>
                             </li>
-                            <li className={`menulist ${window.location.pathname === '/SubscribeLList' ? 'active' : ''}`} >
+                            <li 
+                                className={`menulist ${window.location.pathname === '/SubscribeLList' ? 'active' : ''}`}
+                                onMouseEnter={toggleSubmenu}
+                                onMouseLeave={toggleSubmenu}
+                            >
                                 <Link to={'/SubscribeLList'} onClick={() => handleMenuClick('/SubscribeLList')}>
                                     구독
                                 </Link>
+                                {submenuVisible && (
+                                    <ul className="submenu">
+                                        <li className="submenu-item">
+                                            <Link to={'/SubscribeLList'}>구독</Link>
+                                        </li>
+                                        <li className="submenu-item">
+                                            <Link to={'/Lecture'}>강의</Link>
+                                        </li>
+                                    </ul>
+                                )}
                             </li>
                             <li className="menulist">
                                 {/* <Link to={'/VboardList'} onClick={() => handleMenuClick('')}> */}

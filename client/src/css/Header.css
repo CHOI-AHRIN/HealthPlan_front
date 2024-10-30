@@ -80,19 +80,33 @@ img {
   font-size: 30px;
   font-weight: bold;
   font-weight: 400 !important;
-  display: inline-block !important ; 
+  display: inline-block !important;
   margin-left: 10px;
 }
 
 .health-plan-link {
-  color: inherit;  /* 부모 요소의 텍스트 색상 상속 */
-  text-decoration: none; /* 링크의 밑줄 제거 */
+  color: inherit;
+  /* 부모 요소의 텍스트 색상 상속 */
+  text-decoration: none;
+  /* 링크의 밑줄 제거 */
 }
 
 .health-plan-link:hover {
-  color: rgb(151, 188, 249); /* 링크에 마우스 올렸을 때 색상 변경 */
-  display: inline-block !important ; 
+  color: rgb(151, 188, 249);
+  /* 링크에 마우스 올렸을 때 색상 변경 */
+  display: inline-block !important;
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 /* 햄버거 */
@@ -110,6 +124,7 @@ img {
   text-align: right;
 }
 
+/* 호버시 css */
 .hbrfont>ul>li.on>a:hover,
 .menulist>a:hover {
   margin-top: 18px;
@@ -122,8 +137,70 @@ img {
   letter-spacing: -0.03em;
   transition: .3s;
   border-radius: 10px;
+  text-align: center;
+  /* 텍스트 가운데 정렬 */
 }
 
+/* 부모 메뉴에 마우스를 올렸을 때 서브메뉴가 나타나는 스타일 */
+.hbrfont > ul > li {
+  position: relative; /* 서브메뉴 위치 기준 */
+}
+
+.hbrfont > ul > li:hover > .submenu {
+  display: block;
+  position: absolute;
+  top: 100%; /* 부모 메뉴 바로 아래에 위치 */
+  left: 50%; /* 부모 메뉴의 중앙으로 위치 */
+  transform: translateX(-50%); /* 중앙 정렬 */
+  background-color: rgb(2, 0, 109);
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 2;
+}
+
+/* 서브메뉴 스타일 */
+.hbrfont > ul > li:hover > ul {
+  display: block; /* 부모 메뉴에 마우스를 올리면 서브메뉴가 나타남 */
+  position: absolute;
+  background-color: rgb(2, 0, 109);
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  top: 100%; /* 부모 메뉴 아래에 위치 */
+  left: 0;
+  z-index: 2;
+}
+
+/* 서브메뉴 링크 호버 스타일 */
+.hbrfont > ul > li > ul > li > a:hover {
+  background-color: rgb(151, 188, 249);
+  color: white;
+  padding: 5px;
+  border-radius: 3px;
+  transition: background-color 0.3s;
+}
+
+/* 서브메뉴 호버 스타일 */
+.submenu-item a:hover {
+  margin-top: 10px;
+  height: 50px;
+  justify-content: center; /* 수평 중앙 정렬 */
+  align-items: center; /* 수직 중앙 정렬 */
+  display: flex;
+  background-color: #0062ff;
+  color: white;
+  padding: 5px;
+  border-radius: 10px;
+  transition: background-color 0.3s;
+}
+
+
+
+
+
+
+/*메뉴 클릭시 css*/
 .hbrfont>ul>li.on>a,
 .menulist.active>a {
   margin-top: 18px;
@@ -131,11 +208,12 @@ img {
   font-size: 20px;
   line-height: 50px;
   color: rgb(2, 0, 109);
-  background:  rgb(151, 188, 249);
+  background: rgb(151, 188, 249);
   padding: 5px 18px;
   letter-spacing: -0.03em;
   transition: .3s;
   border-radius: 10px;
+  text-align: center;
 }
 
 .header {
@@ -190,6 +268,18 @@ img {
   margin-right: 20px;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
 /* 반응형 스타일 추가 */
 @media screen and (max-width: 768px) {
 
@@ -207,7 +297,8 @@ img {
     top: 70px;
     right: 0;
     width: 100%;
-    background-color: rgba(238, 238, 238, 0.9); /* 배경색을 투명하게 설정 */
+    background-color: rgba(238, 238, 238, 0.9);
+    /* 배경색을 투명하게 설정 */
     z-index: 1;
     padding: 10px;
   }
@@ -222,12 +313,27 @@ img {
     font-size: 17px;
     line-height: 80px;
     color: #333;
-    background: rgba(255, 255, 255, 0.8); /* 배경색을 투명하게 설정 */
+    background: rgba(255, 255, 255, 0.8);
+    /* 배경색을 투명하게 설정 */
     padding: 5px 18px;
     letter-spacing: -0.03em;
     transition: 0.3s;
-    text-align: right;
+    text-align: center;
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   .menulist {
     margin: 10px;
@@ -235,8 +341,10 @@ img {
     font-size: 13px;
     line-height: 1.5;
     /* 간격을 조절하는 부분 */
+    text-align: center;
   }
 
+  /* 호버시 css*/
   .hbrfont>ul>li.on>a:hover,
   .menulist>a:hover {
     margin-top: -3px;
@@ -279,14 +387,18 @@ img {
     display: none;
     flex-direction: column;
     position: absolute;
-    top: 130px; /* 조절된 값 */
+    top: 130px;
+    /* 조절된 값 */
     right: 0;
     width: auto;
-    background-color: rgba(238, 238, 238, 0.9); /* 배경색을 투명하게 설정 */
+    background-color: rgba(238, 238, 238, 0.9);
+    /* 배경색을 투명하게 설정 */
     z-index: 1;
     padding: 10px;
-    border-radius: 5px; /* 테두리를 둥글게 만듭니다. */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* 그림자 효과를 추가합니다. */
+    border-radius: 5px;
+    /* 테두리를 둥글게 만듭니다. */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    /* 그림자 효과를 추가합니다. */
   }
 
   .nav.show-menu {
@@ -312,5 +424,7 @@ img {
     font-size: 15px;
     transition: color 0.3s;
   }
-  
+
+
+
 }
