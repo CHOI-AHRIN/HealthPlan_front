@@ -141,10 +141,7 @@ img {
   /* 텍스트 가운데 정렬 */
 }
 
-/* 부모 메뉴에 마우스를 올렸을 때 서브메뉴가 나타나는 스타일 */
-.hbrfont > ul > li {
-  position: relative; /* 서브메뉴 위치 기준 */
-}
+
 
 .hbrfont > ul > li:hover > .submenu {
   display: block;
