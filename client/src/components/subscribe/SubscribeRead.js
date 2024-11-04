@@ -5,7 +5,8 @@ import $ from 'jquery';
 import Swal from 'sweetalert2'
 import cookie from 'react-cookies';
 import Modal from 'react-modal';
-
+// import moment from 'moment';
+// import 'moment/locale/ko';
 
 const SubscribeLRead = (props) => {
     const { sno } = useParams();
@@ -15,7 +16,7 @@ const SubscribeLRead = (props) => {
     const [mno, setMno] = useState(''); // 로그인한 사용자의 mno
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
-    const [writer, setWriter] = useState(''); // 게시글 작성자 정보
+    const [writer, setWriter] = useState('');
     const [viewCnt, setViewCnt] = useState('');
     const [regidate, setRegidate] = useState('');
     const [imageDTOList, setImageDTOList] = useState([]);
@@ -32,11 +33,13 @@ const SubscribeLRead = (props) => {
 
     /*     useEffect(() => {
             callNboardInfoApi();
-            // callReplyListApi(sno);
+            callReplyListApi(sno);
             // $("#modifyButton").hide();
             // $("#replyerDiv").hide();
             // $("#snoDiv").hide();
         }, []) */
+
+
 
     // 1. token에서 로그인한 사용자의 id 읽어오기
     useEffect(() => {
@@ -78,32 +81,32 @@ const SubscribeLRead = (props) => {
             console.log('댓글 데이터가 없습니다.');
             return;
         }
-    
-    
+
+
         console.log("responseReplyList 변경됨!!!! 2:", responseReplyList);
 
 
         const fetchUuids = async () => {
             if (responseReplyList && responseReplyList.length > 0) {
                 console.log("fetchUuids 호출됨, responseReplyList:", responseReplyList);
-        
+
                 const requests = responseReplyList.map((data) =>
                     axios.post('http://localhost:8080/api/member/getUuidByMno', { mno: data.mno })
                 );
-        
+
                 try {
                     const responses = await Promise.all(requests);
                     console.log("응답 확인", responses); // 응답 확인용 콘솔 로그
-        
+
                     const uuidMapping = responseReplyList.reduce((acc, data, index) => {
                         console.log("응답에서 받은 uuid:", responses[index].data.uuid);
                         acc[data.mno] = responses[index].data.uuid; // mno에 해당하는 uuid 매핑
                         return acc;
                     }, {});
-        
+
                     console.log("매핑된 uuidMap: ", uuidMapping); // uuidMap 확인
                     setUuidMap(uuidMapping); // 상태 업데이트
-        
+
                 } catch (error) {
                     console.error('UUID 조회 중 오류 발생:', error);
                 }
@@ -118,22 +121,22 @@ const SubscribeLRead = (props) => {
 
     // 2. 게시글 정보 API 호출, 게시글 작성자 UUID와 로그인한 사용자의 UUID를 비교
     const callNboardInfoApi = async () => {
-        axios.get(`http://localhost:8080/api/subscribe/subscribeLessionRead/${sno}`, {
+        axios.get(`http://localhost:8080/api/subscribe/subscribeRead/${sno}`, {
             //sno: sno,
         }).then(response => {
             try {
                 setTitle(response.data.title);
                 setContent(response.data.contents);
-                setWriter(response.data.uuid); // 사용자의 uuid 저장
+                setWriter(response.data.uuid);
                 setViewCnt(response.data.counts);
                 setRegidate(response.data.wdate);
                 setImageDTOList(response.data.imageDTOList);
             }
             catch (error) {
-                alert('게시글 데이터 받기 오류')
+                alert('게시글데이터 받기 오류')
             }
 
-        }).catch(error => { alert('게시글 데이터 받기 오류2'); return false; });
+        }).catch(error => { alert('게시글데이터 받기 오류2'); return false; });
     }
 
 
@@ -152,14 +155,14 @@ const SubscribeLRead = (props) => {
     };
 
 
-      // 4. 댓글 작성자와 로그인한 사용자의 UUID가 일치하면 수정/삭제 버튼을 보여줌
-      const renderReplyModifyDeleteButtons = (data) => {
+    // 4. 댓글 작성자와 로그인한 사용자의 UUID가 일치하면 수정/삭제 버튼을 보여줌
+    const renderReplyModifyDeleteButtons = (data) => {
         // data.replyer를 uuidMap에서 찾아서 현재 로그인한 uuid와 비교
         if (uuidMap[data.mno] && uuidMap[data.mno] === uuid) {
             return (
                 <div>
                     <button className="catbtn bt_ty2 submit_ty1 saveclass" onClick={() => modifyComment(`${data.rno}`)}>수정</button>
-                   {/*  <button className="catbtn bt_ty2 submit_ty1 saveclass" onClick={() => openEditModal(`${data.rno}`)}>모달</button> */}
+                    {/*  <button className="catbtn bt_ty2 submit_ty1 saveclass" onClick={() => openEditModal(`${data.rno}`)}>모달</button> */}
                     <button className="catbtn bt_ty2 submit_ty1 saveclass" onClick={() => deleteComment(`${data.rno}`)}>삭제</button>
                 </div>
             );
@@ -168,21 +171,39 @@ const SubscribeLRead = (props) => {
     };
 
 
-    // 파일 - 썸네일
+
+    /*     const callNboardInfoApi = async () => {
+            axios.get(`http://localhost:8080/api/subscribe/subscribeRead/${sno}`, {
+                //sno: sno,
+            }).then(response => {
+                try {
+                    setTitle(response.data.title);
+                    setContent(response.data.contents);
+                    setWriter(response.data.uuid);
+                    setViewCnt(response.data.counts);
+                    setRegidate(response.data.wdate);
+                    setImageDTOList(response.data.imageDTOList);
+                }
+                catch (error) {
+                    alert('게시글데이터 받기 오류')
+                }
+    
+            }).catch(error => { alert('게시글데이터 받기 오류2'); return false; });
+        } */
+
     const handleThumbnailClick = (thumbnailURL) => {
         setModalIsOpen(true);
         setSelectedImage(thumbnailURL);
     };
 
-    // 파일 
     const closeImageModal = () => {
         setModalIsOpen(false);
         setSelectedImage('');
     };
 
-    // 파일 
     const renderImages = () => {
         const imageList = imageDTOList;
+
         return imageList.map((images, index) => (
             <li className="hidden_type" key={index}>
                 <img
@@ -196,7 +217,7 @@ const SubscribeLRead = (props) => {
 
     const deleteArticle = (e) => {
         sweetalertDelete1('삭제하시겠습니까?', () => {
-            axios.delete(`http://localhost:8080/api/subscribe/subscribeLessionDelete/${sno}`, {
+            axios.delete(`http://localhost:8080/api/subscribe/subscribeDelete/${sno}`, {
                 // sno: sno
             }).then(response => {
 
@@ -222,7 +243,7 @@ const SubscribeLRead = (props) => {
                     '',
                     'success'
                 ).then(() => {
-                    window.location.href = '/SubscribeLList';
+                    window.location.href = '/SubscribeList';
                 });
             } else {
                 return false;
@@ -231,7 +252,6 @@ const SubscribeLRead = (props) => {
         })
     }
 
-    // 댓글
     const submitClick = (e) => {
         const reply_checker = $('#replyTextVal').val();
 
@@ -246,8 +266,7 @@ const SubscribeLRead = (props) => {
         }
 
         if (fnValidate()) {
-
-
+ 
             // 폼 데이터를 객체로 수집
             const Json_data = {
                 sno: $('#snoVal').val(),
@@ -267,8 +286,7 @@ const SubscribeLRead = (props) => {
                     catch (error) {
                         alert('1. 작업중 오류가 발생하였습니다.')
                     }
-                })
-                .catch(error => { alert('2. 작업중 오류가 발생하였습니다.'); return false; });
+                }).catch(error => { alert('2. 작업중 오류가 발생하였습니다.'); return false; });
         }
     };
 
@@ -282,11 +300,8 @@ const SubscribeLRead = (props) => {
     }
 
     const callReplyListApi = (sno) => {
-        axios.get(`http://localhost:8080/api/sreplies/list/${sno}`) // 게시글 번호에서 댓글 달꺼니까!
-        
+        axios.get(`http://localhost:8080/api/sreplies/list/${sno}`)
             .then(response => {
-                console.log("댓글 데이터 수신:", response.data); // 서버로부터 받은 데이터를 확인
-               // console.log(response.data);
                 try {
                     setResponseReplyList(response.data);
                     setAppend_ReplyList(ReplyListAppend(response.data));
@@ -294,24 +309,27 @@ const SubscribeLRead = (props) => {
                     alert('작업중 오류가 발생하였습니다1.');
                 }
             })
-            .catch(error => { alert('작업중 오류가 발생하였습니다2 (댓글).'); return false; });
+            .catch(error => { alert('작업중 오류가 발생하였습니다2.'); return false; });
     }
 
-
     const ReplyListAppend = (replyList) => {
-
         if (!replyList || replyList.length === 0) {
             return <li>댓글이 없습니다.</li>;
         }
         let result = []
+        // const currentUser = '111';
 
         for (let i = 0; i < replyList.length; i++) {
             let data = replyList[i]
-            const isCurrentUserCommentOwner = true; // 작성자 여부 판단
+            const isCurrentUserCommentOwner = true;
+
             console.log("댓글에서 보여줄 내용:", data); // 댓글 목록 확인
 
             console.log("uuidMap 확인:", uuidMap);
             console.log("현재 mno 확인:", data.mno);
+            // const isCurrentUserCommentOwner = data.replyer === currentUser;
+            // const formattedDate = moment(data.regdate).fromNow();
+
             result.push(
                 <li key={data.rno} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '19px' }}>
                     <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -320,34 +338,20 @@ const SubscribeLRead = (props) => {
                         </div>
                         <div className="cat">
                             <p style={{ fontSize: '19px' }}>
-                                {/*  {data.userUuid} */}{/* {' '} */}
-                                
+                                {/* {data.replyer} */}
                                 {uuidMap[data.mno] ? uuidMap[data.mno] : '아이디 누락'} {/* uuid 표시 */}
                                 {data.mno}
                                 <span style={{ fontSize: '12px' }}>
-                                    {/* {formattedDate} */}
-                                    {/*  {data.modidate && ( */}
-                                    {/* <> */}
-                                    <span style={{ marginLeft: '5px', color: 'grey' }}>(수정됨)</span>
-                                    <span style={{ fontSize: '10px', color: 'grey' }}>
-                                        {/* {moment(data.modidate).fromNow()} */}
-                                    </span>
-                                    {/*  </> */}
-                                    {/* )} */}
+                                    <span style={{ marginLeft: '5px', color: 'grey' }}></span>
+                                    <span style={{ fontSize: '10px', color: 'grey' }}></span>
                                 </span>
                             </p>
-                            <p style={{ color: '#525252' }}>{data.rcomment}</p>
+                            <p style={{ color: '#525252' }}>{data.rcomment}
+                                {/* <input type="text" value={data.rcomment} style={{ flex: '1', marginRight: '8px', height: '50px' }} /> */}
+                            </p>
                         </div>
                     </div>
                     <div>
-{/*                         {isCurrentUserCommentOwner && (
-                            <div>
-                                <button className="catbtn bt_ty2 submit_ty1 saveclass" onClick={() => modifyComment(`${data.rno}`)}>수정</button>
-                                <button className="catbtn bt_ty2 submit_ty1 saveclass" onClick={() => openEditModal(`${data.rno}`)}>modal</button>
-                                <button className="catbtn bt_ty2 submit_ty1 saveclass" onClick={() => deleteComment(`${data.rno}`)}>삭제</button>
-                            </div>
-              
-                        )} */}
                         {renderReplyModifyDeleteButtons(data)}
                     </div>
                 </li>
@@ -359,14 +363,11 @@ const SubscribeLRead = (props) => {
     const deleteComment = (rno) => {
         sweetalertDelete2('삭제하시겠습니까?', () => {
             axios.delete(`http://localhost:8080/api/sreplies/delete/${rno}`, {
-                /*  rNo: responseReplyList.data[index].rno,
-                 sno: sno */
-            })
-                .then(response => {
-                    if (response.data == "SUCCESS") {
-                        callReplyListApi(sno);
-                    }
-                }).catch(error => { alert('작업중 오류가 발생하였습니다.'); return false; });
+            }).then(response => {
+                if (response.data == "SUCCESS") {
+                    callReplyListApi(sno);
+                }
+            }).catch(error => { alert('작업중 오류가 발생하였습니다.'); return false; });
         })
     };
 
@@ -390,26 +391,17 @@ const SubscribeLRead = (props) => {
     }
 
     const modifyComment = (rno, rco) => {
-        console.log("=====================> " + rno);
         setIsEditModalOpen(true);
         setSelectRno(rno);
         setEditedContent(rco);
     };
 
-    /*     const openEditModal = (rno) => {
-            this.setState({
-                selectRno: rno,
-                isEditModalOpen: true,
-                editedContent: rno,
-            });
-        }; */
-
-        
-
     const openEditModal = (rno) => {
-        setSelectRno(rno);  // 선택한 댓글 번호 설정
-        setIsEditModalOpen(true);  // 모달 열기
-        setEditedContent(rno);  // 수정할 댓글 내용 설정 (현재는 rno를 넣고 있는데, 이 부분에 실제 수정할 댓글 내용을 넣어야 할 수도 있습니다)
+        this.setState({
+            selectRno: rno,
+            isEditModalOpen: true,
+            editedContent: rno,
+        });
     };
 
     const closeEditModal = () => {
@@ -421,15 +413,12 @@ const SubscribeLRead = (props) => {
         axios.put(`http://localhost:8080/api/sreplies/update/${selectRno}`, {
             rno: selectRno,
             rcomment: editedContent,
-        })
-            .then(response => {
-                if (response.data == "SUCCESS") {
-                    setIsEditModalOpen(false);
-                    callReplyListApi(sno);
-                    sweetalert('댓글 수정이 완료되었습니다', '', 'success', '닫기');
-                }
-            })
-            .catch(error => { sweetalert('수정할 내용을 입력해 주세요.', '', 'error', '닫기'); });
+        }).then(response => {
+            if (response.data == "SUCCESS") {
+                setIsEditModalOpen(false);
+                callReplyListApi(sno);
+            }
+        }).catch(error => { alert('댓글수정오류'); return false; });
     };
 
     const formattedRegidate = new Date(regidate).toLocaleDateString('ko-KR', {
@@ -444,14 +433,14 @@ const SubscribeLRead = (props) => {
         <section class="sub_wrap">
             <article class="s_cnt mp_pro_li ct1">
                 <div class="li_top">
-                    <h2 class="s_tit1">강의수강</h2>
+                    <h2 class="s_tit1">전문가구독</h2>
                 </div>
                 <div class="bo_w re1_wrap re1_wrap_writer">
                     <form name="frm" id="frm" action="" onsubmit="" method="post" >
                         <article class="res_w">
                             <div class="tb_outline">
                                 <div style={{ textAlign: "Right" }}>
-                                    <Link to={`/SubscribeLList`} className="bt_ty bt_ty2 submit_ty1 saveclass">목록</Link>
+                                    <Link to={`/SubscribeList`} className="bt_ty bt_ty2 submit_ty1 saveclass">목록</Link>
                                 </div>
                                 <table class="table_ty1">
                                     <tr>
@@ -488,7 +477,6 @@ const SubscribeLRead = (props) => {
                                     </tr>
                                 </table>
                                 <table class="table_ty1">
-
                                     <tr>
                                         <th>
                                             <label for="Content">내용</label>
@@ -509,8 +497,8 @@ const SubscribeLRead = (props) => {
                                         </td>
                                     </tr>
 
-                                     <Modal
-                                     ariaHideApp={false}
+                                    <Modal
+                                        ariaHideApp={false}
                                         isOpen={modalIsOpen}
                                         onRequestClose={closeImageModal}
                                         contentLabel="썸네일 이미지"
@@ -534,19 +522,13 @@ const SubscribeLRead = (props) => {
                                                 backgroundColor: 'rgba(0, 0, 0, 0.5)'
                                             }
                                         }}>
-                                       {selectedImage && (
+                                        {selectedImage && (
                                             <img src={`http://localhost:8080/api/subscribe/display?fileName=${selectedImage}`} alt="선택한 썸네일" />
                                         )}
                                     </Modal>
-
                                 </table>
                                 {/* 조건에 맞으면 수정/삭제 버튼 표시 */}
                                 {renderModifyDeleteButtons()}
-
-                                {/*                                 <div id="modifyButton" class="btn_confirm mt20" style={{ "margin-bottom": "44px", textAlign: "center" }}>
-                                    <Link to={`/SubscribeLUpdate/${sno}`} className="bt_ty bt_ty2 submit_ty1 saveclass">수정</Link>
-                                    <a href='javascript:' className="bt_ty bt_ty2 submit_ty1 saveclass" onClick={(e) => deleteArticle(e)}>삭제</a>
-                                </div> */}
                             </div>
                         </article>
                     </form>
@@ -555,18 +537,14 @@ const SubscribeLRead = (props) => {
                     <form name="frm2" id="frm2" action="" onsubmit="" method="post">
                         <div className='line'></div>
                         <table class="table_ty1">
-                            <tr id='snoDiv'>
+                                                         <tr id='snoDiv'>
                                 <td>
-                                    <input type="hidden" name="sno" id="snoVal" value={sno} />
+                                    <input type="hidden" name="sno" id="snoVal" value={sno} readonly="readonly" />
                                 </td>
-                            </tr>
-{/*                             <tr id='replyerDiv'>
-                                <td>
-                                    <input type="text" name="replyer" id="replyerVal" value={uuid} />
-                                    <input type="text" name="mno" value={mno} />
-                                </td>
-                            </tr> */}
-                              <table class="table_ty1">
+                            </tr> 
+                            <tr id='replyerDiv'>
+
+                                <table class="table_ty1">
                                     <tr style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
                                         <th style={{ marginRight: '10px' }}>
                                             <label for="mno">회원번호</label>
@@ -583,10 +561,11 @@ const SubscribeLRead = (props) => {
                                         </td>
                                     </tr>
                                 </table>
+                            </tr>
                             <tr>
                                 <td style={{ display: 'flex', alignItems: 'center' }}>
-                                <label for="rcomment" style={{marginRight: '135px'}}>댓글</label>
-                                    <input type="text" name=" rcomment" id="replyTextVal" placeholder='내용을 입력해주세요.' style={{ flex: '1', marginRight: '8px', height: '50px' }} />
+                                    <label for="rcomment" style={{marginRight: '135px'}}>댓글</label>
+                                    <input type="text" name="rcomment" id="replyTextVal" placeholder='내용을 입력해주세요.' style={{ flex: '1', marginRight: '8px', height: '50px' }} />
                                     <a href="javascript:" className="bt_ty1 bt_ty3 submit_ty1 saveclass" onClick={(e) => submitClick(e)}>등록</a>
                                 </td>
                             </tr>

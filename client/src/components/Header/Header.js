@@ -111,18 +111,22 @@ const Header = () => {
                                     홈
                                 </Link>
                             </li>
-                            <li className={`menulist ${window.location.pathname === '/' ? 'active' : ''}`}>
+                            {/* <li className={`menulist ${window.location.pathname === '/' ? 'active' : ''}`}>
                                 <Link to={'/'} onClick={() => handleMenuClick('/')}>
                                     커뮤니티
                                 </Link>
-                            </li>
+                            </li> */}
                             <li className={`menulist ${window.location.pathname === '/ChallengeList' ? 'active' : ''}`}>
                                 <Link to={'/ChallengeList'} onClick={() => handleMenuClick('/ChallengeList')}>
                                     챌린지
                                 </Link>
                             </li>
                             <li 
-                                className={`menulist ${window.location.pathname === '/SubscribeLList' ? 'active' : ''}`}
+                                   className={`menulist ${
+                                    (window.location.pathname === '/SubscribeLList' || window.location.pathname === '/SubscribeList') 
+                                        ? 'active' 
+                                        : ''
+                                }`}
                                 onMouseEnter={toggleSubmenu}
                                 onMouseLeave={toggleSubmenu}
                             >
@@ -132,19 +136,19 @@ const Header = () => {
                                 {submenuVisible && (
                                     <ul className="submenu">
                                         <li className="submenu-item">
-                                            <Link to={'/SubscribeLList'}>구독</Link>
+                                            <Link to={'/SubscribeList'}>구독</Link>
                                         </li>
                                         <li className="submenu-item">
-                                            <Link to={'/Lecture'}>강의</Link>
+                                            <Link to={'/SubscribeLList'}>강의</Link>
                                         </li>
                                     </ul>
                                 )}
                             </li>
-                            <li className="menulist">
-                                {/* <Link to={'/VboardList'} onClick={() => handleMenuClick('')}> */}
+                            {/* <li className="menulist">
+                                <Link to={'/VboardList'} onClick={() => handleMenuClick('')}>
                                 FAQ
-                                {/* </Link> */}
-                            </li>
+                                </Link> 
+                            </li> */}
                             <li className={`menulist ${window.location.pathname === '/MyPage' ? 'active' : ''}`}>
                                 <Link to={'/MyPage'} onClick={() => handleMenuClick('/MyPage')}>
                                     마이페이지

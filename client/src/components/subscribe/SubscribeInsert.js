@@ -1,58 +1,52 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useParams, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from "axios";
 import $ from 'jquery';
 import Swal from 'sweetalert2'
+import cookie from 'react-cookies';
 
-const SubscribeLUpdate = (props) => {
+const SubscribeLInsert = () => {
+
     const navigate = useNavigate();
 
-    const { sno } = useParams();
     const [selectedFile, setSelectedFile] = useState(null);
     const [imageDTOList, setImageDTOList] = useState([]);
-    const [imageList, setImageList] = useState([]);
-    const [title, setTitle] = useState();
-    const [content, setContent] = useState();
-    const [writer, setWriter] = useState();
+    const [uuid, setUuid] = useState('');
+    const [mno, setMno] = useState('');
 
+
+    /* 회원 정보 가져오기 */
     useEffect(() => {
-        callNboardInfoApi();
-        // $('#articleNo').hide();
-    }, [])
+        // token을 쿠키에서 가져와서 uuid를 받아오는 요청
+        const token = cookie.load('token');
+
+        if (token) {
+            axios.post('http://localhost:8080/api/member/loginCookie', { token })
+                .then(response => {
+                    const uuid = response.data.uuid;
+                    if (uuid) {
+                        axios.post('http://localhost:8080/api/member/read', { uuid })
+                            .then(response => {
+                                const data = response.data;
+                                setUuid(uuid);  // uuid 상태 값 설정
+                                setMno(data.mno);  // mno 값 설정
+                                // 'mno'가 상태로 업데이트된 후에 알림을 표시하기 위해, 업데이트된 값을 사용하도록 변경
+                            })
+                            .catch(error => {
+                                console.error('회원 정보를 가져오는 중 오류 발생:', error);
+                            });
+                    } else {
+                        console.error('아이디를 가져오는 데 실패했습니다.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Token으로 아이디를 가져오는 요청 중 오류 발생:', error);
+                });
+        }
+    }, []);
 
 
-    const callNboardInfoApi = () => {
-        axios.get(`http://localhost:8080/api/subscribe/subscribeLessionRead/${sno}`, {
-            // sno: sno
-        }).then(response => {
-            try {
-                setTitle(response.data.title);
-                setContent(response.data.contents);
-                setWriter(response.data.uuid);
-                setImageDTOList(response.data.imageDTOList);
-                setImageList(response.data.imageDTOList.map(image => ({
-                    thumbnailURL: image.thumbnailURL
-                })));
-            }
-            catch (error) {
-                alert('게시글데이터 받기 오류')
-            }
-        }).catch(error => { alert('게시글데이터 받기 오류2'); return false; });
-
-    }
-
-    const renderImages = () => {
-        return imageList.map((image, index) => (
-            <li className="hidden_type" key={index}>
-                <img
-                    src={`/display?fileName=${image.thumbnailURL}`}
-                    alt={`썸네일 ${index}`}
-                />
-            </li>
-        ));
-    };
-
-    const submitClick = (type, e) => {
+    const submitClick = async (type, e) => {
 
         const title_checker = $('#titleVal').val();
         const content_checker = $('#contentVal').val();
@@ -78,13 +72,22 @@ const SubscribeLUpdate = (props) => {
         if (fnValidate()) {
             let jsonstr = $("form[name='frm']").serialize();
 
-            axios.put(`http://localhost:8080/api/subscribe/subscribeLessionUpdate`, jsonstr)
+            jsonstr = decodeURIComponent(jsonstr);
+            let Json_form = JSON.stringify(jsonstr).replace(/\"/gi, '')
+            Json_form = "{\"" + Json_form.replace(/\&/g, '\",\"').replace(/=/gi, '\":"') + "\"}";
+
+            let Json_data = {
+                ...JSON.parse(Json_form),
+                imageDTOList: imageDTOList,
+            };
+
+            axios.post('http://localhost:8080/api/subscribe/subscribeInsert', Json_data)
                 .then(response => {
                     try {
                         if (response.data == "success") {
-                            sweetalert('수정되었습니다.', '', 'success', '확인')
-                            setTimeout(() => {
-                                navigate(`/SubscribeLRead/${sno}`);
+                            sweetalert('등록되었습니다.', '', 'success', '확인')
+                            setTimeout(function () {
+                                navigate('/SubscribeList');
                             }, 1000
                             );
                         }
@@ -106,6 +109,7 @@ const SubscribeLUpdate = (props) => {
         })
     }
 
+    // 파일 선택 input의 값이 변경될 때 실행되는 메서드
     const handleFileInput = (type, e) => {
         const selected = e.target.files[0];
         $('#imagefile').val(selected ? selected.name : '');
@@ -125,14 +129,14 @@ const SubscribeLUpdate = (props) => {
 
         try {
             const res = await axios.post("http://localhost:8080/api/subscribe/uploadAjax", formData);
-            const { fileName, uuid, folderPath, thumbnailURL } = res.data[0];
+            const { fileName, uuid, folderPath, imageURL, thumbnailURL, imgType } = res.data[0];
 
             setImageDTOList((prevImageDTOList) => [
                 ...prevImageDTOList,
-                { imgName: fileName, path: folderPath, uuid: uuid },
+                { imgName: fileName, imageURL: imageURL, thumbnailURL: thumbnailURL, path: folderPath, uuid: '111', imgType: "A" },
             ]);
 
-            const str = `<li data-name='${fileName}' data-path='${folderPath}' data-uuid='${uuid}'>
+            const str = `<li data-name='${fileName}' data-path='${folderPath}' data-uuid='${uuid} data-imageURL='${imageURL}'>
                             <img src='http://localhost:8080/api/subscribe/display?fileName=${thumbnailURL}'>
                           </li>`;
             $('#upload_img').append(str);
@@ -148,23 +152,25 @@ const SubscribeLUpdate = (props) => {
     };
 
     return (
-        <section class="sub_wrap">
-            <article class="s_cnt mp_pro_li ct1">
-                <div class="li_top">
-                    <h2 class="s_tit1">강의수정</h2>
+        <section className="sub_wrap">
+            <article className="s_cnt mp_pro_li ct1">
+                <div className="li_top">
+                    <h2 className="s_tit1">전문가구독 등록</h2>
                 </div>
-                <div class="bo_w re1_wrap re1_wrap_writer">
-                    <form name="frm" id="frm" action="" onsubmit="" method="put" >
-                        <article class="res_w">
-                            <div class="tb_outline">
-                                <table class="table_ty1">
-                                    <tr id="articleNo">
+                <div className="bo_w re1_wrap re1_wrap_writer">
+                    <form name="frm" id="frm" action="" method="post" >
+                        <article className="res_w">
+                            <div className="tb_outline">
+                                <table className="table_ty1">
+                                    <tr>
                                         <th>
-                                            <label for="sno">글번호</label>
+                                            <label for="writer">작성자</label>
                                         </th>
                                         <td>
-                                            <input type="text" name="sno" id="snoVal" value={sno} readonly="readonly" />
-                                            {/*  <input type="text" name="mno" id="snoVal" value="1" /> */}
+                                            {/* <input type="text" name="uuid" id="writerVal" value="111" />
+                                            <input type="text" name="mno" id="" value="1" /> */}
+                                            <input type="text" name="uuid" id="writerVal" value={uuid} readonly="readonly"/>
+                                            <input type="text" name="mno" id="" value={mno} readonly="readonly"/>
                                         </td>
                                     </tr>
                                     <tr>
@@ -172,7 +178,7 @@ const SubscribeLUpdate = (props) => {
                                             <label for="title">제목</label>
                                         </th>
                                         <td>
-                                            <input type="text" name="title" id="titleVal" defaultValue={title} />
+                                            <input type="text" name="title" id="titleVal" />
                                         </td>
                                     </tr>
                                     <tr>
@@ -180,7 +186,7 @@ const SubscribeLUpdate = (props) => {
                                             <label for="Content">내용</label>
                                         </th>
                                         <td>
-                                            <textarea style={{ padding: '15px' }} name="contents" id="contentVal" rows="" cols="" defaultValue={content} ></textarea>
+                                            <textarea style={{ padding: '15px' }} name="contents" id="contentVal" rows="" cols=""></textarea>
                                         </td>
                                     </tr>
                                     <tr>
@@ -189,23 +195,21 @@ const SubscribeLUpdate = (props) => {
                                         </th>
                                         <td className="fileBox fileBox1">
                                             <label htmlFor='imageSelect' className="btn_file">파일선택</label>
-                                            <input type="text" id="imagefile" className="fileName fileName1"
-                                                readOnly="readonly" placeholder="선택된 파일 없음" />
+                                            <input type="text" id="imagefile" className="fileName fileName1" readOnly="readonly" placeholder="선택된 파일 없음" />
                                             <input type="file" id="imageSelect" className="uploadBtn uploadBtn1"
                                                 onChange={e => handleFileInput('file', e)} multiple />
                                             <button type="button" className='bt_ty2' style={{ paddingTop: 5, paddingLeft: 10, paddingRight: 10 }}
                                                 onClick={handleRemoveAllThumbnails}>X</button>
                                             <ul id="upload_img">
-                                                {renderImages()}
                                             </ul>
                                         </td>
                                     </tr>
 
                                 </table>
-                                <div class="btn_confirm mt20" style={{ "margin-bottom": "44px", textAlign: "center" }}>
+                                <div className="btn_confirm mt20" style={{ "margin-bottom": "44px", textAlign: "center" }}>
                                     <a href="javascript:" className="bt_ty bt_ty2 submit_ty1 saveclass"
-                                        onClick={(e) => submitClick('file', e)}>저장</a>
-                                    <Link to={`/SubscribeLRead/${sno}`} className="bt_ty bt_ty2 submit_ty1 saveclass">취소</Link>
+                                        onClick={(e) => submitClick('file', e)}>저장 </a>
+                                    <Link to={'/SubscribeLList'} className="bt_ty bt_ty2 submit_ty1 saveclass">취소</Link>
                                 </div>
                             </div>
                         </article>
@@ -216,4 +220,4 @@ const SubscribeLUpdate = (props) => {
     );
 }
 
-export default SubscribeLUpdate;
+export default SubscribeLInsert;

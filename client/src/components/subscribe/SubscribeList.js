@@ -5,6 +5,7 @@ import $ from 'jquery';
 
 const SubscribeLList = () => {
 
+    //const history = useHistory();
 
     const [append_SboardList, setAppend_SboardList] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
@@ -21,26 +22,25 @@ const SubscribeLList = () => {
     }, []);
 
     const callSboardListApi = (page) => {
-        axios.get(`http://localhost:8080/api/subscribe/subscribeLessionList?page=${page}&searchType=${searchtype}&keyword=${keyword}`)
-            .then(response => {
-                try {
-                    setAppend_SboardList(subscribeListAppend(response.data));
-                    setTotalPages(response.data.pageMaker.totalCount);
-                    setStartPage(response.data.pageMaker.startPage);
-                    setEndPage(response.data.pageMaker.endPage);
-                    setPrev(response.data.pageMaker.prev);
-                    setNext(response.data.pageMaker.next);
-                } catch (error) {
-                    alert('작업중 오류가 발생하였습니다1.');
-                }
-            })
-            .catch(error => { alert('작업중 오류가 발생하였습니다2.'); return false; });
+        axios.get(`http://localhost:8080/api/subscribe/subscribeList?page=${page}&searchType=${searchtype}&keyword=${keyword}`
+            // sno: sno
+        ).then(response => {
+            try {
+                setAppend_SboardList(subscribeListAppend(response.data));
+                setTotalPages(response.data.pageMaker.totalCount);
+                setStartPage(response.data.pageMaker.startPage);
+                setEndPage(response.data.pageMaker.endPage);
+                setPrev(response.data.pageMaker.prev);
+                setNext(response.data.pageMaker.next);
+            } catch (error) {
+                alert('작업중 오류가 발생하였습니다1.');
+            }
+        }).catch(error => { alert('작업중 오류가 발생하였습니다2.'); return false; });
     };
 
     const subscribeListAppend = (nBoard) => {
         let result = [];
         let nBoardList = nBoard.list;
-       //  alert(nBoardList);
         
         for (let i = 0; i < nBoardList.length; i++) {
             let data = nBoardList[i];
@@ -51,13 +51,13 @@ const SubscribeLList = () => {
             var day = date.substr(8,2);
             var reg_date = year +'.'+month+'.'+day;
 
+            //list num
             var num = (nBoard.pageMaker.totalCount - (nBoard.pageMaker.cri.page - 1) * nBoard.pageMaker.cri.perPageNum - i);
 
             result.push(
                 <tr className="hidden_type">
-                    {/* <td> {data.sno} </td> */}
                     <td> {num} </td>
-                    <td><Link to={`/SubscribeLRead/${data.sno}`}>{data.title}{data.replycnt > 0 && `[${data.replycnt}]`}</Link></td>
+                    <td><Link to={`/SubscribeRead/${data.sno}`}>{data.title}{data.replycnt > 0 && ` [${data.replycnt}]`}</Link></td>
                     <td> {data.uuid} </td>
                     <td> {data.counts} </td>
                     <td> {reg_date} </td>
@@ -102,13 +102,13 @@ const SubscribeLList = () => {
         return (
             <div className="Paging">
                 {prev == true && (
-                    <button style={{ margin: 5, backgroundColor: '#6fa1dd !important'}} className="sch_bt99 wi_au" onClick={() => handlePageClick(startPage - 1)}>
+                    <button style={{ margin: 5, backgroundColor: '#6fa1dd !important' }} className="sch_bt99 wi_au" onClick={() => handlePageClick(startPage - 1)}>
                         {'<'}
                     </button>
                 )}
                 {pageNumbers}
                 {next == true && (
-                    <button style={{ margin: 5, backgroundColor: '#6fa1dd' }} className="sch_bt99 wi_au" onClick={() => handlePageClick(endPage + 1)}>
+                    <button style={{ margin: 5, backgroundColor: '#6fa1dd'}} className="sch_bt99 wi_au" onClick={() => handlePageClick(endPage + 1)}>
                         {'>'}
                     </button>
                 )}
@@ -120,7 +120,7 @@ const SubscribeLList = () => {
         <section className="sub_wrap" >
             <article className="s_cnt mp_pro_li ct1 mp_pro_li_admin">
                 <div className="li_top">
-                    <h2 className="s_tit1">강의수강</h2>
+                    <h2 className="s_tit1">전문가구독</h2>
                 </div>
 
                 <div className="searchingForm" >
@@ -129,7 +129,7 @@ const SubscribeLList = () => {
                             <option value="total">전체</option>
                             <option value="TITLE">제목</option>
                             <option value="CONTENTS">내용</option>
-                            <option value="uuid">작성자</option>
+                            <option value="UUID">작성자</option>
                         </select>
                         <input className='search' type="text" placeholder="검색어를 입력해주세요."
                             value={keyword} onChange={handleSearchValChange} />
@@ -156,7 +156,7 @@ const SubscribeLList = () => {
                 </div>
 
                 <div className="li_top_sch af">
-                    <Link to={'/SubscribeLInsert'} className="sch_bt2 wi_au">글쓰기</Link>
+                    <Link to={'/SubscribeInsert'} className="sch_bt2 wi_au">글쓰기</Link>
                 </div>
             </article>
         </section>

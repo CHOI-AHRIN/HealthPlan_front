@@ -22,7 +22,7 @@ const SubscribeLUpdate = (props) => {
 
 
     const callNboardInfoApi = () => {
-        axios.get(`http://localhost:8080/api/subscribe/subscribeLessionRead/${sno}`, {
+        axios.get(`http://localhost:8080/api/subscribe/subscribeRead/${sno}`, {
             // sno: sno
         }).then(response => {
             try {
@@ -31,7 +31,7 @@ const SubscribeLUpdate = (props) => {
                 setWriter(response.data.uuid);
                 setImageDTOList(response.data.imageDTOList);
                 setImageList(response.data.imageDTOList.map(image => ({
-                    thumbnailURL: image.thumbnailURL
+                    thumbnailURL: image.imgName
                 })));
             }
             catch (error) {
@@ -45,7 +45,7 @@ const SubscribeLUpdate = (props) => {
         return imageList.map((image, index) => (
             <li className="hidden_type" key={index}>
                 <img
-                    src={`/display?fileName=${image.thumbnailURL}`}
+                    src={`http://localhost:8080/api/subscribe/display?fileName=${image.thumbnailURL}`}
                     alt={`썸네일 ${index}`}
                 />
             </li>
@@ -77,14 +77,22 @@ const SubscribeLUpdate = (props) => {
 
         if (fnValidate()) {
             let jsonstr = $("form[name='frm']").serialize();
+            
+            jsonstr = decodeURIComponent(jsonstr);
+            let Json_form = JSON.stringify(jsonstr).replace(/\"/gi, '')
+            Json_form = "{\"" + Json_form.replace(/\&/g, '\",\"').replace(/=/gi, '\":"') + "\"}";
+            let Json_data = {
+                ...JSON.parse(Json_form),
+                imageDTOList: imageDTOList,
+            };
 
-            axios.put(`http://localhost:8080/api/subscribe/subscribeLessionUpdate`, jsonstr)
+            axios.put(`http://localhost:8080/api/subscribe/subscribeUpdate`, Json_data)
                 .then(response => {
                     try {
                         if (response.data == "success") {
                             sweetalert('수정되었습니다.', '', 'success', '확인')
                             setTimeout(() => {
-                                navigate(`/SubscribeLRead/${sno}`);
+                                navigate(`/SubscribeRead/${sno}`);
                             }, 1000
                             );
                         }
@@ -125,14 +133,14 @@ const SubscribeLUpdate = (props) => {
 
         try {
             const res = await axios.post("http://localhost:8080/api/subscribe/uploadAjax", formData);
-            const { fileName, uuid, folderPath, thumbnailURL } = res.data[0];
+            const { fileName, uuid, folderPath, imageURL, thumbnailURL, imgType } = res.data[0];
 
             setImageDTOList((prevImageDTOList) => [
                 ...prevImageDTOList,
-                { imgName: fileName, path: folderPath, uuid: uuid },
+                { imgName: fileName, imageURL: imageURL, thumbnailURL: thumbnailURL, path: folderPath, uuid: '111', imgType: "A" },
             ]);
 
-            const str = `<li data-name='${fileName}' data-path='${folderPath}' data-uuid='${uuid}'>
+            const str = `<li data-name='${fileName}' data-path='${folderPath}' data-uuid='${uuid} data-imageURL='${imageURL}'>
                             <img src='http://localhost:8080/api/subscribe/display?fileName=${thumbnailURL}'>
                           </li>`;
             $('#upload_img').append(str);
@@ -151,7 +159,7 @@ const SubscribeLUpdate = (props) => {
         <section class="sub_wrap">
             <article class="s_cnt mp_pro_li ct1">
                 <div class="li_top">
-                    <h2 class="s_tit1">강의수정</h2>
+                    <h2 class="s_tit1">전문가구독 수정</h2>
                 </div>
                 <div class="bo_w re1_wrap re1_wrap_writer">
                     <form name="frm" id="frm" action="" onsubmit="" method="put" >
@@ -164,7 +172,7 @@ const SubscribeLUpdate = (props) => {
                                         </th>
                                         <td>
                                             <input type="text" name="sno" id="snoVal" value={sno} readonly="readonly" />
-                                            {/*  <input type="text" name="mno" id="snoVal" value="1" /> */}
+                                            {/* <input type="text" name="mno" id="snoVal" value="1" /> */}
                                         </td>
                                     </tr>
                                     <tr>
@@ -205,7 +213,7 @@ const SubscribeLUpdate = (props) => {
                                 <div class="btn_confirm mt20" style={{ "margin-bottom": "44px", textAlign: "center" }}>
                                     <a href="javascript:" className="bt_ty bt_ty2 submit_ty1 saveclass"
                                         onClick={(e) => submitClick('file', e)}>저장</a>
-                                    <Link to={`/SubscribeLRead/${sno}`} className="bt_ty bt_ty2 submit_ty1 saveclass">취소</Link>
+                                    <Link to={`/SubscribeRead/${sno}`} className="bt_ty bt_ty2 submit_ty1 saveclass">취소</Link>
                                 </div>
                             </div>
                         </article>

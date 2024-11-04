@@ -24,43 +24,49 @@ import Modify from './Member/Modify';
 import MyPage from './Member/MyPage';
 
 
-// 게시판 컴포넌트 import
-import SubscribeLList   from './subscribe/SubscribeLList';
+// 구독 컴포넌트 import
+import SubscribeLList from './subscribe/SubscribeLList';
 import SubscribeLInsert from './subscribe/SubscribeLInsert';
-import SubscribeLRead   from './subscribe/SubscribeLRead';
+import SubscribeLRead from './subscribe/SubscribeLRead';
 import SubscribeLUpdate from './subscribe/SubscribeLUpdate';
 
+// 구독 전문가 컴포넌트 import
+import SubscribeList    from './subscribe/SubscribeList';
+import SubscribeInsert  from './subscribe/SubscribeInsert';
+import SubscribeRead    from './subscribe/SubscribeRead';
+import SubscribeUpdate  from './subscribe/SubscribeUpdate';
+
+// 챌린지 컴포넌트 import
 import ChallengeList from './Challenge/ChallengeList';
 import ChallengeInsert from './Challenge/ChallengeInsert';
 import ChallengeRead from './Challenge/ChallengeRead';
 import ChallengeUpdate from './Challenge/ChallengeUpdate';
 
 
-
 const App = () => {
   const [name, setName] = useState(''); // 사용자 이름 저장
   const [token, setToken] = useState(cookie.load('token'));
- 
+
   useEffect(() => {
-    
+
     if (token) {
       axios
         .post('http://localhost:8080/api/member/loginCookie', { token })
         .then(response => {
           const uuid = response.data.uuid;
           if (uuid) {
-            axios.post('http://localhost:8080/apimember/read', { uuid })
-                .then(response => {
-                    const data = response.data;
-                    setToken(token);  // uuid 상태 값 설정
-                    setName(data.name);  // mno 값 설정
-                })
-                .catch(error => {
-                    console.error('회원 정보를 가져오는 중 오류 발생:', error);
-                });
-        } else {
+            axios.post('http://localhost:8080/api/member/read', { uuid })
+              .then(response => {
+                const data = response.data;
+                setToken(token);  // uuid 상태 값 설정
+                setName(data.name);  // mno 값 설정
+              })
+              .catch(error => {
+                console.error('회원 정보를 가져오는 중 오류 발생:', error);
+              });
+          } else {
             console.error('아이디를 가져오는 데 실패했습니다.');
-        }
+          }
         })
         .catch(error => {
           noPermission();
@@ -68,33 +74,6 @@ const App = () => {
     }
   }, [token]);
 
-
-/*     if (
-      window.location.pathname.includes('/MainForm')  ||
-      window.location.pathname.includes('/MyPage') ||
-      window.location.pathname.includes('/MyPage') ||
-      window.location.pathname.includes('/Modify/') 
-      // window.location.pathname.includes('/CarRegister') ||
-      // window.location.pathname.includes('/findStation') ||
-      // window.location.pathname.includes('/NboardList') ||
-      // window.location.pathname.includes('/NboardRegister') ||
-      // window.location.pathname.includes('/NboardRead') ||
-      // window.location.pathname.includes('/NboardModify')
-    ) {
-      axios
-        .post('/api/member/loginCookie', {
-          token: cookie.load('token') 
-        })
-        .then(response => {
-          if (response.data.uuid === undefined) {
-            noPermission();
-          } 
-        })
-        .catch(error => {
-          noPermission();
-        });
-    }
-  }, []); */
 
   const noPermission = () => {
     if (window.location.hash !== 'nocookie') {
@@ -123,8 +102,12 @@ const App = () => {
         <Route path='/SubscribeLInsert' element={<SubscribeLInsert />} />
         <Route path='/SubscribeLRead/:sno' element={<SubscribeLRead />} />
         <Route path='/SubscribeLUpdate/:sno' element={<SubscribeLUpdate />} />
+        <Route path='/SubscribeList' element={<SubscribeList/>} />
+        <Route path='/SubscribeInsert' element={<SubscribeInsert/>} />
+        <Route path='/SubscribeRead/:sno' element={<SubscribeRead/>} />
+        <Route path='/SubscribeUpdate/:sno' element={<SubscribeUpdate/>} />
         <Route path='/ChallengeList' element={<ChallengeList />} />
-        <Route path='/ChallengeRead/:bno' element={<ChallengeRead/>}/>
+        <Route path='/ChallengeRead/:bno' element={<ChallengeRead />} />
         <Route path='/ChallengeInsert' element={<ChallengeInsert />} />
         <Route path='/ChallengeUpdate/:bno' element={<ChallengeUpdate />} />
       </Routes>
