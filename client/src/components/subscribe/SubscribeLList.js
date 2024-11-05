@@ -40,7 +40,6 @@ const SubscribeLList = () => {
     const subscribeListAppend = (nBoard) => {
         let result = [];
         let nBoardList = nBoard.list;
-       //  alert(nBoardList);
         
         for (let i = 0; i < nBoardList.length; i++) {
             let data = nBoardList[i];
@@ -51,16 +50,23 @@ const SubscribeLList = () => {
             var day = date.substr(8,2);
             var reg_date = year +'.'+month+'.'+day;
 
+            // list num
             var num = (nBoard.pageMaker.totalCount - (nBoard.pageMaker.cri.page - 1) * nBoard.pageMaker.cri.perPageNum - i);
 
             result.push(
                 <tr className="hidden_type">
-                    {/* <td> {data.sno} </td> */}
                     <td> {num} </td>
-                    <td><Link to={`/SubscribeLRead/${data.sno}`}>{data.title}{data.replycnt > 0 && `[${data.replycnt}]`}</Link></td>
+                    <td>{
+                        data.titleimg != null
+                        ? <img src={`http://localhost:8080/api/supload/display?fileName=${data.titleimg}`} width='35px' height='35px'/>
+                        : <img src={require(`../../img/layout/exerciseMan.gif`)} width='40px' height='40px'/>
+                    }
+                    </td>
+                    <td><Link to={`/SubscribeLRead/${data.sno}`}>{data.title}{data.replycnt > 0 && ` [${data.replycnt}]`}</Link></td>
                     <td> {data.uuid} </td>
+                    <td> {data.spoint} </td>
                     <td> {data.counts} </td>
-                    <td> {reg_date} </td>
+                    <td> {data.wdate} </td>
                 </tr>
             )
         }
@@ -127,9 +133,9 @@ const SubscribeLList = () => {
                     <form onSubmit={(e) => handleSearchButtonClick(e)}>
                         <select value={searchtype} onChange={handleSearchTypeChange} id="searchtype" className="searchzone">
                             <option value="total">전체</option>
-                            <option value="TITLE">제목</option>
-                            <option value="CONTENTS">내용</option>
-                            <option value="uuid">작성자</option>
+                            <option value="TITLE">강의제목</option>
+                            <option value="CONTENTS">강의내용</option>
+                            <option value="uuid">강의등록</option>
                         </select>
                         <input className='search' type="text" placeholder="검색어를 입력해주세요."
                             value={keyword} onChange={handleSearchValChange} />
@@ -138,16 +144,18 @@ const SubscribeLList = () => {
                 </div>
 
                 <div className="list_cont list_cont_admin">
-                    <table className="table_ty1 ad_tlist">
+                    <table className="table_ty1 ad_slist">
                         <tr>
                             <th>번호</th>
-                            <th>제목</th>
-                            <th>작성자</th>
+                            <th>강의이미지</th>
+                            <th>강의제목</th>
+                            <th>강의등록</th>
+                            <th>수강료</th>
                             <th>조회수</th>
-                            <th>작성일</th>
+                            <th>등록일</th>
                         </tr>
                     </table>
-                    <table id="appendNboardList" className="table_ty2 ad_tlist">
+                    <table id="appendNboardList" className="table_ty2 ad_slist">
                         {append_SboardList}
                     </table>
                     <div id="spaging">

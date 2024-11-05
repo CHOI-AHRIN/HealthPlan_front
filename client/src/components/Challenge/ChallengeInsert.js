@@ -18,7 +18,7 @@ const SubscribeLInsert = () => {
     useEffect(() => {
         // token을 쿠키에서 가져와서 uuid를 받아오는 요청
         const token = cookie.load('token');
-    
+
         if (token) {
             axios.post('http://localhost:8080/api/member/loginCookie', { token })
                 .then(response => {
@@ -72,6 +72,15 @@ const SubscribeLInsert = () => {
             let jsonstr = $("form[name='frm']").serialize();
             //alert(jsonstr);
 
+            jsonstr = decodeURIComponent(jsonstr);
+            let Json_form = JSON.stringify(jsonstr).replace(/\"/gi, '')
+            Json_form = "{\"" + Json_form.replace(/\&/g, '\",\"').replace(/=/gi, '\":"') + "\"}";
+
+            let Json_data = {
+                ...JSON.parse(Json_form),
+                imageDTOList: imageDTOList,
+            };
+
             axios.post('http://localhost:8080/api/challenge/challengeinsert', jsonstr)
                 .then(response => {
                     try {
@@ -90,7 +99,7 @@ const SubscribeLInsert = () => {
                 })
                 .catch(error => { alert('2. 작업중 오류가 발생하였습니다.'); return false; });
         }
-    }; 
+    };
 
     const sweetalert = (title, contents, icon, confirmButtonText) => {
         Swal.fire({
@@ -100,7 +109,7 @@ const SubscribeLInsert = () => {
             confirmButtonText: confirmButtonText
         })
     }
-    
+
     // 파일 선택 input의 값이 변경될 때 실행되는 메서드
     const handleFileInput = (type, e) => {
         const selected = e.target.files[0];
@@ -110,26 +119,26 @@ const SubscribeLInsert = () => {
 
     useEffect(() => {
         if (selectedFile) {
-                handlePostImage();
-            }
+            handlePostImage();
+        }
     }, [selectedFile]);
-    
+
 
     const handlePostImage = async () => {
         const formData = new FormData();
         formData.append('uploadFiles', selectedFile);
 
         try {
-            const res = await axios.post("/uploadAjax", formData);
-            const { fileName, uuid, folderPath, thumbnailURL } = res.data[0];
+            const res = await axios.post("http://localhost:8080/api/challenge/uploadAjax", formData);
+            const { fileName, uuid, folderPath, imageURL, thumbnailURL, imgType} = res.data[0];
 
             setImageDTOList((prevImageDTOList) => [
                 ...prevImageDTOList,
-                { imgName: fileName, path: folderPath, uuid: uuid },
+                {imgName: fileName, imageURL: imageURL, thumbnailURL: thumbnailURL, path: folderPath, uuid: uuid, imgType: "A" },
             ]);
 
-            const str = `<li data-name='${fileName}' data-path='${folderPath}' data-uuid='${uuid}'>
-                            <img src='/display?fileName=${thumbnailURL}'>
+            const str = `<li data-name='${fileName}' data-path='${folderPath}' data-uuid='${uuid} data-imageURL='${imageURL}' >
+                            <img src='http://localhost:8080/api/challenge/display?fileName=${thumbnailURL}'>
                           </li>`;
             $('#upload_img').append(str);
         } catch (error) {
@@ -154,16 +163,24 @@ const SubscribeLInsert = () => {
                         <article className="res_w">
                             <div className="tb_outline">
                                 <table className="table_ty1">
-                                    <tr>
-                                        <th>
-                                            <label for="writer">작성자</label>
+                                    <tr style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
+
+                                        <th style={{ marginRight: '10px' }}>
+                                            <label for="mno">회원번호</label>
                                         </th>
-                                        <td>
-                                            {/* <input type="text" name="writer" id="writerVal" readOnly="readonly" value={memNickName} /> */}
-                                            <input type="text"  id="writerVal" value={uuid} readonly="readonly"/>
-                                            <input type="text" name="mno" id="" value={mno} readonly="readonly"/>
+                                        <td style={{ flex: '1', marginRight: '10px' }}>
+                                            <input type="text" name="mno" id="mno" readOnly="readonly" value={mno} style={{ width: '100%' }} />
+                                        </td>
+
+                                        <th style={{ marginLeft: '20px' }}>
+                                            <label for="writerVal">작성자</label>
+                                        </th>
+                                        <td style={{ flex: '1', marginRight: '10px' }}>
+                                            <input type="text" name="writerVal" id="writerVal" readOnly="readonly" value={uuid} style={{ width: '100%' }} />
                                         </td>
                                     </tr>
+                                </table>
+                                <table className="table_ty1">
                                     <tr>
                                         <th>
                                             <label for="title">제목</label>
@@ -186,8 +203,7 @@ const SubscribeLInsert = () => {
                                         </th>
                                         <td className="fileBox fileBox1">
                                             <label htmlFor='imageSelect' className="btn_file">파일선택</label>
-                                            <input type="text" id="imagefile" className="fileName fileName1"
-                                                readOnly="readonly" placeholder="선택된 파일 없음" />
+                                            <input type="text" id="imagefile" className="fileName fileName1" readOnly="readonly" placeholder="선택된 파일 없음" />
                                             <input type="file" id="imageSelect" className="uploadBtn uploadBtn1"
                                                 onChange={e => handleFileInput('file', e)} multiple />
                                             <button type="button" className='bt_ty2' style={{ paddingTop: 5, paddingLeft: 10, paddingRight: 10 }}
@@ -201,7 +217,7 @@ const SubscribeLInsert = () => {
                                 <div className="btn_confirm mt20" style={{ "margin-bottom": "44px", textAlign: "center" }}>
                                     <a href="javascript:" className="bt_ty bt_ty2 submit_ty1 saveclass"
                                         onClick={(e) => submitClick('file', e)}>저장 </a>
-                                    <Link to={'/SubscribeLList'} className="bt_ty bt_ty2 submit_ty1 saveclass">취소</Link>
+                                    <Link to={'/ChallengeLList'} className="bt_ty bt_ty2 submit_ty1 saveclass">취소</Link>
                                 </div>
                             </div>
                         </article>

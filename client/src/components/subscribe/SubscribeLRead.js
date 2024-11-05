@@ -186,7 +186,7 @@ const SubscribeLRead = (props) => {
         return imageList.map((images, index) => (
             <li className="hidden_type" key={index}>
                 <img
-                    src={`http://localhost:8080/api/subscribe/display?fileName=${images.imgName}`}
+                    src={`http://localhost:8080/api/supload/display?fileName=${images.imgName}`}
                     alt={`썸네일 ${index}`}
                     onClick={() => handleThumbnailClick(images.imageURL)}
                 />
@@ -551,11 +551,11 @@ const SubscribeLRead = (props) => {
                         </article>
                     </form>
 
-                    <div className='table_ty99'>댓글</div>
+                    <div className='table_ty99' style={{ marginTop: '50px' }}>댓글</div>
                     <form name="frm2" id="frm2" action="" onsubmit="" method="post">
                         <div className='line'></div>
                         <table class="table_ty1">
-                            <tr id='snoDiv'>
+                            <tr id='snoDiv' style={{ display: 'none' }}>
                                 <td>
                                     <input type="hidden" name="sno" id="snoVal" value={sno} />
                                 </td>

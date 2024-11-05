@@ -161,18 +161,25 @@ const SubscribeLInsert = () => {
                     <form name="frm" id="frm" action="" method="post" >
                         <article className="res_w">
                             <div className="tb_outline">
-                                <table className="table_ty1">
-                                    <tr>
-                                        <th>
-                                            <label for="writer">작성자</label>
+                            <table className="table_ty1">
+                                    <tr style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
+
+                                        <th style={{ marginRight: '10px' }}>
+                                            <label for="mno">회원번호</label>
                                         </th>
-                                        <td>
-                                            {/* <input type="text" name="uuid" id="writerVal" value="111" />
-                                            <input type="text" name="mno" id="" value="1" /> */}
-                                            <input type="text" name="uuid" id="writerVal" value={uuid} readonly="readonly"/>
-                                            <input type="text" name="mno" id="" value={mno} readonly="readonly"/>
+                                        <td style={{ flex: '1', marginRight: '10px' }}>
+                                            <input type="text" name="mno" id="mno" readOnly="readonly" value={mno} style={{ width: '100%' }} />
+                                        </td>
+
+                                        <th style={{ marginLeft: '20px' }}>
+                                            <label for="writerVal">작성자</label>
+                                        </th>
+                                        <td style={{ flex: '1', marginRight: '10px' }}>
+                                            <input type="text" name="writerVal" id="writerVal" readOnly="readonly" value={uuid} style={{ width: '100%' }} />
                                         </td>
                                     </tr>
+                                </table>
+                                <table className="table_ty1">
                                     <tr>
                                         <th>
                                             <label for="title">제목</label>

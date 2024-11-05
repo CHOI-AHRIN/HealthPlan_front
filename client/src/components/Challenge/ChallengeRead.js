@@ -191,12 +191,12 @@ const getUuidByMno = (mno) => {
     // 파일 
     const renderImages = () => {
         const imageList = imageDTOList;
-        return imageList.map((image, index) => (
+        return imageList.map((images, index) => (
             <li className="hidden_type" key={index}>
                 <img
-                    src={`/display?fileName=${image.thumbnailURL}`}
+                    src={`http://localhost:8080/api/challenge/display?fileName=${images.imgName}`}
                     alt={`썸네일 ${index}`}
-                    onClick={() => handleThumbnailClick(image.imageURL)}
+                    onClick={() => handleThumbnailClick(images.imageURL)}
                 />
             </li>
         ));
@@ -204,8 +204,8 @@ const getUuidByMno = (mno) => {
 
     const deleteArticle = (e) => {
         sweetalertDelete1('삭제하시겠습니까?', () => {
-            axios.delete(`http://localhost:8080/api/challenge/challengedelete/${bno}`, {
-                // bno: bno
+            axios.delete(`http://localhost:8080/api/challenge/challengeLessionDelete/${bno}`, {
+                // sno: sno
             }).then(response => {
 
             }).catch(error => {
@@ -332,7 +332,6 @@ const getUuidByMno = (mno) => {
                         <div className="cat">
                             <p style={{ fontSize: '19px' }}>
                                 {/*  {data.userUuid} */}{/* {' '} */}
-                                
                                 {uuidMap[data.mno] ? uuidMap[data.mno] : '아이디 누락'} {/* uuid 표시 */}
                                 {data.mno}
                                 <span style={{ fontSize: '12px' }}>
@@ -517,7 +516,7 @@ const getUuidByMno = (mno) => {
                                             </ul>
                                         </td>
                                     </tr>
-                                    {/*  <Modal
+                                      <Modal
                                         isOpen={modalIsOpen}
                                         onRequestClose={closeImageModal}
                                         contentLabel="썸네일 이미지"
@@ -542,9 +541,9 @@ const getUuidByMno = (mno) => {
                                             }
                                         }}>
                                         {selectedImage && (
-                                            <img src={`/display?fileName=${selectedImage}`} alt="선택한 썸네일" />
+                                            <img src={`http://localhost:8080/api/challenge/display?fileName=${selectedImage}`} alt="선택한 썸네일" />
                                         )}
-                                    </Modal> */}
+                                    </Modal> 
 
                                 </table>
                                 {/* 조건에 맞으면 수정/삭제 버튼 표시 */}
@@ -558,23 +557,35 @@ const getUuidByMno = (mno) => {
                         </article>
                     </form>
 
-                    <div className='table_ty99'>댓글</div>
+                    <div className='table_ty99' style={{ marginTop: '50px' }}>댓글</div>
                     <form name="frm2" id="frm2" action="" onsubmit="" method="post">
                         <div className='line'></div>
                         <table class="table_ty1">
-                            <tr id='bnoDiv'>
+                            <tr id='bnoDiv' style={{ display: 'none' }}>
                                 <td>
-                                    <input type="text" name="bno" id="bnoVal" value={bno} />
+                                    <input type="hidden" name="bno" id="bnoVal" value={bno} />
                                 </td>
                             </tr>
                             <tr id='replyerDiv'>
-                                <td>
-                                    <input type="text" name="replyer" id="replyerVal" value={uuid} />
-                                    <input type="hidden" name="mno" value={mno} />
-                                </td>
+                                    <tr style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
+                                        <th style={{ marginRight: '10px' }}>
+                                            <label for="mno">회원번호</label>
+                                        </th>
+                                        <td style={{ flex: '1', marginRight: '10px' }}>
+                                            <input type="text" name="mno" id="mno" readOnly="readonly" value={mno} style={{ width: '100%' }} />
+                                        </td>
+
+                                        <th style={{ marginLeft: '20px' }}>
+                                            <label for="replyer">작성자</label>
+                                        </th>
+                                        <td style={{ flex: '1', marginRight: '10px' }}>
+                                            <input type="text" name="replyer" id="replyerVal" readOnly="readonly" value={uuid} style={{ width: '100%' }} />
+                                        </td>
+                                    </tr>
                             </tr>
                             <tr>
                                 <td style={{ display: 'flex', alignItems: 'center' }}>
+                                <label for="rcomment" style={{ marginRight: '135px' }}>댓글</label>
                                     <input type="text" name=" rcomment" id="replyTextVal" placeholder='내용을 입력해주세요.' style={{ flex: '1', marginRight: '8px', height: '50px' }} />
                                     <a href="javascript:" className="bt_ty1 bt_ty3 submit_ty1 saveclass" onClick={(e) => submitClick(e)}>등록</a>
                                 </td>
@@ -588,7 +599,7 @@ const getUuidByMno = (mno) => {
                     </div>
                 </div>
 
-                {/*                 <Modal
+                                <Modal
                     isOpen={isEditModalOpen}
                     onRequestClose={closeEditModal}
                     style={{
@@ -623,7 +634,7 @@ const getUuidByMno = (mno) => {
                         <button className="bt_ty bt_ty2 submit_ty1 saveclass" onClick={handleEditSubmit}>저장</button>
                         <button className="bt_ty bt_ty2 submit_ty1 saveclass" onClick={closeEditModal}>취소</button>
                     </div>
-                </Modal> */}
+                </Modal>
 
                 <Modal
                     ariaHideApp={false}
