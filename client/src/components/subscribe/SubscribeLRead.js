@@ -535,7 +535,7 @@ const SubscribeLRead = (props) => {
                                             }
                                         }}>
                                        {selectedImage && (
-                                            <img src={`http://localhost:8080/api/subscribe/display?fileName=${selectedImage}`} alt="선택한 썸네일" />
+                                            <img src={`http://localhost:8080/api/supload/display?fileName=${selectedImage}`} alt="선택한 썸네일" />
                                         )}
                                     </Modal>
 

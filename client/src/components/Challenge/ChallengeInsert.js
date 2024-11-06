@@ -129,7 +129,7 @@ const SubscribeLInsert = () => {
         formData.append('uploadFiles', selectedFile);
 
         try {
-            const res = await axios.post("http://localhost:8080/api/challenge/uploadAjax", formData);
+            const res = await axios.post("http://localhost:8080/api/cupload/uploadAjax", formData);
             const { fileName, uuid, folderPath, imageURL, thumbnailURL, imgType} = res.data[0];
 
             setImageDTOList((prevImageDTOList) => [
@@ -138,7 +138,7 @@ const SubscribeLInsert = () => {
             ]);
 
             const str = `<li data-name='${fileName}' data-path='${folderPath}' data-uuid='${uuid} data-imageURL='${imageURL}' >
-                            <img src='http://localhost:8080/api/challenge/display?fileName=${thumbnailURL}'>
+                            <img src='http://localhost:8080/api/cupload/display?fileName=${thumbnailURL}'>
                           </li>`;
             $('#upload_img').append(str);
         } catch (error) {

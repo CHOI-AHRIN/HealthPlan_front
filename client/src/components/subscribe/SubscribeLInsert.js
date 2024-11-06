@@ -48,6 +48,7 @@ const SubscribeLInsert = () => {
     const submitClick = async (type, e) => {
 
         const title_checker = $('#titleVal').val();
+        const spoint_checker = $('#spointVal').val();
         const content_checker = $('#contentVal').val();
 
         const fnValidate = (e) => {
@@ -58,6 +59,13 @@ const SubscribeLInsert = () => {
             }
             $('#titleVal').removeClass('border_validate_err');
 
+            if (spoint_checker === '') {
+                $('#spointVal').addClass('border_validate_err');
+                sweetalert('수강료를 입력해주세요.', '', 'error', '닫기')
+                return false;
+            }
+            $('#spointVal').removeClass('border_validate_err');
+
             if (content_checker === '') {
                 $('#contentVal').addClass('border_validate_err');
                 sweetalert('내용을 입력해주세요.', '', 'error', '닫기')
@@ -67,6 +75,7 @@ const SubscribeLInsert = () => {
 
             return true;
         }
+
 
         if (fnValidate()) {
             let jsonstr = $("form[name='frm']").serialize();
@@ -114,8 +123,10 @@ const SubscribeLInsert = () => {
     const handleFileInput = (type, e) => {
         const selected = e.target.files[0];
         $('#imagefile').val(selected ? selected.name : '');
+        selected.imgType = "A";
         setSelectedFile(selected);
     }
+    
 
     //대표이미지
     const handleFileInput2 = (type, e) => {
