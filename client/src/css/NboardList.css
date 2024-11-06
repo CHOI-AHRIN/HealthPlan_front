@@ -87,6 +87,7 @@ img, fieldset, button {border:none;}
 
 /* 테이블 */
 .list_cont_admin .ad_tlist tr th:nth-child(2), .list_cont_admin .ad_tlist tr td:nth-child(2) {width: 50%; text-align: center; text-align: left; -webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box; padding-left: 20px;}
+.list_cont_admin2 .ad_tlist2 tr th:nth-child(2), .list_cont_admin2 .ad_tlist2 tr td:nth-child(2) {width: 30%; text-align: center; -webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box; padding-left: 20px;}
 
 .table_ty1 tr th{border: 1px solid #ddd; background: #fff; font-size: 17px; color: #303030;	font-weight: 500; height: 59px; line-height: 59px; box-sizing: border-box;}
 .table_ty1 tr th a{font-size: 17px; color: #303030;	font-weight: 500;}

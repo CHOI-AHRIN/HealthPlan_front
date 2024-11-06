@@ -146,7 +146,7 @@ const SubscribeLRead = (props) => {
         if (uuid === writer) {
             return (
                 <div id="modifyButton" className="btn_confirm mt20" style={{ marginBottom: '44px', textAlign: 'center' }}>
-                    <Link to={`/SubscribeLUpdate/${sno}`} className="bt_ty bt_ty2 submit_ty1 saveclass">수정</Link>
+                    <Link to={`/SubscribeUpdate/${sno}`} className="bt_ty bt_ty2 submit_ty1 saveclass">수정</Link>
                     <a href="javascript:" className="bt_ty bt_ty2 submit_ty1 saveclass" onClick={deleteArticle}>삭제</a>
                 </div>
             );
@@ -207,7 +207,7 @@ const SubscribeLRead = (props) => {
         return imageList.map((images, index) => (
             <li className="hidden_type" key={index}>
                 <img
-                    src={`http://localhost:8080/api/subscribe/display?fileName=${images.imgName}`}
+                    src={`http://localhost:8080/api/supload/display?fileName=${images.imgName}`}
                     alt={`썸네일 ${index}`}
                     onClick={() => handleThumbnailClick(images.imageURL)}
                 />
@@ -523,7 +523,7 @@ const SubscribeLRead = (props) => {
                                             }
                                         }}>
                                         {selectedImage && (
-                                            <img src={`http://localhost:8080/api/subscribe/display?fileName=${selectedImage}`} alt="선택한 썸네일" />
+                                            <img src={`http://localhost:8080/api/supload/display?fileName=${selectedImage}`} alt="선택한 썸네일" />
                                         )}
                                     </Modal>
                                 </table>

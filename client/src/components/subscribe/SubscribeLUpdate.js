@@ -12,12 +12,14 @@ const SubscribeLUpdate = (props) => {
     const [imageDTOList, setImageDTOList] = useState([]);
     const [mainImage, setMainImageList] = useState([]);
     const [imageList, setImageList] = useState([]);
+    const [imageMList, setMImageList] = useState([]);
     const [title, setTitle] = useState();
     const [spoint, setSpoint] = useState();
     const [imgType, setImgType] = useState();
     const [mno, setMno] = useState();
     const [content, setContent] = useState();
     const [writer, setWriter] = useState();
+
 
 
     useEffect(() => {
@@ -37,10 +39,12 @@ const SubscribeLUpdate = (props) => {
                 setImgType(response.data.imgType);
                 setImageDTOList(response.data.imageDTOList);
                 setMainImageList(response.data.mainImage);
-                /* setImageDTOList(response.data.imageDTOList);
                 setImageList(response.data.imageDTOList.map(image => ({
-                    thumbnailURL: image.thumbnailURL
-                }))); */
+                    thumbnailURL: image.imgName
+                })));
+                setMImageList(response.data.mainImage.map(image => ({
+                    thumbnailURL: image.imgName
+                })));
             }
             catch (error) {
                 alert('게시글데이터 받기 오류')
@@ -75,6 +79,7 @@ const SubscribeLUpdate = (props) => {
     const submitClick = (type, e) => {
 
         const title_checker = $('#titleVal').val();
+        const spoint_checker = $('#spointVal').val();
         const content_checker = $('#contentVal').val();
 
         const fnValidate = (e) => {
@@ -84,6 +89,13 @@ const SubscribeLUpdate = (props) => {
                 return false;
             }
             $('#titleVal').removeClass('border_validate_err');
+
+            if (spoint_checker === '') {
+                $('#spointVal').addClass('border_validate_err');
+                sweetalert('수강료를 입력해주세요.', '', 'error', '닫기')
+                return false;
+            }
+            $('#spointVal').removeClass('border_validate_err');
 
             if (content_checker === '') {
                 $('#contentVal').addClass('border_validate_err');
@@ -97,7 +109,7 @@ const SubscribeLUpdate = (props) => {
 
         if (fnValidate()) {
             let jsonstr = $("form[name='frm']").serialize();
-
+            
             jsonstr = decodeURIComponent(jsonstr);
             let Json_form = JSON.stringify(jsonstr).replace(/\"/gi, '')
             Json_form = "{\"" + Json_form.replace(/\&/g, '\",\"').replace(/=/gi, '\":"') + "\"}";
@@ -105,9 +117,9 @@ const SubscribeLUpdate = (props) => {
                 ...JSON.parse(Json_form),
                 imageDTOList: imageDTOList,
             };
+            
 
-
-            axios.put(`http://localhost:8080/api/subscribe/subscribeLessionUpdate`, jsonstr)
+            axios.put(`http://localhost:8080/api/subscribe/subscribeLessionUpdate`, Json_data)
                 .then(response => {
                     try {
                         if (response.data == "success") {
@@ -148,9 +160,18 @@ const SubscribeLUpdate = (props) => {
     }
 
 
+
+    const handleFileInput2 = (type, e) => {
+        const selected = e.target.files[0];
+        $('#imageMainfile').val(selected ? selected.name : '');
+        selected.imgType = 'M';
+        setSelectedFile(selected);
+    }
+    
+
     useEffect(() => {
         if (selectedFile) {
-            handlePostImage(imgType);
+            handlePostImage(selectedFile.imgType);
         }
     }, [selectedFile]);
 
@@ -160,16 +181,16 @@ const SubscribeLUpdate = (props) => {
         formData.append('uploadFiles', selectedFile);
 
         try {
-            const res = await axios.post("http://localhost:8080/api/subscribe/uploadAjax", formData);
-            const { fileName, uuid, folderPath, imageURL, thumbnailURL } = res.data[0];
+            const res = await axios.post("http://localhost:8080/api/supload/uploadAjax", formData);
+            const { fileName, uuid, folderPath, imageURL, thumbnailURL, imgType } = res.data[0];
 
             setImageDTOList((prevImageDTOList) => [
                 ...prevImageDTOList,
                 { imgName: fileName, imageURL: imageURL, thumbnailURL: thumbnailURL, path: folderPath, uuid: uuid, imgType: type },
             ]);
 
-            const str = `<li data-name='${fileName}' data-path='${folderPath}' data-uuid='${uuid}' data-imageURL='${imageURL}'>
-                            <img src='http://localhost:8080/api/subscribe/display?fileName=${thumbnailURL}'>
+            const str = `<li data-name='${fileName}' data-path='${folderPath}' data-uuid='${uuid}' data-imgtype='${type}' data-imageURL='${imageURL}'>
+                            <img src='http://localhost:8080/api/supload/display?fileName=${thumbnailURL}'>
                           </li>`;
             if (type == 'M') {
                 $('#upload_MainImg').append(str);
@@ -181,20 +202,20 @@ const SubscribeLUpdate = (props) => {
         }
     }
 
+
+
     const handleRemoveAllThumbnails = (imgType) => {
         if (imgType == 'M') {
-            $('.fileBox fileMainBox1>ul>li').empty();
-            // $('#upload_MainImg').val('');
+            $('.fileMainBox1 ul').empty();
             $('#imageMainfile').val('');
             setMainImageList([])
         } else {
-            $('.fileBox fileBox1>ul>li').empty();
-            // $('#upload_Img').val();
+            $('.fileBox1 ul').empty();
             $('#imagefile').val('');
             setImageDTOList([]);
         }
-        // setImageList([]);
     };
+
 
     return (
         <section class="sub_wrap">
@@ -225,7 +246,7 @@ const SubscribeLUpdate = (props) => {
                                             <input type="text" id="imageMainfile" className="fileName fileName1"
                                                 readOnly="readonly" placeholder="선택된 파일 없음" />
                                             <input type="file" id="imageMainSelect" className="uploadBtn uploadBtn1"
-                                                onChange={e => handleFileInput('file', e, 'M')} multiple />
+                                                onChange={e => handleFileInput2('file', e)} multiple />
                                             <button type="button" className='bt_ty2' style={{ paddingTop: 5, paddingLeft: 10, paddingRight: 10 }}
                                                 onClick={() => handleRemoveAllThumbnails('M')}>X</button>
                                             <ul id="upload_MainImg">
@@ -266,7 +287,7 @@ const SubscribeLUpdate = (props) => {
                                             <input type="text" id="imagefile" className="fileName fileName1"
                                                 readOnly="readonly" placeholder="선택된 파일 없음" />
                                             <input type="file" id="imageSelect" className="uploadBtn uploadBtn1"
-                                                onChange={e => handleFileInput('file', e, 'A')} multiple />
+                                                onChange={e => handleFileInput('file', e)} multiple />
                                             <button type="button" className='bt_ty2' style={{ paddingTop: 5, paddingLeft: 10, paddingRight: 10 }}
                                                 onClick={() => handleRemoveAllThumbnails('A')}>X</button>
                                             <ul id="upload_img">

@@ -158,7 +158,7 @@ const SubscribeLList = () => {
                     <table id="appendNboardList" className="table_ty2 ad_slist">
                         {append_SboardList}
                     </table>
-                    <div id="spaging">
+                    <div id="spaging" style={{marginTop: '10px'}}>
                         {renderSearchPagination()}
                     </div>
                 </div>

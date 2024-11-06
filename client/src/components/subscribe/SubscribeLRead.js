@@ -10,15 +10,17 @@ import Modal from 'react-modal';
 const SubscribeLRead = (props) => {
     const { sno } = useParams();
 
-    const [memNickName] = useState(cookie.load('memNickName'));
-    const [uuid, setUuid] = useState(''); // 로그인한 사용자의 uuid 
-    const [mno, setMno] = useState(''); // 로그인한 사용자의 mno
     const [title, setTitle] = useState('');
+    const [spoint, setSpoint] = useState('');
     const [content, setContent] = useState('');
-    const [writer, setWriter] = useState(''); // 게시글 작성자 정보
+    const [writer, setWriter] = useState('');
+    const [mno, setMno] = useState('');
+    const [uuid, setUuid] = useState(cookie.load('uuid'));
+    const [rmno, setRmno] = useState('');
     const [viewCnt, setViewCnt] = useState('');
     const [regidate, setRegidate] = useState('');
     const [imageDTOList, setImageDTOList] = useState([]);
+    const [mainImage, setMainImageList] = useState([]);
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [selectedImage, setSelectedImage] = useState('');
     const [append_ReplyList, setAppend_ReplyList] = useState([]);
@@ -26,6 +28,7 @@ const SubscribeLRead = (props) => {
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [editedContent, setEditedContent] = useState('');
     const [selectRno, setSelectRno] = useState('');
+
 
     const [uuidMap, setUuidMap] = useState({}); // mno와 uuid 매핑을 저장
 
@@ -54,6 +57,7 @@ const SubscribeLRead = (props) => {
                         .then(response => {
                             setMno(response.data.mno); // 회원 번호 상태 업데이트
                             callNboardInfoApi(userUuid); // 받아온 UUID를 기반으로 게시글 정보 요청
+                            callReplyListApi(sno); // 11.06 추가 댓글 요청
                         })
                         .catch(error => {
                             console.error('회원 번호를 가져오는 중 오류 발생:', error);
@@ -78,32 +82,32 @@ const SubscribeLRead = (props) => {
             console.log('댓글 데이터가 없습니다.');
             return;
         }
-    
-    
+
+
         console.log("responseReplyList 변경됨!!!! 2:", responseReplyList);
 
 
         const fetchUuids = async () => {
             if (responseReplyList && responseReplyList.length > 0) {
                 console.log("fetchUuids 호출됨, responseReplyList:", responseReplyList);
-        
+
                 const requests = responseReplyList.map((data) =>
                     axios.post('http://localhost:8080/api/member/getUuidByMno', { mno: data.mno })
                 );
-        
+
                 try {
                     const responses = await Promise.all(requests);
                     console.log("응답 확인", responses); // 응답 확인용 콘솔 로그
-        
+
                     const uuidMapping = responseReplyList.reduce((acc, data, index) => {
                         console.log("응답에서 받은 uuid:", responses[index].data.uuid);
                         acc[data.mno] = responses[index].data.uuid; // mno에 해당하는 uuid 매핑
                         return acc;
                     }, {});
-        
+
                     console.log("매핑된 uuidMap: ", uuidMapping); // uuidMap 확인
                     setUuidMap(uuidMapping); // 상태 업데이트
-        
+
                 } catch (error) {
                     console.error('UUID 조회 중 오류 발생:', error);
                 }
@@ -123,11 +127,14 @@ const SubscribeLRead = (props) => {
         }).then(response => {
             try {
                 setTitle(response.data.title);
+                setSpoint(response.data.spoint);
                 setContent(response.data.contents);
-                setWriter(response.data.uuid); // 사용자의 uuid 저장
+                setWriter(response.data.uuid);
+                setMno(response.data.mno);
                 setViewCnt(response.data.counts);
                 setRegidate(response.data.wdate);
                 setImageDTOList(response.data.imageDTOList);
+                setMainImageList(response.data.mainImage);
             }
             catch (error) {
                 alert('게시글 데이터 받기 오류')
@@ -152,14 +159,14 @@ const SubscribeLRead = (props) => {
     };
 
 
-      // 4. 댓글 작성자와 로그인한 사용자의 UUID가 일치하면 수정/삭제 버튼을 보여줌
-      const renderReplyModifyDeleteButtons = (data) => {
+    // 4. 댓글 작성자와 로그인한 사용자의 UUID가 일치하면 수정/삭제 버튼을 보여줌
+    const renderReplyModifyDeleteButtons = (data) => {
         // data.replyer를 uuidMap에서 찾아서 현재 로그인한 uuid와 비교
         if (uuidMap[data.mno] && uuidMap[data.mno] === uuid) {
             return (
                 <div>
                     <button className="catbtn bt_ty2 submit_ty1 saveclass" onClick={() => modifyComment(`${data.rno}`)}>수정</button>
-                   {/*  <button className="catbtn bt_ty2 submit_ty1 saveclass" onClick={() => openEditModal(`${data.rno}`)}>모달</button> */}
+                    {/*  <button className="catbtn bt_ty2 submit_ty1 saveclass" onClick={() => openEditModal(`${data.rno}`)}>모달</button> */}
                     <button className="catbtn bt_ty2 submit_ty1 saveclass" onClick={() => deleteComment(`${data.rno}`)}>삭제</button>
                 </div>
             );
@@ -180,16 +187,35 @@ const SubscribeLRead = (props) => {
         setSelectedImage('');
     };
 
-    // 파일 
+    // 파일 - 이미지 로딩
     const renderImages = () => {
         const imageList = imageDTOList;
+
         return imageList.map((images, index) => (
             <li className="hidden_type" key={index}>
-                <img
-                    src={`http://localhost:8080/api/supload/display?fileName=${images.imgName}`}
-                    alt={`썸네일 ${index}`}
-                    onClick={() => handleThumbnailClick(images.imageURL)}
-                />
+                {images.imgType == 'A' ?
+                    <img src={`/subscribe/display?fileName=${images.imgName}`}
+                        alt={`썸네일 ${index}`}
+                        onClick={() => handleThumbnailClick(images.imageURL)} />
+                    : ''
+                }
+            </li>
+        ));
+    };
+
+    // 파일 - 메인 이미지 로딩
+    // imgtype = M (메인이미지)
+    const renderMainImages = () => {
+        const mainImgList = mainImage;
+
+        return mainImgList.map((image, index) => (
+            <li className="hidden_type1" key={index}>
+                {image.imgType == 'M' ?
+                    <img src={`http://localhost:8080/api/supload/display?fileName=${image.imgName}`}
+                        alt={`썸네일 ${index}`}
+                        onClick={() => handleThumbnailClick(image.imageURL)} />
+                    : ''
+                }
             </li>
         ));
     };
@@ -283,10 +309,10 @@ const SubscribeLRead = (props) => {
 
     const callReplyListApi = (sno) => {
         axios.get(`http://localhost:8080/api/sreplies/list/${sno}`) // 게시글 번호에서 댓글 달꺼니까!
-        
+
             .then(response => {
                 console.log("댓글 데이터 수신:", response.data); // 서버로부터 받은 데이터를 확인
-               // console.log(response.data);
+                // console.log(response.data);
                 try {
                     setResponseReplyList(response.data);
                     setAppend_ReplyList(ReplyListAppend(response.data));
@@ -321,7 +347,7 @@ const SubscribeLRead = (props) => {
                         <div className="cat">
                             <p style={{ fontSize: '19px' }}>
                                 {/*  {data.userUuid} */}{/* {' '} */}
-                                
+
                                 {uuidMap[data.mno] ? uuidMap[data.mno] : '아이디 누락'} {/* uuid 표시 */}
                                 {data.mno}
                                 <span style={{ fontSize: '12px' }}>
@@ -340,7 +366,7 @@ const SubscribeLRead = (props) => {
                         </div>
                     </div>
                     <div>
-{/*                         {isCurrentUserCommentOwner && (
+                        {/*                         {isCurrentUserCommentOwner && (
                             <div>
                                 <button className="catbtn bt_ty2 submit_ty1 saveclass" onClick={() => modifyComment(`${data.rno}`)}>수정</button>
                                 <button className="catbtn bt_ty2 submit_ty1 saveclass" onClick={() => openEditModal(`${data.rno}`)}>modal</button>
@@ -404,7 +430,7 @@ const SubscribeLRead = (props) => {
             });
         }; */
 
-        
+
 
     const openEditModal = (rno) => {
         setSelectRno(rno);  // 선택한 댓글 번호 설정
@@ -456,17 +482,35 @@ const SubscribeLRead = (props) => {
                                 <table class="table_ty1">
                                     <tr>
                                         <th>
-                                            <label for="title">제목</label>
+                                            대표이미지
+                                        </th>
+                                        <td className="fileBox fileBox1">
+                                            <ul id="upload_mainimg">
+                                                {renderMainImages()}
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            <label for="title">강의제목</label>
                                         </th>
                                         <td>
                                             <input type="text" name="title" id="titleVal" readOnly="readonly" value={title} />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            <label for="spoint">수강료</label>
+                                        </th>
+                                        <td>
+                                            <input type="text" name="spoint" id="spointVal" readOnly="readonly" value={spoint} />
                                         </td>
                                     </tr>
                                 </table>
                                 <table class="table_ty1">
                                     <tr>
                                         <th>
-                                            <label for="writer">작성자</label>
+                                            <label for="writer">강의등록자</label>
                                         </th>
                                         <td>
                                             <input type="text" name="writer" id="writerVal" readOnly="readonly" value={writer} />
@@ -491,7 +535,7 @@ const SubscribeLRead = (props) => {
 
                                     <tr>
                                         <th>
-                                            <label for="Content">내용</label>
+                                            <label for="Content">강의내용</label>
                                         </th>
                                         <td>
                                             <textarea style={{ padding: '15px' }} name="content" id="contentVal" rows="" cols="" readOnly="readonly" value={content}></textarea>
@@ -509,8 +553,8 @@ const SubscribeLRead = (props) => {
                                         </td>
                                     </tr>
 
-                                     <Modal
-                                     ariaHideApp={false}
+                                    <Modal
+                                        ariaHideApp={false}
                                         isOpen={modalIsOpen}
                                         onRequestClose={closeImageModal}
                                         contentLabel="썸네일 이미지"
@@ -534,7 +578,7 @@ const SubscribeLRead = (props) => {
                                                 backgroundColor: 'rgba(0, 0, 0, 0.5)'
                                             }
                                         }}>
-                                       {selectedImage && (
+                                        {selectedImage && (
                                             <img src={`http://localhost:8080/api/supload/display?fileName=${selectedImage}`} alt="선택한 썸네일" />
                                         )}
                                     </Modal>
@@ -560,32 +604,32 @@ const SubscribeLRead = (props) => {
                                     <input type="hidden" name="sno" id="snoVal" value={sno} />
                                 </td>
                             </tr>
-{/*                             <tr id='replyerDiv'>
+                            {/*                             <tr id='replyerDiv'>
                                 <td>
                                     <input type="text" name="replyer" id="replyerVal" value={uuid} />
                                     <input type="text" name="mno" value={mno} />
                                 </td>
                             </tr> */}
-                              <table class="table_ty1">
-                                    <tr style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
-                                        <th style={{ marginRight: '10px' }}>
-                                            <label for="mno">회원번호</label>
-                                        </th>
-                                        <td style={{ flex: '1', marginRight: '10px' }}>
-                                            <input type="text" name="mno" id="mno" readOnly="readonly" value={mno} style={{ width: '100%' }} />
-                                        </td>
+                            <table class="table_ty1">
+                                <tr style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
+                                    <th style={{ marginRight: '10px' }}>
+                                        <label for="mno">회원번호</label>
+                                    </th>
+                                    <td style={{ flex: '1', marginRight: '10px' }}>
+                                        <input type="text" name="mno" id="mno" readOnly="readonly" value={mno} style={{ width: '100%' }} />
+                                    </td>
 
-                                        <th style={{ marginLeft: '20px' }}>
-                                            <label for="replyer">작성자</label>
-                                        </th>
-                                        <td style={{ flex: '1', marginRight: '10px' }}>
-                                            <input type="text" name="replyer" id="replyerVal" readOnly="readonly" value={uuid} style={{ width: '100%' }} />
-                                        </td>
-                                    </tr>
-                                </table>
+                                    <th style={{ marginLeft: '20px' }}>
+                                        <label for="replyer">작성자</label>
+                                    </th>
+                                    <td style={{ flex: '1', marginRight: '10px' }}>
+                                        <input type="text" name="replyer" id="replyerVal" readOnly="readonly" value={uuid} style={{ width: '100%' }} />
+                                    </td>
+                                </tr>
+                            </table>
                             <tr>
                                 <td style={{ display: 'flex', alignItems: 'center' }}>
-                                <label for="rcomment" style={{marginRight: '135px'}}>댓글</label>
+                                    <label for="rcomment" style={{ marginRight: '135px' }}>댓글</label>
                                     <input type="text" name=" rcomment" id="replyTextVal" placeholder='내용을 입력해주세요.' style={{ flex: '1', marginRight: '8px', height: '50px' }} />
                                     <a href="javascript:" className="bt_ty1 bt_ty3 submit_ty1 saveclass" onClick={(e) => submitClick(e)}>등록</a>
                                 </td>
@@ -626,7 +670,7 @@ const SubscribeLRead = (props) => {
                     <div id="replyDiv">
                         <h2>댓글 수정</h2>
                         <br></br>
-                        <input className="input_2" style={{ height: '30%', width: '80%', padding: '15px', marginBottom:'20px'}}
+                        <input className="input_2" style={{ height: '30%', width: '80%', padding: '15px', marginBottom: '20px' }}
                             value={editedContent}
                             onChange={(e) => setEditedContent(e.target.value)} ></input>
                         <br></br>

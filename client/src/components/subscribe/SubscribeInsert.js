@@ -49,6 +49,7 @@ const SubscribeLInsert = () => {
     const submitClick = async (type, e) => {
 
         const title_checker = $('#titleVal').val();
+        const spoint_checker = $('#spointVal').val();
         const content_checker = $('#contentVal').val();
 
         const fnValidate = (e) => {
@@ -58,6 +59,13 @@ const SubscribeLInsert = () => {
                 return false;
             }
             $('#titleVal').removeClass('border_validate_err');
+
+            if (spoint_checker === '') {
+                $('#spointVal').addClass('border_validate_err');
+                sweetalert('구독료를 입력해주세요.', '', 'error', '닫기')
+                return false;
+            }
+            $('#spointVal').removeClass('border_validate_err');
 
             if (content_checker === '') {
                 $('#contentVal').addClass('border_validate_err');
@@ -113,6 +121,15 @@ const SubscribeLInsert = () => {
     const handleFileInput = (type, e) => {
         const selected = e.target.files[0];
         $('#imagefile').val(selected ? selected.name : '');
+        selected.imgType = "A";
+        setSelectedFile(selected);
+    }
+
+    // 전문가 이미지
+    const handleFileInput2 = (type, e) => {
+        const selected = e.target.files[0];
+        $('#imagefile2').val(selected ? selected.name : '');
+        selected.imgType = "M";
         setSelectedFile(selected);
     }
 
@@ -125,21 +142,26 @@ const SubscribeLInsert = () => {
 
     const handlePostImage = async () => {
         const formData = new FormData();
+        const itype = selectedFile.imgType;
         formData.append('uploadFiles', selectedFile);
 
         try {
-            const res = await axios.post("http://localhost:8080/api/subscribe/uploadAjax", formData);
+            const res = await axios.post("http://localhost:8080/api/supload/uploadAjax", formData);
             const { fileName, uuid, folderPath, imageURL, thumbnailURL, imgType } = res.data[0];
 
             setImageDTOList((prevImageDTOList) => [
                 ...prevImageDTOList,
-                { imgName: fileName, imageURL: imageURL, thumbnailURL: thumbnailURL, path: folderPath, uuid: '111', imgType: "A" },
+                { imgName: fileName, imageURL: imageURL, thumbnailURL: thumbnailURL, path: folderPath, uuid: uuid, imgType: itype },
             ]);
 
             const str = `<li data-name='${fileName}' data-path='${folderPath}' data-uuid='${uuid} data-imageURL='${imageURL}'>
-                            <img src='http://localhost:8080/api/subscribe/display?fileName=${thumbnailURL}'>
+                            <img src='http://localhost:8080/api/supload/display?fileName=${thumbnailURL}'>
                           </li>`;
-            $('#upload_img').append(str);
+            if (itype == "M") {
+                $('#upload_img2').append(str);
+            } else {
+                $('#upload_img').append(str);
+            }
         } catch (error) {
             alert('작업 중 오류가 발생하였습니다.');
         }
@@ -148,6 +170,12 @@ const SubscribeLInsert = () => {
     const handleRemoveAllThumbnails = () => {
         $('.fileBox1 ul').empty();
         $('#imagefile').val('');
+        setImageDTOList([]);
+    };
+
+    const handleRemoveAllThumbnails2 = () => {
+        $('.fileBox2 ul').empty();
+        $('#imagefile2').val('');
         setImageDTOList([]);
     };
 
@@ -161,7 +189,7 @@ const SubscribeLInsert = () => {
                     <form name="frm" id="frm" action="" method="post" >
                         <article className="res_w">
                             <div className="tb_outline">
-                            <table className="table_ty1">
+                                <table className="table_ty1">
                                     <tr style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
 
                                         <th style={{ marginRight: '10px' }}>
@@ -172,14 +200,27 @@ const SubscribeLInsert = () => {
                                         </td>
 
                                         <th style={{ marginLeft: '20px' }}>
-                                            <label for="writerVal">작성자</label>
+                                            <label for="uuid">작성자</label>
                                         </th>
                                         <td style={{ flex: '1', marginRight: '10px' }}>
-                                            <input type="text" name="writerVal" id="writerVal" readOnly="readonly" value={uuid} style={{ width: '100%' }} />
+                                            <input type="text" name="uuid" id="uuid" readOnly="readonly" value={uuid} style={{ width: '100%' }} />
                                         </td>
                                     </tr>
                                 </table>
                                 <table className="table_ty1">
+                                    <tr>
+                                        <th>
+                                            전문가 대표 이미지
+                                        </th>
+                                        <td className="fileBox fileBox2">
+                                            <label htmlFor='imageSelect2' className="btn_file">파일선택</label>
+                                            <input type="text" id="imagefile2" className="fileName fileName1" readOnly="readonly" placeholder="선택된 파일 없음" />
+                                            <input type="file" id="imageSelect2" className="uploadBtn uploadBtn1" onChange={e => handleFileInput2('file', e)} multiple />
+                                            <button type="button" className='bt_ty2' style={{ paddingTop: 5, paddingLeft: 10, paddingRight: 10 }} onClick={handleRemoveAllThumbnails2}>X</button>
+                                            <ul id="upload_img2">
+                                            </ul>
+                                        </td>
+                                    </tr>
                                     <tr>
                                         <th>
                                             <label for="title">제목</label>
@@ -190,7 +231,15 @@ const SubscribeLInsert = () => {
                                     </tr>
                                     <tr>
                                         <th>
-                                            <label for="Content">내용</label>
+                                            <label for="spoint">구독료</label>
+                                        </th>
+                                        <td>
+                                            <input type="text" name="spoint" id="spointVal" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            <label for="Content">전문가 소개</label>
                                         </th>
                                         <td>
                                             <textarea style={{ padding: '15px' }} name="contents" id="contentVal" rows="" cols=""></textarea>
@@ -200,13 +249,21 @@ const SubscribeLInsert = () => {
                                         <th>
                                             파일첨부
                                         </th>
+                                        {/*    <td className="fileBox fileBox1">
+                                        <label htmlFor='imageSelect' className="btn_file">파일선택</label>
+                                        <input type="text" id="imagefile" className="fileName fileName1" readOnly="readonly" placeholder="선택된 파일 없음" />
+                                        <input type="file" id="imageSelect" className="uploadBtn uploadBtn1"
+                                            onChange={e => handleFileInput('file', e)} multiple />
+                                        <button type="button" className='bt_ty2' style={{ paddingTop: 5, paddingLeft: 10, paddingRight: 10 }}
+                                            onClick={handleRemoveAllThumbnails}>X</button>
+                                        <ul id="upload_img">
+                                        </ul>
+                                    </td> */}
                                         <td className="fileBox fileBox1">
                                             <label htmlFor='imageSelect' className="btn_file">파일선택</label>
                                             <input type="text" id="imagefile" className="fileName fileName1" readOnly="readonly" placeholder="선택된 파일 없음" />
-                                            <input type="file" id="imageSelect" className="uploadBtn uploadBtn1"
-                                                onChange={e => handleFileInput('file', e)} multiple />
-                                            <button type="button" className='bt_ty2' style={{ paddingTop: 5, paddingLeft: 10, paddingRight: 10 }}
-                                                onClick={handleRemoveAllThumbnails}>X</button>
+                                            <input type="file" id="imageSelect" className="uploadBtn uploadBtn1" onChange={e => handleFileInput('file', e)} multiple />
+                                            <button type="button" className='bt_ty2' style={{ paddingTop: 5, paddingLeft: 10, paddingRight: 10 }} onClick={handleRemoveAllThumbnails}>X</button>
                                             <ul id="upload_img">
                                             </ul>
                                         </td>
@@ -216,14 +273,14 @@ const SubscribeLInsert = () => {
                                 <div className="btn_confirm mt20" style={{ "margin-bottom": "44px", textAlign: "center" }}>
                                     <a href="javascript:" className="bt_ty bt_ty2 submit_ty1 saveclass"
                                         onClick={(e) => submitClick('file', e)}>저장 </a>
-                                    <Link to={'/SubscribeLList'} className="bt_ty bt_ty2 submit_ty1 saveclass">취소</Link>
+                                    <Link to={'/SubscribeList'} className="bt_ty bt_ty2 submit_ty1 saveclass">취소</Link>
                                 </div>
                             </div>
                         </article>
                     </form>
                 </div>
             </article>
-        </section>
+        </section >
     );
 }
 
