@@ -23,7 +23,6 @@ const SubscribeLList = () => {
 
     const callSboardListApi = (page) => {
         axios.get(`http://localhost:8080/api/subscribe/subscribeList?page=${page}&searchType=${searchtype}&keyword=${keyword}`
-            // sno: sno
         ).then(response => {
             try {
                 setAppend_SboardList(subscribeListAppend(response.data));
@@ -57,10 +56,17 @@ const SubscribeLList = () => {
             result.push(
                 <tr className="hidden_type">
                     <td> {num} </td>
+                    <td>{
+                        data.titleimg != null
+                        ? <img src={`api/supload/display?fileName=${data.titleimg}`} width='35px' height='35px'/>
+                        : <img src={require(`../../img/layout/avatar.jpg`)} width='30px' height='30px'/>
+                    }
+                    </td>
                     <td><Link to={`/SubscribeRead/${data.sno}`}>{data.title}{data.replycnt > 0 && ` [${data.replycnt}]`}</Link></td>
                     <td> {data.uuid} </td>
+                    <td> {data.spoint} </td>
                     <td> {data.counts} </td>
-                    <td> {reg_date} </td>
+                    <td> {data.wdate} </td>
                 </tr>
             )
         }
@@ -127,9 +133,9 @@ const SubscribeLList = () => {
                     <form onSubmit={(e) => handleSearchButtonClick(e)}>
                         <select value={searchtype} onChange={handleSearchTypeChange} id="searchtype" className="searchzone">
                             <option value="total">전체</option>
-                            <option value="TITLE">제목</option>
+                            <option value="TITLE">전문가구독</option>
                             <option value="CONTENTS">내용</option>
-                            <option value="UUID">작성자</option>
+                            <option value="uuid">전문가</option>
                         </select>
                         <input className='search' type="text" placeholder="검색어를 입력해주세요."
                             value={keyword} onChange={handleSearchValChange} />
@@ -137,20 +143,22 @@ const SubscribeLList = () => {
                     </form>
                 </div>
 
-                <div className="list_cont list_cont_admin">
-                    <table className="table_ty1 ad_tlist">
-                        <tr>
+                <div className="list_cont list_cont_admin2">
+                    <table className="table_ty1 ad_tlist2">
+                    <tr>
                             <th>번호</th>
-                            <th>제목</th>
-                            <th>작성자</th>
+                            <th>구독이미지</th>
+                            <th>전문가구독</th>
+                            <th>전문가</th>
+                            <th>구독료</th>
                             <th>조회수</th>
                             <th>작성일</th>
                         </tr>
                     </table>
-                    <table id="appendNboardList" className="table_ty2 ad_tlist">
+                    <table id="appendNboardList" className="table_ty2 ad_tlist2">
                         {append_SboardList}
                     </table>
-                    <div id="spaging">
+                    <div id="spaging" style={{marginTop: '10px'}}>
                         {renderSearchPagination()}
                     </div>
                 </div>

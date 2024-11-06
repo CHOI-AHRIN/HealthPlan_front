@@ -146,7 +146,7 @@ const SubscribeLRead = (props) => {
         if (uuid === writer) {
             return (
                 <div id="modifyButton" className="btn_confirm mt20" style={{ marginBottom: '44px', textAlign: 'center' }}>
-                    <Link to={`/SubscribeLUpdate/${sno}`} className="bt_ty bt_ty2 submit_ty1 saveclass">수정</Link>
+                    <Link to={`/SubscribeUpdate/${sno}`} className="bt_ty bt_ty2 submit_ty1 saveclass">수정</Link>
                     <a href="javascript:" className="bt_ty bt_ty2 submit_ty1 saveclass" onClick={deleteArticle}>삭제</a>
                 </div>
             );
@@ -207,7 +207,7 @@ const SubscribeLRead = (props) => {
         return imageList.map((images, index) => (
             <li className="hidden_type" key={index}>
                 <img
-                    src={`http://localhost:8080/api/subscribe/display?fileName=${images.imgName}`}
+                    src={`http://localhost:8080/api/supload/display?fileName=${images.imgName}`}
                     alt={`썸네일 ${index}`}
                     onClick={() => handleThumbnailClick(images.imageURL)}
                 />
@@ -266,7 +266,7 @@ const SubscribeLRead = (props) => {
         }
 
         if (fnValidate()) {
- 
+
             // 폼 데이터를 객체로 수집
             const Json_data = {
                 sno: $('#snoVal').val(),
@@ -523,7 +523,7 @@ const SubscribeLRead = (props) => {
                                             }
                                         }}>
                                         {selectedImage && (
-                                            <img src={`http://localhost:8080/api/subscribe/display?fileName=${selectedImage}`} alt="선택한 썸네일" />
+                                            <img src={`http://localhost:8080/api/supload/display?fileName=${selectedImage}`} alt="선택한 썸네일" />
                                         )}
                                     </Modal>
                                 </table>
@@ -533,18 +533,17 @@ const SubscribeLRead = (props) => {
                         </article>
                     </form>
 
-                    <div className='table_ty99'>댓글</div>
+                    <div className='table_ty99' style={{ marginTop: '50px' }}>댓글</div>
+
                     <form name="frm2" id="frm2" action="" onsubmit="" method="post">
                         <div className='line'></div>
                         <table class="table_ty1">
-                                                         <tr id='snoDiv'>
+                            <tr id='snoDiv' style={{ display: 'none' }}>
                                 <td>
                                     <input type="hidden" name="sno" id="snoVal" value={sno} readonly="readonly" />
                                 </td>
-                            </tr> 
+                            </tr>
                             <tr id='replyerDiv'>
-
-                                <table class="table_ty1">
                                     <tr style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
                                         <th style={{ marginRight: '10px' }}>
                                             <label for="mno">회원번호</label>
@@ -560,11 +559,10 @@ const SubscribeLRead = (props) => {
                                             <input type="text" name="replyer" id="replyerVal" readOnly="readonly" value={uuid} style={{ width: '100%' }} />
                                         </td>
                                     </tr>
-                                </table>
                             </tr>
                             <tr>
                                 <td style={{ display: 'flex', alignItems: 'center' }}>
-                                    <label for="rcomment" style={{marginRight: '135px'}}>댓글</label>
+                                    <label for="rcomment" style={{ marginRight: '135px' }}>댓글</label>
                                     <input type="text" name="rcomment" id="replyTextVal" placeholder='내용을 입력해주세요.' style={{ flex: '1', marginRight: '8px', height: '50px' }} />
                                     <a href="javascript:" className="bt_ty1 bt_ty3 submit_ty1 saveclass" onClick={(e) => submitClick(e)}>등록</a>
                                 </td>
@@ -605,7 +603,7 @@ const SubscribeLRead = (props) => {
                     <div id="replyDiv">
                         <h2>댓글 수정</h2>
                         <br></br>
-                        <input className="input_2" style={{ height: '30%', width: '80%', padding: '15px', marginBottom:'20px'}}
+                        <input className="input_2" style={{ height: '30%', width: '80%', padding: '15px', marginBottom: '20px' }}
                             value={editedContent}
                             onChange={(e) => setEditedContent(e.target.value)} ></input>
                         <br></br>

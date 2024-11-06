@@ -1,74 +1,66 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import axios from "axios";
-import $ from 'jquery';
+import cookie from 'react-cookies';
 
 const ChallengeList = () => {
 
-    const [append_sChallengeList, setAppend_sChallengeList] = useState([]);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [totalPages, setTotalPages] = useState('');
-    const [startPage, setStartPage] = useState('');
-    const [endPage, setEndPage] = useState('');
-    const [prev, setPrev] = useState('');
-    const [next, setNext] = useState('');
+    const [challenges, setChallenges] = useState([]); // 전체 챌린지 목록
+    const [currentPage, setCurrentPage] = useState(1); // 현재 페이지 번호
+    const [totalPages, setTotalPages] = useState(1); // 전체 페이지 수
+    const [currentUuid, setCurrentUuid] = useState(''); // 현재 로그인한 사용자의 UUID
+    const itemsPerPage = 3; // 페이지당 항목 수
     const [keyword, setKeyword] = useState('');
     const [searchtype, setSearchtype] = useState('');
 
     useEffect(() => {
-        callChallengeListApi(currentPage);
+        const token = cookie.load('token'); // 쿠키에서 토큰 가져오기
+        if (token) {
+            axios.post('http://localhost:8080/api/member/loginCookie', { token })
+                .then(response => setCurrentUuid(response.data.uuid))
+                .catch(error => console.error('토큰에서 아이디를 읽어올 수 없습니다:', error));
+        }
+        fetchChallenges();
     }, []);
 
-    /* 페이지 정보 조회 */
-    const callChallengeListApi = (page) => {
-        axios.get(`http://localhost:8080/api/challenge/challengeList?page=${page}&searchType=${searchtype}&keyword=${keyword}`)
+    // 챌린지 목록 및 전체 페이지 수 설정
+    const fetchChallenges = () => {
+        axios.get(`http://localhost:8080/api/challenge/challengeList?searchType=${searchtype}&keyword=${keyword}`)
             .then(response => {
-                try {
-                    setAppend_sChallengeList(challengeListAppend(response.data));
-                    setTotalPages(response.data.pageMaker.totalCount);
-                    setStartPage(response.data.pageMaker.startPage);
-                    setEndPage(response.data.pageMaker.endPage);
-                    setPrev(response.data.pageMaker.prev);
-                    setNext(response.data.pageMaker.next);
-
-                } catch (error) {
-                    alert('작업중 오류가 발생하였습니다1.');
-                }
+                const fetchedChallenges = response.data.clist;
+                // 최신 순으로 정렬
+                const sortedChallenges = fetchedChallenges.sort((a, b) => new Date(b.wdate) - new Date(a.wdate));
+                setChallenges(sortedChallenges);
+                setTotalPages(Math.ceil(sortedChallenges.length / itemsPerPage));
             })
-            .catch(error => { alert('작업중 오류가 발생하였습니다2.'); return false; });
+            .catch(error => console.error('챌린지 목록을 가져오는 중 오류:', error));
     };
 
-    const challengeListAppend = (Challenge) => {
-        let result = [];
-        let ChallengeList = Challenge.clist;
-        // alert("ChallengeList : " + ChallengeList);
+    // 현재 페이지에 맞는 챌린지 목록 슬라이스
+    const challengeListAppend = () => {
+        const startIdx = (currentPage - 1) * itemsPerPage;
+        const currentChallenges = challenges.slice(startIdx, startIdx + itemsPerPage);
 
+        return currentChallenges.map((data, index) => {
+            const date = data.wdate;
+            const year = date.substr(0, 4);
+            const month = date.substr(5, 2);
+            const day = date.substr(8, 2);
+            const reg_date = `${year}.${month}.${day}`;
 
-        for (let i = 0; i < ChallengeList.length; i++) {
-            let data = ChallengeList[i];
+            // 현재 페이지와 항목 인덱스를 기반으로 순차적으로 번호를 표시
+            const num = startIdx + index + 1;
 
-            var date = data.wdate;
-            var year = date.substr(0, 4);
-            var month = date.substr(5, 2);
-            var day = date.substr(8, 2);
-            var reg_date = year + '.' + month + '.' + day;
-
-            var num = (Challenge.pageMaker.totalCount - (Challenge.pageMaker.cri.page - 1) * Challenge.pageMaker.cri.perPageNum - i);
-
-            // data에 포함된 uuid를 그대로 사용
-            let uuid = data.uuid || '조회 중..';
-
-            result.push(
-                <tr className="hidden_type">
+            return (
+                <tr className="hidden_type" key={data.bno}>
                     <td> {num} </td>
                     <td><Link to={`/ChallengeRead/${data.bno}`}>{data.title}{data.replycnt > 0 && `[${data.replycnt}]`}</Link></td>
-                    <td> {uuid} </td>
+                    <td> {data.uuid || '조회 중..'} </td>
                     <td> {data.bcounts} </td>
                     <td> {reg_date} </td>
                 </tr>
-            )
-        }
-        return result;
+            );
+        });
     };
 
     const handleSearchTypeChange = (e) => {
@@ -82,16 +74,20 @@ const ChallengeList = () => {
     const handleSearchButtonClick = (e) => {
         e.preventDefault();
         setCurrentPage(1);
-        callChallengeListApi(1);
+        fetchChallenges();
     };
 
     const handlePageClick = (page) => {
         setCurrentPage(page);
-        callChallengeListApi(page);
     };
 
     const renderSearchPagination = () => {
         const pageNumbers = [];
+        const pagesToShow = 5; // 한 번에 보여줄 페이지 수
+
+        // 페이지네이션 표시 범위 계산
+        const startPage = Math.floor((currentPage - 1) / pagesToShow) * pagesToShow + 1;
+        const endPage = Math.min(startPage + pagesToShow - 1, totalPages);
 
         for (let i = startPage; i <= endPage; i++) {
             const isCurrentPage = i === currentPage;
@@ -102,17 +98,16 @@ const ChallengeList = () => {
                 </button>
             );
         };
-
         return (
             <div className="Paging">
-                {prev == true && (
-                    <button style={{ margin: 5, backgroundColor: '#004AAD !important' }} className="sch_bt99 wi_au" onClick={() => handlePageClick(startPage - 1)}>
+                {totalPages > pagesToShow && startPage > 1 && (
+                    <button style={{ margin: 5 }} className="sch_bt99 wi_au" onClick={() => handlePageClick(startPage - 1)}>
                         {'<'}
                     </button>
                 )}
                 {pageNumbers}
-                {next == true && (
-                    <button style={{ margin: 5, backgroundColor: '#004AAD' }} className="sch_bt99 wi_au" onClick={() => handlePageClick(endPage + 1)}>
+                {totalPages > pagesToShow && endPage < totalPages && (
+                    <button style={{ margin: 5 }} className="sch_bt99 wi_au" onClick={() => handlePageClick(endPage + 1)}>
                         {'>'}
                     </button>
                 )}
@@ -121,13 +116,13 @@ const ChallengeList = () => {
     };
 
     return (
-        <section className="sub_wrap" >
+        <section className="sub_wrap">
             <article className="s_cnt mp_pro_li ct1 mp_pro_li_admin">
                 <div className="li_top">
                     <h2 className="s_tit1">챌린지</h2>
                 </div>
 
-                <div className="searchingForm" >
+                <div className="searchingForm">
                     <form onSubmit={(e) => handleSearchButtonClick(e)}>
                         <select value={searchtype} onChange={handleSearchTypeChange} id="searchtype" className="searchzone">
                             <option value="total">전체</option>
@@ -152,16 +147,18 @@ const ChallengeList = () => {
                         </tr>
                     </table>
                     <table id="appendChallengeList" className="table_ty2 ad_tlist">
-                        {append_sChallengeList}
+                        {challengeListAppend()}
                     </table>
                     <div id="spaging">
                         {renderSearchPagination()}
                     </div>
                 </div>
 
-                <div className="li_top_sch af">
-                    <Link to={'/ChallengeInsert'} className="sch_bt2 wi_au">글쓰기</Link>
-                </div>
+                {currentUuid === 'admin' && (
+                    <div className="li_top_sch af">
+                        <Link to={'/ChallengeInsert'} className="sch_bt2 wi_au">글쓰기</Link>
+                    </div>
+                )}
             </article>
         </section>
     );
