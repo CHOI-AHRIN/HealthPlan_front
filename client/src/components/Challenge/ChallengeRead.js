@@ -234,7 +234,7 @@ const ChallengeRead = (props) => {
 
     const deleteArticle = (e) => {
         sweetalertDelete1('삭제하시겠습니까?', () => {
-            axios.delete(`http://localhost:8080/api/challenge/challengeLessionDelete/${bno}`, {
+            axios.delete(`http://localhost:8080/api/challenge/challengedelete/${bno}`, {
                 // sno: sno
             }).then(response => {
 
