@@ -194,7 +194,7 @@ const SubscribeLRead = (props) => {
         return imageList.map((images, index) => (
             <li className="hidden_type" key={index}>
                 {images.imgType == 'A' ?
-                    <img src={`/subscribe/display?fileName=${images.imgName}`}
+                    <img src={`/api/supload/display?fileName=${images.imgName}`}
                         alt={`썸네일 ${index}`}
                         onClick={() => handleThumbnailClick(images.imageURL)} />
                     : ''
