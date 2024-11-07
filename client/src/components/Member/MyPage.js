@@ -108,17 +108,21 @@ const MyPage = () => {
 
                             <div className="re1_wrap">
                                 <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                                    {/* <button className="bt_ty3 bt_ty2 submit_ty1">회원관리</button> */}
                                     {uuid === 'admin' && (
                                         <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                                             {uuid === 'admin' && (
-                                                <button
-                                                    onClick={goToMemberList}
-                                                    className="bt_ty3 bt_ty2 submit_ty1"
-                                                    style={{ marginLeft: '10px' }}
-                                                >
+                                                /*                                                 <button
+                                                                                                    onClick={goToMemberList}
+                                                                                                    className="bt_ty3 bt_ty2 submit_ty1"
+                                                                                                    style={{ marginLeft: '10px' }}
+                                                                                                >
+                                                                                                    회원관리
+                                                                                                </button> */
+                                                <Link to="/MemberList" className="bt_ty2 submit_ty1" style={{
+                                                fontSize: '15px', width: '120px', height: '30px', alignItems: 'center', justifyContent: 'center', display: 'flex'
+                                                }}>
                                                     회원관리
-                                                </button>
+                                                </Link>
                                             )}
                                         </div>
                                     )}
@@ -186,7 +190,7 @@ const MyPage = () => {
                                                 <input id="pcount" type="text" name="pcount" readOnly="readonly" value={pcount}
                                                 />
                                             </td>
-                                            <button className="bt_ty3 bt_ty2 submit_ty1" >포인트 충전</button>
+                                            <button className="bt_ty3 bt_ty2 submit_ty1"  >포인트 충전</button>
                                         </tr>
                                         {/* {appendCarList} */}
                                     </table>
