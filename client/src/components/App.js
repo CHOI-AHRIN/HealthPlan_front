@@ -22,6 +22,10 @@ import LoginForm from './LoginForm';
 import Register from './Member/Register';
 import Modify from './Member/Modify';
 import MyPage from './Member/MyPage';
+import MemberList from './Member/MemberList';
+import MemberModify from './Member/MemberModify';
+
+
 
 
 // 구독 컴포넌트 import
@@ -98,6 +102,8 @@ const App = () => {
         <Route path='/Register' element={<Register />} />
         <Route path='/MyPage' element={<MyPage />} />
         <Route path='/Modify' element={<Modify />} />
+        <Route path='/MemberList' element={<MemberList />} />
+        <Route path='/MemberModify' element={<MemberModify />} />
         <Route path='/SubscribeLList' element={<SubscribeLList />} />
         <Route path='/SubscribeLInsert' element={<SubscribeLInsert />} />
         <Route path='/SubscribeLRead/:sno' element={<SubscribeLRead />} />
