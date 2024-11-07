@@ -34,6 +34,7 @@ body {
 .input_ty1::placeholder{color: #cdcdcd;}
 
 .s_tit1{ font-size: 50px; line-height: 38px; color: #004AAD; font-weight: 500; letter-spacing: -0.03em; margin-bottom: 27px; margin-left: -3px;}
+.s_tit2{ font-size: 35px; line-height: 38px; color: #0058cb; font-weight: 500; letter-spacing: -0.03em; margin-bottom: 20px; margin-top: 20px; margin-left: 10px;}
 
 a {display:block;font-weight:400;color:#505050;text-decoration:none; /* vertical-align:top; */}
 a:hover, a:active, a:focus, a:visited {text-decoration:none;}

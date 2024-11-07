@@ -94,9 +94,14 @@ const MyPage = () => {
                     <div className="li_top">
                         <h2 className="s_tit1">MyPage</h2>
                         <form method="post" name="frm">
+
                             <div className="re1_wrap">
+                                <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                                    <button className="bt_ty3 bt_ty2 submit_ty1">회원관리</button>
+                                </div>
                                 <div className="re_cnt ct2">
                                     <table className="table_ty1">
+
                                         <tr>
                                             <th>회원번호</th>
                                             <td>
@@ -165,7 +170,6 @@ const MyPage = () => {
                             </div>
                             <div className="btn_confirm">
                                 <Link to={'/Modify'} className="bt_ty bt_ty2 submit_ty1 modifyclass">프로필수정</Link>
-                                {/* <Link to={'/CarRegister'} className="bt_ty bt_ty2 submit_ty1 modifyclass">차량등록</Link> */}
                             </div>
                         </form>
                     </div>
