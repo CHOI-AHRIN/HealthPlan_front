@@ -105,3 +105,8 @@ img, fieldset, button {border:none;}
 .table_ty2 tr td p{font-size: 15px; line-height: 15px; color: #a1a1a1; font-weight: 400;; text-overflow:ellipsis;white-space:nowrap;word-wrap:normal;overflow:hidden;}
 table {width:100%;table-layout:fixed;border-collapse:collapse;border-spacing:0;text-align:center;}
 
+
+
+tbody tr {
+  margin-top: 10px;      /* 데이터 행 사이에 여백 추가 */
+}

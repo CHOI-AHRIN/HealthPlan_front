@@ -279,7 +279,7 @@ const ChallengeList = () => {
                                 <th>인증수</th>
                             </tr>
                         </thead>
-                        <tbody id="appendChallengeRanking">
+                        <tbody id="appendChallengeRanking" className="table_ty2 ad_tlist2" style={{marginTop: '10px'}}>
                             {rankingData && rankingData.length > 0 ? (
                                 rankingData.map((data, index) => (
                                     <tr key={`${data.MNO}-${index}`}>
