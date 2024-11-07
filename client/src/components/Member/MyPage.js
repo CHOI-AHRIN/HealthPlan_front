@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import cookie from 'react-cookies';
 import axios from 'axios';
 
@@ -16,7 +16,7 @@ const MyPage = () => {
     const [pcount, setPcount] = useState('');
     // const [appendCarList, setAppendCarList] = useState([]);
 
-
+    const navigate = useNavigate();
 
     // 날짜 형식을 변환하는 함수
     const formatDate = (dateString) => {
@@ -28,6 +28,11 @@ const MyPage = () => {
         const minutes = String(date.getMinutes()).padStart(2, '0');
         // const seconds = String(date.getSeconds()).padStart(2, '0');
         return `${year}-${month}-${day}   ${hours}:${minutes} `; // ${hours}:${minutes}:${seconds}
+    };
+
+    // 전화번호 포맷 변환 함수
+    const formatPhoneNumber = (phone) => {
+        return phone.replace(/^(\d{3})(\d{3,4})(\d{4})$/, '$1-$2-$3');
     };
 
 
@@ -70,10 +75,14 @@ const MyPage = () => {
     };
 
 
+    const goToMemberList = () => {
+        navigate.push('/MemberList');
+    };
 
     useEffect(() => {
         callMemberInfoApi(); // 컴포넌트 마운트 시 API 호출
     }, []); // 빈 배열을 전달하여 최초 한 번만 실행되도록 설정
+
 
 
     // mtype을 변환하는 함수
@@ -82,6 +91,8 @@ const MyPage = () => {
             return '전문가';
         } else if (mtype === 'm') {
             return '일반회원';
+        } else if (mtype === 'a') {
+            return '운영자';
         } else {
             return '알 수 없는 타입'; // 다른 값이 있을 때 대비
         }
@@ -97,7 +108,20 @@ const MyPage = () => {
 
                             <div className="re1_wrap">
                                 <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                                    <button className="bt_ty3 bt_ty2 submit_ty1">회원관리</button>
+                                    {/* <button className="bt_ty3 bt_ty2 submit_ty1">회원관리</button> */}
+                                    {uuid === 'admin' && (
+                                        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                                            {uuid === 'admin' && (
+                                                <button
+                                                    onClick={goToMemberList}
+                                                    className="bt_ty3 bt_ty2 submit_ty1"
+                                                    style={{ marginLeft: '10px' }}
+                                                >
+                                                    회원관리
+                                                </button>
+                                            )}
+                                        </div>
+                                    )}
                                 </div>
                                 <div className="re_cnt ct2">
                                     <table className="table_ty1">
@@ -123,7 +147,7 @@ const MyPage = () => {
                                         <tr>
                                             <th>연락처</th>
                                             <td>
-                                                <input id="phone" type="text" name="phone_" readOnly="readonly" value={phone}
+                                                <input id="phone" type="text" name="phone_" readOnly="readonly" value={formatPhoneNumber(phone)}
                                                 />
                                             </td>
                                         </tr>
@@ -173,9 +197,9 @@ const MyPage = () => {
                             </div>
                         </form>
                     </div>
-                </article>
-            </section>
-        </div>
+                </article >
+            </section >
+        </div >
     );
 }
 

@@ -53,11 +53,12 @@ const SubscribeLUpdate = (props) => {
 
     }
 
+    // 썸네일 로딩
     const renderImages = () => {
         return imageList.map((image, index) => (
             <li className="hidden_type" key={index}>
                 <img
-                    src={`/display?fileName=${image.thumbnailURL}`}
+                    src={`/api/supload/display?fileName=${image.thumbnailURL}`}
                     alt={`썸네일 ${index}`}
                 />
             </li>
@@ -69,7 +70,7 @@ const SubscribeLUpdate = (props) => {
 
         return mainImgList.map((image, index) => (
             <li className="hidden_type1" key={index}>
-                <img src={`/subscribe/display?fileName=${image.imgName}`}
+                <img src={`/api/supload/display?fileName=${image.imgName}`}
                     alt={`썸네일 ${index}`} />
             </li>
         ));
@@ -109,7 +110,7 @@ const SubscribeLUpdate = (props) => {
 
         if (fnValidate()) {
             let jsonstr = $("form[name='frm']").serialize();
-            
+
             jsonstr = decodeURIComponent(jsonstr);
             let Json_form = JSON.stringify(jsonstr).replace(/\"/gi, '')
             Json_form = "{\"" + Json_form.replace(/\&/g, '\",\"').replace(/=/gi, '\":"') + "\"}";
@@ -117,7 +118,7 @@ const SubscribeLUpdate = (props) => {
                 ...JSON.parse(Json_form),
                 imageDTOList: imageDTOList,
             };
-            
+
 
             axios.put(`http://localhost:8080/api/subscribe/subscribeLessionUpdate`, Json_data)
                 .then(response => {
@@ -148,26 +149,21 @@ const SubscribeLUpdate = (props) => {
     }
 
 
-    const handleFileInput = (type, e, iType) => {
+    const handleFileInput = (type, e) => {
         const selected = e.target.files[0];
-        if (iType == 'M') {
-            $('#imageMainfile').val(selected ? selected.name : '');
-        } else {
-            $('#imagefile').val(selected ? selected.name : '');
-        }
+        $('#imagefile').val(selected ? selected.name : '');
+        selected.imgType = "A";
         setSelectedFile(selected);
-        setImgType(iType);
     }
-
-
 
     const handleFileInput2 = (type, e) => {
         const selected = e.target.files[0];
         $('#imageMainfile').val(selected ? selected.name : '');
-        selected.imgType = 'M';
+        selected.imgType = "M";
         setSelectedFile(selected);
     }
-    
+
+
 
     useEffect(() => {
         if (selectedFile) {

@@ -9,7 +9,7 @@ const ChallengeList = () => {
     const [currentPage, setCurrentPage] = useState(1); // 현재 페이지 번호
     const [totalPages, setTotalPages] = useState(1); // 전체 페이지 수
     const [currentUuid, setCurrentUuid] = useState(''); // 현재 로그인한 사용자의 UUID
-    const itemsPerPage = 3; // 페이지당 항목 수
+    const itemsPerPage = 10; // 페이지당 항목 수
     const [keyword, setKeyword] = useState('');
     const [searchtype, setSearchtype] = useState('');
 
@@ -21,14 +21,15 @@ const ChallengeList = () => {
                 .catch(error => console.error('토큰에서 아이디를 읽어올 수 없습니다:', error));
         }
         fetchChallenges();
-        fetchMainChallenges();
-    }, []);
+        //fetchMainChallenges();
+    }, [searchtype, keyword, currentPage]);
 
     // 챌린지 목록 및 전체 페이지 수 설정
     const fetchChallenges = () => {
         axios.get(`http://localhost:8080/api/challenge/challengeList?searchType=${searchtype}&keyword=${keyword}`)
             .then(response => {
                 const fetchedChallenges = response.data.clist;
+                console.log(fetchedChallenges); // 데이터가 모두 불러와지는지 확인
                 // 최신 순으로 정렬
                 const sortedChallenges = fetchedChallenges.sort((a, b) => new Date(b.wdate) - new Date(a.wdate));
                 setChallenges(sortedChallenges);
@@ -36,20 +37,6 @@ const ChallengeList = () => {
             })
             .catch(error => console.error('챌린지 목록을 가져오는 중 오류:', error));
     };
-
-    // 공지사항 목록 및 전체 페이지 수 설정
-    const fetchMainChallenges = () => {
-        axios.get(`http://localhost:8080/api/challenge/challengeList?searchType=${searchtype}&keyword=${keyword}`)
-            .then(response => {
-                const fetchedChallenges = response.data.clist;
-                // 최신 순으로 정렬
-                const sortedChallenges = fetchedChallenges.sort((a, b) => new Date(b.wdate) - new Date(a.wdate));
-                setChallenges(sortedChallenges);
-                setTotalPages(Math.ceil(sortedChallenges.length / itemsPerPage));
-            })
-            .catch(error => console.error('공지사항 목록을 가져오는 중 오류:', error));
-    };
-
 
     // 오늘의 챌린지
     const challengeListAppend = () => {
@@ -79,7 +66,7 @@ const ChallengeList = () => {
     };
     
     // 챌린지 랭킹
-    const challengRankAppend = () => {
+/*     const challengRankAppend = () => {
         const startIdx = (currentPage - 1) * itemsPerPage;
         const currentChallenges = challenges.slice(startIdx, startIdx + itemsPerPage);
 
@@ -104,33 +91,7 @@ const ChallengeList = () => {
             );
         });
     };
-
-    // 공지사항
-   /*  const challengeMainAppend = () => {
-        const startIdx = (currentPage - 1) * itemsPerPage;
-        const currentChallenges = challenges.slice(startIdx, startIdx + itemsPerPage);
-
-        return currentChallenges.map((data, index) => {
-            const date = data.wdate;
-            const year = date.substr(0, 4);
-            const month = date.substr(5, 2);
-            const day = date.substr(8, 2);
-            const reg_date = `${year}.${month}.${day}`;
-
-            // 현재 페이지와 항목 인덱스를 기반으로 순차적으로 번호를 표시
-            const num = startIdx + index + 1;
-
-            return (
-                <tr className="hidden_type" key={data.bno}>
-                    <td> {num} </td>
-                    <td><Link to={`/ChallengeRead/${data.bno}`}>{data.title}{data.replycnt > 0 && `[${data.replycnt}]`}</Link></td>
-                    <td> {data.uuid || '조회 중..'} </td>
-                    <td> {data.bcounts} </td>
-                    <td> {reg_date} </td>
-                </tr>
-            );
-        });
-    }; */
+ */
 
 
     const handleSearchTypeChange = (e) => {
@@ -144,7 +105,6 @@ const ChallengeList = () => {
     const handleSearchButtonClick = (e) => {
         e.preventDefault();
         setCurrentPage(1);
-        fetchChallenges();
     };
 
     const handlePageClick = (page) => {
@@ -187,41 +147,6 @@ const ChallengeList = () => {
 
 
 
-    // 공지사항 페이지네이션
-    /* const renderMainPagination = () => {
-        const pageNumbers = [];
-        const pagesToShow = 5; // 한 번에 보여줄 페이지 수
-
-        // 페이지네이션 표시 범위 계산
-        const startPage = Math.floor((currentPage - 1) / pagesToShow) * pagesToShow + 1;
-        const endPage = Math.min(startPage + pagesToShow - 1, totalPages);
-
-        for (let i = startPage; i <= endPage; i++) {
-            const isCurrentPage = i === currentPage;
-            pageNumbers.push(
-                <button style={{ margin: 5, backgroundColor: isCurrentPage ? '#20217d' : '' }}
-                    className={`sch_bt99 wi_au ${isCurrentPage ? 'current-page' : ''}`} key={i} onClick={() => handlePageClick(i)}>
-                    {i}
-                </button>
-            );
-        };
-        return (
-            <div className="Paging">
-                {totalPages > pagesToShow && startPage > 1 && (
-                    <button style={{ margin: 5 }} className="sch_bt99 wi_au" onClick={() => handlePageClick(startPage - 1)}>
-                        {'<'}
-                    </button>
-                )}
-                {pageNumbers}
-                {totalPages > pagesToShow && endPage < totalPages && (
-                    <button style={{ margin: 5 }} className="sch_bt99 wi_au" onClick={() => handlePageClick(endPage + 1)}>
-                        {'>'}
-                    </button>
-                )}
-            </div>
-        );
-    };
- */
     return (
         <section className="sub_wrap">
             <article className="s_cnt mp_pro_li ct1 mp_pro_li_admin">
@@ -313,7 +238,7 @@ const ChallengeList = () => {
                         </tr>
                     </table>
                     <table id="appendChallengeList" className="table_ty2 ad_tlist">
-                        {challengeListAppend()}
+                        {/* {challengeListAppend()} */}
                     </table>
                 </div>
             </article>
