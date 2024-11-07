@@ -186,7 +186,7 @@ const ChallengeRead = (props) => {
     // 4. 댓글 작성자와 로그인한 사용자의 UUID가 일치하면 수정/삭제 버튼을 보여줌
     const renderReplyModifyDeleteButtons = (data) => {
         // data.replyer를 uuidMap에서 찾아서 현재 로그인한 uuid와 비교
-        if (uuidMap[data.mno] && uuidMap[data.mno] === uuid) {
+        if (uuidMap[data.mno] && uuidMap[data.mno] === uuid && uuid !== 'admin') {
             return (
                 <div>
                     <button className="catbtn bt_ty2 submit_ty1 saveclass" onClick={() => modifyComment(`${data.rno}`)}>수정</button>
@@ -313,11 +313,12 @@ const ChallengeRead = (props) => {
 
     // 포인트 적립 함수
     const handlePointSubmit = () => {
+       // alert(mno, pcount, psource);
         axios.post('http://localhost:8080/api/challenge/addPoint', {
             mno: mno, // 댓글 작성자의 회원번호
-            uuid: uuid, // 댓글 작성자의 uuid
             pcount: point, // 입력된 포인트 수량
             psource: psource // 입력된 포인트 적립 사유
+            
         })
             .then(response => {
                 if (response.data === "SUCCESS") {
@@ -707,7 +708,7 @@ const ChallengeRead = (props) => {
                         },
                         content: {
                             width: '40%',
-                            height: '30%',
+                            height: 'auto',
                             top: '50%',
                             left: '50%',
                             transform: 'translate(-50%, -50%)',
@@ -717,53 +718,55 @@ const ChallengeRead = (props) => {
                             display: 'flex',
                             flexDirection: 'column',
                             alignItems: 'center',
-                            justifyContent: 'center',
-                            backgroundColor: 'white'
+                            backgroundColor: 'white',
+                            padding: '20px'
                         }
-                    }}>
+                    }}
+                >
                     <h2>포인트 적립</h2>
                     <br />
-                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                        {/*                         <p>회원번호: {mno}</p>
-                        <p>회원 아이디: {uuid}</p> */}
-                        <tr style={{ display: 'flex' }}>
-                            <tr>
-                                <label style={{ fontSize: '19px' }}>회원번호 : </label>
-                                <input value={mno} style={{ maginLeft: '1px', marginRight: '20px', width: '50px', textAlign: 'center' }} />
-                            </tr>
-                            <tr>
-                                <label style={{ fontSize: '19px' }} >회원 아이디 : </label>
-                                <input value={uuid} style={{ maginLeft: '1px', marginBottom: '10px', width: '100px', textAlign: 'center' }} />
-                            </tr>
-                        </tr>
-                        {/* <td style={{ display: 'flex' }}> */}
-                        <div style={{ width: '100%', marginBottom: '20px', display: 'flex', alignItems: 'center' }}>
-                            <label style={{ fontSize: '19px' , width:'150px'}}>적립사유 : </label>
-                            <input
-                                type="text"
-                                placeholder="적립 사유 입력"
-                                style={{ height: '30%', width: '80%', padding: '15px', marginBottom: '20px' }}
-                                value={psource}
-                                onChange={(e) => setPsource(e.target.value)} // 포인트 사유 상태 업데이트
-                            />
-                        </div>
-                        <div style={{ display: 'flex' }}>
-                            <label style={{ fontSize: '19px' , width:'150px'}}>적립할 포인트 : </label>
-                            <input
-                                type="number"
-                                placeholder="적립할 포인트 입력"
-                                style={{ height: '30%', width: '80%', padding: '15px', marginBottom: '20px' }}
-                                value={point}
-                                onChange={(e) => setPoint(e.target.value)} // 포인트 수량 상태 업데이트
-                            />
-                        </div>
-                        {/* </td> */}
+                    <div style={{ width: '80%', marginBottom: '20px', display: 'flex', alignItems: 'center' }}>
+                        <label style={{ fontSize: '19px', marginRight: '10px', width: '100px' }}>회원번호 :</label>
+                        <input
+                            type="text"
+                            value={mno}
+                            readOnly
+                            style={{ flex: 1, padding: '10px', textAlign: 'center' , width: '30px'}}
+                        />
+                        <label style={{ fontSize: '19px', marginLeft:'20px', marginRight: '10px', width: '100px' }}>회원 아이디 :</label>
+                        <input
+                            type="text"
+                            value={uuid}
+                            readOnly
+                            style={{ flex: 1, padding: '10px', textAlign: 'center', width: '100px' }}
+                        />
                     </div>
-                    <div style={{ display: 'flex' }}>
-                        <button className="bt_ty bt_ty2 submit_ty1 saveclass" onClick={handlePointSubmit}>저장</button>
+                    <div style={{ width: '80%', marginBottom: '20px', display: 'flex', alignItems: 'center' }}>
+                        <label style={{ fontSize: '19px', marginRight: '10px', width: '120px' }}>적립사유 :</label>
+                        <input
+                            type="text"
+                            placeholder="적립 사유 입력"
+                            style={{ flex: 1, padding: '10px' }}
+                            value={psource}
+                            onChange={(e) => setPsource(e.target.value)}
+                        />
+                    </div>
+                    <div style={{ width: '80%', marginBottom: '20px', display: 'flex', alignItems: 'center' }}>
+                        <label style={{ fontSize: '19px', marginRight: '10px', width: '120px' }}>적립할 포인트 :</label>
+                        <input
+                            type="number"
+                            placeholder="적립할 포인트 입력"
+                            style={{ flex: 1, padding: '10px' }}
+                            value={point}
+                            onChange={(e) => setPoint(e.target.value)}
+                        />
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'center', width: '100%', marginBottom: '10px' }}>
+                        <button className="bt_ty bt_ty2 submit_ty1 saveclass" onClick={handlePointSubmit} style={{ marginRight: '10px' }}>저장</button>
                         <button className="bt_ty bt_ty2 submit_ty1 saveclass" onClick={() => setIsEditModalOpenPoint(false)}>취소</button>
                     </div>
                 </Modal>
+
             </article>
         </section>
     );
