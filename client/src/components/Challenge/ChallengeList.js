@@ -75,7 +75,7 @@ const ChallengeList = () => {
             return (
                 <tr className="hidden_type" key={data.bno}>
                     <td> {num} </td>
-                    <td><Link to={`/ChallengeRead/${data.bno}`}>{data.title}{data.replycnt > 0 && `[${data.replycnt}]`}</Link></td>
+                    <td><Link to={`/ChallengeRead/${data.bno}`}>{data.title}{data.replycnt > 0 && `  [${data.replycnt}]`}</Link></td>
                     <td> {data.uuid || '조회 중..'} </td>
                     <td> {data.bcounts} </td>
                     <td> {reg_date} </td>
@@ -105,35 +105,6 @@ const ChallengeList = () => {
             </tr>
         ));
     };
-
-
-    // 챌린지 랭킹
-    /*     const challengRankAppend = () => {
-            const startIdx = (currentPage - 1) * itemsPerPage;
-            const currentChallenges = challenges.slice(startIdx, startIdx + itemsPerPage);
-     
-            return currentChallenges.map((data, index) => {
-                const date = data.wdate;
-                const year = date.substr(0, 4);
-                const month = date.substr(5, 2);
-                const day = date.substr(8, 2);
-                const reg_date = `${year}.${month}.${day}`;
-     
-                // 현재 페이지와 항목 인덱스를 기반으로 순차적으로 번호를 표시
-                const num = startIdx + index + 1;
-     
-                return (
-                    <tr className="hidden_type" key={data.bno}>
-                        <td> {num} </td>
-                        <td> {data.mno}</td>
-                        <td> {data.uuid || '조회 중..'} </td>
-                        <td> {data.name} </td>
-                        <td> {reg_date} </td>
-                    </tr>
-                );
-            });
-        };
-     */
 
 
     const handleSearchTypeChange = (e) => {
@@ -195,36 +166,7 @@ const ChallengeList = () => {
                 <div className="li_top">
                     <h2 className="s_tit1">챌린지</h2>
                 </div>
-
-                {/* 챌린지 공지사항 */}
-                {/*  <h4 className="s_tit2">공지사항</h4>
-                <div className="list_cont list_cont_admin">
-                    <table className="table_ty1 ad_tlist">
-                        <tr>
-                            <th>번호</th>
-                            <th>제목</th>
-                            <th>작성자</th>
-                            <th>조회수</th>
-                            <th>작성일</th>
-                        </tr>
-                    </table>
-                    <table id="appendChallengeList" className="table_ty2 ad_tlist">
-                        {challengeMainAppend()}
-                    </table>
-                    <div id="spaging">
-                        {renderMainPagination()}
-                    </div>
-                </div>
-
-                {currentUuid === 'admin' && (
-                    <div className="li_top_sch af">
-                        <Link to={'/ChallengeInsert'} className="sch_bt2 wi_au">글쓰기</Link>
-                    </div>
-                )} */}
-
-                {/* --------------------------------------------------------------------------------------------------------------------- */}
-
-
+            
                 <h4 className="s_tit2">오늘의 챌린지</h4>
                 <div className="searchingForm">
                     <form onSubmit={(e) => handleSearchButtonClick(e)}>
