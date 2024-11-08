@@ -316,7 +316,11 @@ const Modify = () => {
                                     </table>
                                 </div>
                             </div>
-                            <div>
+                            <div style={{
+                                alignItems: 'center',
+                                display: 'flex',
+                                justifyContent: 'center'
+                            }}>
                                 <div className="btn_confirm bt_ty bt_ty2 submit_ty1 modifyclass" type="button" onClick={(e) => submitClick('modify', e)} >수정</div>
                                 {/* <a href="javascript:" className="bt_ty bt_ty2 submit_ty1 modifyclass"
                                     onClick={(e) => submitClick('modify', e)}>수정</a> */}
