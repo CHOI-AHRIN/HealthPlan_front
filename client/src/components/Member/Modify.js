@@ -316,20 +316,34 @@ const Modify = () => {
                                     </table>
                                 </div>
                             </div>
-                            <div style={{
-                                alignItems: 'center',
-                                display: 'flex',
-                                justifyContent: 'center'
-                            }}>
-                                <div className="btn_confirm bt_ty bt_ty2 submit_ty1 modifyclass" type="button" onClick={(e) => submitClick('modify', e)} >수정</div>
-                                {/* <a href="javascript:" className="bt_ty bt_ty2 submit_ty1 modifyclass"
-                                    onClick={(e) => submitClick('modify', e)}>수정</a> */}
-                                <div className="bt_ty bt_ty2 submit_ty1 deleteclass" type="button" onClick={(e) => deleteMember()} >탈퇴</div>
-                                {/* <a href="javascript:" className="bt_ty bt_ty2 submit_ty1 modifyclass"
-                                    onClick={(e) => submitClick('modify', e)}>수정</a> */}
+                            <div
+                                style={{
+                                    display: 'flex',
+                                    justifyContent: 'center', // 버튼을 가로로 중앙에 정렬
+                                    alignItems: 'center', // 버튼을 세로로 중앙에 정렬
+                                    gap: '20px', // 버튼 사이의 간격 조정
+                                    marginTop: '20px', // 버튼 그룹 위쪽 여백
+                                }}>
+                                <div className="btn_confirm bt_ty bt_ty2 submit_ty1 modifyclass" type="button" onClick={(e) => submitClick('modify', e)}
+                                    style={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        cursor: 'pointer',
+                                        backgroundColor: '#004AAD', // 예시 배경색
+                                        color: '#fff', // 텍스트 색상
+                                    }}
+                                >수정</div>
+                                <div className="bt_ty bt_ty2 submit_ty1 deleteclass" type="button" onClick={(e) => deleteMember()} 
+                                     style={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        cursor: 'pointer',
+                                        backgroundColor: '#d9534f', // 예시 배경색 (삭제 버튼)
+                                        color: '#fff', // 텍스트 색상
+                                    }}>탈퇴</div>
 
-                                {/* <a href="javascript:" className="bt_ty bt_ty2 submit_ty1 deleteclass"
-                                    onClick={(e) => deleteMember()}>탈퇴</a> */}
                             </div>
                         </form>
                     </div>

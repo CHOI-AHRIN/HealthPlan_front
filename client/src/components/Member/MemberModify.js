@@ -156,12 +156,12 @@ const MemberModify = () => {
                             </table>
                         </div>
                     </div>
-                    <div 
-                    style= {{
-                        alignItems: 'center',
-                        display: 'flex',
-                        justifyContent: 'center'
-                    }}>
+                    <div
+                        style={{
+                            alignItems: 'center',
+                            display: 'flex',
+                            justifyContent: 'center'
+                        }}>
                         <div className="btn_confirm bt_ty bt_ty2 submit_ty1 modifyclass" type="button" /* onClick={(e) => submitClick('modify', e)}  */>수정</div>
                         <div className="bt_ty bt_ty2 submit_ty1 deleteclass" type="button" /* onClick={(e) => deleteMember() }*/ >탈퇴</div>
                     </div>
