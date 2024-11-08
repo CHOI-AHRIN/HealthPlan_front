@@ -70,7 +70,7 @@ const SubscribeLInsert = () => {
 
         if (fnValidate()) {
             let jsonstr = $("form[name='frm']").serialize();
-            //alert(jsonstr);
+            alert(jsonstr);
 
             jsonstr = decodeURIComponent(jsonstr);
             let Json_form = JSON.stringify(jsonstr).replace(/\"/gi, '')
@@ -81,7 +81,7 @@ const SubscribeLInsert = () => {
                 imageDTOList: imageDTOList,
             };
 
-            axios.post('http://localhost:8080/api/challenge/challengeinsert', jsonstr)
+            axios.post('http://localhost:8080/api/challenge/challengeinsert', Json_data)
                 .then(response => {
                     try {
                         if (response.data == "success") {
@@ -114,6 +114,7 @@ const SubscribeLInsert = () => {
     const handleFileInput = (type, e) => {
         const selected = e.target.files[0];
         $('#imagefile').val(selected ? selected.name : '');
+        selected.imgType = "A";
         setSelectedFile(selected);
     }
 
@@ -126,6 +127,7 @@ const SubscribeLInsert = () => {
 
     const handlePostImage = async () => {
         const formData = new FormData();
+        const itype = selectedFile.imgType;
         formData.append('uploadFiles', selectedFile);
 
         try {
@@ -134,10 +136,10 @@ const SubscribeLInsert = () => {
 
             setImageDTOList((prevImageDTOList) => [
                 ...prevImageDTOList,
-                {imgName: fileName, imageURL: imageURL, thumbnailURL: thumbnailURL, path: folderPath, uuid: uuid, imgType: "A" },
+                {imgName: fileName, imageURL: imageURL, thumbnailURL: thumbnailURL, path: folderPath, uuid: uuid, imgType: itype },
             ]);
 
-            const str = `<li data-name='${fileName}' data-path='${folderPath}' data-uuid='${uuid} data-imageURL='${imageURL}' >
+            const str = `<li data-name='${fileName}' data-path='${folderPath}' data-uuid='${uuid}' data-imgtype='${itype}' data-imageURL='${imageURL}'>
                             <img src='http://localhost:8080/api/cupload/display?fileName=${thumbnailURL}'>
                           </li>`;
             $('#upload_img').append(str);

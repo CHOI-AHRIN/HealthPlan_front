@@ -105,6 +105,7 @@ const MyPage = () => {
                     <div className="li_top">
                         <h2 className="s_tit1">MyPage</h2>
                         <form method="post" name="frm">
+
                             <div className="re1_wrap">
                                 <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                                     {uuid === 'admin' && (
