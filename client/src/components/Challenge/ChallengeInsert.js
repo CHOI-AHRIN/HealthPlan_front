@@ -81,7 +81,7 @@ const SubscribeLInsert = () => {
                 imageDTOList: imageDTOList,
             };
 
-            axios.post('http://localhost:8080/api/challenge/challengeinsert', jsonstr)
+            axios.post('http://localhost:8080/api/challenge/challengeinsert', Json_data)
                 .then(response => {
                     try {
                         if (response.data == "success") {
