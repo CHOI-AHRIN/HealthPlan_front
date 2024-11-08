@@ -72,7 +72,7 @@ const SubscribeLRead = (props) => {
     useEffect(() => {
         console.log("uuidMap이 업데이트되었습니다:", uuidMap);
         setAppend_ReplyList(ReplyListAppend(responseReplyList));
-    }, [uuidMap]);  // uuidMap이 변경될 때마다 댓글 목록을 다시 렌더링
+    }, [uuidMap, responseReplyList]);  // uuidMap이 변경될 때마다 댓글 목록을 다시 렌더링
 
 
     // 2. 댓글 목록에서 mno로 uuid 가져오기
@@ -259,6 +259,11 @@ const SubscribeLRead = (props) => {
 
     // 댓글
     const submitClick = (e) => {
+
+        console.log("현재 uuid:", uuid);
+        console.log("현재 mno:", mno);
+
+        
         const reply_checker = $('#replyTextVal').val();
 
         const fnValidate = (e) => {

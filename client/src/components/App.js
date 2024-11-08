@@ -103,7 +103,7 @@ const App = () => {
         <Route path='/MyPage' element={<MyPage />} />
         <Route path='/Modify' element={<Modify />} />
         <Route path='/MemberList' element={<MemberList />} />
-        <Route path='/MemberModify' element={<MemberModify />} />
+        <Route path='/MemberModify/:uuid' element={<MemberModify />} />
         <Route path='/SubscribeLList' element={<SubscribeLList />} />
         <Route path='/SubscribeLInsert' element={<SubscribeLInsert />} />
         <Route path='/SubscribeLRead/:sno' element={<SubscribeLRead />} />
