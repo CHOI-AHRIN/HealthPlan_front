@@ -74,13 +74,13 @@ const Modify = () => {
                     alert('1. 작업중 오류가 발생하였습니다.');
                 }
             })
-            .catch(error => { 
-                alert('2. 작업중 오류가 발생하였습니다 (서버).'); 
-                return false; 
+            .catch(error => {
+                alert('2. 작업중 오류가 발생하였습니다 (서버).');
+                return false;
             });
     };
 
-        const submitClick = (type, e) => {
+    const submitClick = (type, e) => {
         const memPw_val_checker = $('#upw').val();
         const memPw_cnf_val_checker = $('#upw_cnf_val').val();
         const email_val_checker = $('#email_val').val();
@@ -165,7 +165,7 @@ const Modify = () => {
         if (fnValidate()) {
             fnSignInsert('modify', e);
         }
-    }; 
+    };
 
 
     const memPwKeyPress = (e) => {
@@ -289,8 +289,8 @@ const Modify = () => {
                                         <tr>
                                             <th>연락처</th>
                                             <td>
-                                                <input id="phone_val"  type="text" name="phone"  />
-       
+                                                <input id="phone_val" type="text" name="phone" />
+
                                             </td>
                                         </tr>
                                         <tr>
@@ -316,16 +316,34 @@ const Modify = () => {
                                     </table>
                                 </div>
                             </div>
-                            <div>
-                            <div className="btn_confirm bt_ty bt_ty2 submit_ty1 modifyclass"  type="button" onClick={(e) => submitClick('modify', e)} >수정</div>
-                                {/* <a href="javascript:" className="bt_ty bt_ty2 submit_ty1 modifyclass"
-                                    onClick={(e) => submitClick('modify', e)}>수정</a> */}
-                            <div className="bt_ty bt_ty2 submit_ty1 deleteclass"  type="button" onClick={(e) => deleteMember()} >탈퇴</div>
-                                {/* <a href="javascript:" className="bt_ty bt_ty2 submit_ty1 modifyclass"
-                                    onClick={(e) => submitClick('modify', e)}>수정</a> */}
-                           
-                                {/* <a href="javascript:" className="bt_ty bt_ty2 submit_ty1 deleteclass"
-                                    onClick={(e) => deleteMember()}>탈퇴</a> */}
+                            <div
+                                style={{
+                                    display: 'flex',
+                                    justifyContent: 'center', // 버튼을 가로로 중앙에 정렬
+                                    alignItems: 'center', // 버튼을 세로로 중앙에 정렬
+                                    gap: '20px', // 버튼 사이의 간격 조정
+                                    marginTop: '20px', // 버튼 그룹 위쪽 여백
+                                }}>
+                                <div className="btn_confirm bt_ty bt_ty2 submit_ty1 modifyclass" type="button" onClick={(e) => submitClick('modify', e)}
+                                    style={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        cursor: 'pointer',
+                                        backgroundColor: '#004AAD', // 예시 배경색
+                                        color: '#fff', // 텍스트 색상
+                                    }}
+                                >수정</div>
+                                <div className="bt_ty bt_ty2 submit_ty1 deleteclass" type="button" onClick={(e) => deleteMember()} 
+                                     style={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        cursor: 'pointer',
+                                        backgroundColor: '#d9534f', // 예시 배경색 (삭제 버튼)
+                                        color: '#fff', // 텍스트 색상
+                                    }}>탈퇴</div>
+
                             </div>
                         </form>
                     </div>

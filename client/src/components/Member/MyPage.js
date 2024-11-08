@@ -111,15 +111,8 @@ const MyPage = () => {
                                     {uuid === 'admin' && (
                                         <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                                             {uuid === 'admin' && (
-                                                /*                                                 <button
-                                                                                                    onClick={goToMemberList}
-                                                                                                    className="bt_ty3 bt_ty2 submit_ty1"
-                                                                                                    style={{ marginLeft: '10px' }}
-                                                                                                >
-                                                                                                    회원관리
-                                                                                                </button> */
                                                 <Link to="/MemberList" className="bt_ty2 submit_ty1" style={{
-                                                fontSize: '15px', width: '120px', height: '30px', alignItems: 'center', justifyContent: 'center', display: 'flex'
+                                                    fontSize: '15px', width: '120px', height: '30px', alignItems: 'center', justifyContent: 'center', display: 'flex'
                                                 }}>
                                                     회원관리
                                                 </Link>

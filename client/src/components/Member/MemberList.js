@@ -89,7 +89,7 @@ const MemberList = () => {
         <section className="sub_wrap">
             <article className="s_cnt mp_pro_li ct1 mp_pro_li_admin">
                 <div className="li_top">
-                    <h2 className="s_tit1">멤버목록</h2>
+                    <h2 className="s_tit1">회원목록</h2>
                 </div>
                 <div className="list_cont list_cont_admin">
                     <table className="table_ty1 ad_tlist2">
