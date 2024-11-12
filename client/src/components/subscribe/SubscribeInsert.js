@@ -21,11 +21,11 @@ const SubscribeLInsert = () => {
         const token = cookie.load('token');
 
         if (token) {
-            axios.post('http://localhost:8080/api/member/loginCookie', { token })
+            axios.post('/api/member/loginCookie', { token })
                 .then(response => {
                     const uuid = response.data.uuid;
                     if (uuid) {
-                        axios.post('http://localhost:8080/api/member/read', { uuid })
+                        axios.post('/api/member/read', { uuid })
                             .then(response => {
                                 const data = response.data;
                                 setUuid(uuid);  // uuid 상태 값 설정
@@ -89,7 +89,7 @@ const SubscribeLInsert = () => {
                 imageDTOList: imageDTOList,
             };
 
-            axios.post('http://localhost:8080/api/subscribe/subscribeInsert', Json_data)
+            axios.post('/api/subscribe/subscribeInsert', Json_data)
                 .then(response => {
                     try {
                         if (response.data == "success") {
@@ -146,7 +146,7 @@ const SubscribeLInsert = () => {
         formData.append('uploadFiles', selectedFile);
 
         try {
-            const res = await axios.post("http://localhost:8080/api/supload/uploadAjax", formData);
+            const res = await axios.post("/api/supload/uploadAjax", formData);
             const { fileName, uuid, folderPath, imageURL, thumbnailURL, imgType } = res.data[0];
 
             setImageDTOList((prevImageDTOList) => [
@@ -155,7 +155,7 @@ const SubscribeLInsert = () => {
             ]);
 
             const str = `<li data-name='${fileName}' data-path='${folderPath}' data-uuid='${uuid} data-imageURL='${imageURL}'>
-                            <img src='http://localhost:8080/api/supload/display?fileName=${thumbnailURL}'>
+                            <img src='/api/supload/display?fileName=${thumbnailURL}'>
                           </li>`;
             if (itype == "M") {
                 $('#upload_img2').append(str);

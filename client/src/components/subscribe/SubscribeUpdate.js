@@ -22,7 +22,7 @@ const SubscribeLUpdate = (props) => {
 
 
     const callNboardInfoApi = () => {
-        axios.get(`http://localhost:8080/api/subscribe/subscribeRead/${sno}`, {
+        axios.get(`/api/subscribe/subscribeRead/${sno}`, {
             // sno: sno
         }).then(response => {
             try {
@@ -45,7 +45,7 @@ const SubscribeLUpdate = (props) => {
         return imageList.map((image, index) => (
             <li className="hidden_type" key={index}>
                 <img
-                    src={`http://localhost:8080/api/supload/display?fileName=${image.thumbnailURL}`}
+                    src={`/api/supload/display?fileName=${image.thumbnailURL}`}
                     alt={`썸네일 ${index}`}
                 />
             </li>
@@ -86,7 +86,7 @@ const SubscribeLUpdate = (props) => {
                 imageDTOList: imageDTOList,
             };
 
-            axios.put(`http://localhost:8080/api/subscribe/subscribeUpdate`, Json_data)
+            axios.put(`/api/subscribe/subscribeUpdate`, Json_data)
                 .then(response => {
                     try {
                         if (response.data == "success") {
@@ -132,7 +132,7 @@ const SubscribeLUpdate = (props) => {
         formData.append('uploadFiles', selectedFile);
 
         try {
-            const res = await axios.post("http://localhost:8080/api/supload/uploadAjax", formData);
+            const res = await axios.post("/api/supload/uploadAjax", formData);
             const { fileName, uuid, folderPath, imageURL, thumbnailURL, imgType } = res.data[0];
 
             setImageDTOList((prevImageDTOList) => [
@@ -141,7 +141,7 @@ const SubscribeLUpdate = (props) => {
             ]);
 
             const str = `<li data-name='${fileName}' data-path='${folderPath}' data-uuid='${uuid} data-imageURL='${imageURL}'>
-                            <img src='http://localhost:8080/api/supload/display?fileName=${thumbnailURL}'>
+                            <img src='/api/supload/display?fileName=${thumbnailURL}'>
                           </li>`;
             $('#upload_img').append(str);
         } catch (error) {

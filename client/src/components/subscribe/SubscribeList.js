@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import axios from "axios";
 import $ from 'jquery';
+import cookie from 'react-cookies';
 
 const SubscribeLList = () => {
 
@@ -16,13 +17,36 @@ const SubscribeLList = () => {
     const [next, setNext] = useState('');
     const [keyword, setKeyword] = useState('');
     const [searchtype, setSearchtype] = useState('');
+    const [mtype, setMtype] = useState('');
 
     useEffect(() => {
         callSboardListApi(currentPage);
     }, []);
 
+    // mtype을 가져오는 함수
+    const fetchMtype = async () => {
+        try {
+            // 쿠키에서 토큰 가져오기
+            const token = cookie.load('token');
+
+            if (token) {
+                // 토큰을 서버에 보내서 로그인한 사용자의 uuid를 받아옴
+                const uuidResponse = await axios.post('/api/member/loginCookie', { token });
+                const userUuid = uuidResponse.data.uuid;
+
+                // uuid를 사용하여 mtype을 가져옴
+                const mtypeResponse = await axios.get(`/api/member/searchmtype?uuid=${userUuid}`);
+                setMtype(mtypeResponse.data.mtype);
+            } else {
+                console.error("토큰이 존재하지 않습니다.");
+            }
+        } catch (error) {
+            console.error("mtype 조회 중 오류 발생:", error);
+        }
+    };
+
     const callSboardListApi = (page) => {
-        axios.get(`http://localhost:8080/api/subscribe/subscribeList?page=${page}&searchType=${searchtype}&keyword=${keyword}`
+        axios.get(`/api/subscribe/subscribeList?page=${page}&searchType=${searchtype}&keyword=${keyword}`
         ).then(response => {
             try {
                 setAppend_SboardList(subscribeListAppend(response.data));
@@ -40,15 +64,15 @@ const SubscribeLList = () => {
     const subscribeListAppend = (nBoard) => {
         let result = [];
         let nBoardList = nBoard.list;
-        
+
         for (let i = 0; i < nBoardList.length; i++) {
             let data = nBoardList[i];
-            
+
             var date = data.wdate;
-            var year = date.substr(0,4);
-            var month = date.substr(5,2);
-            var day = date.substr(8,2);
-            var reg_date = year +'.'+month+'.'+day;
+            var year = date.substr(0, 4);
+            var month = date.substr(5, 2);
+            var day = date.substr(8, 2);
+            var reg_date = year + '.' + month + '.' + day;
 
             //list num
             var num = (nBoard.pageMaker.totalCount - (nBoard.pageMaker.cri.page - 1) * nBoard.pageMaker.cri.perPageNum - i);
@@ -58,8 +82,8 @@ const SubscribeLList = () => {
                     <td> {num} </td>
                     <td>{
                         data.titleimg != null
-                        ? <img src={`api/supload/display?fileName=${data.titleimg}`} width='35px' height='35px'/>
-                        : <img src={require(`../../img/layout/avatar.jpg`)} width='30px' height='30px'/>
+                            ? <img src={`api/supload/display?fileName=${data.titleimg}`} width='35px' height='35px' />
+                            : <img src={require(`../../img/layout/avatar.jpg`)} width='30px' height='30px' />
                     }
                     </td>
                     <td><Link to={`/SubscribeRead/${data.sno}`}>{data.title}{data.replycnt > 0 && ` [${data.replycnt}]`}</Link></td>
@@ -94,7 +118,7 @@ const SubscribeLList = () => {
 
     const renderSearchPagination = () => {
         const pageNumbers = [];
-        
+
         for (let i = startPage; i <= endPage; i++) {
             const isCurrentPage = i === currentPage;
             pageNumbers.push(
@@ -114,7 +138,7 @@ const SubscribeLList = () => {
                 )}
                 {pageNumbers}
                 {next == true && (
-                    <button style={{ margin: 5, backgroundColor: '#6fa1dd'}} className="sch_bt99 wi_au" onClick={() => handlePageClick(endPage + 1)}>
+                    <button style={{ margin: 5, backgroundColor: '#6fa1dd' }} className="sch_bt99 wi_au" onClick={() => handlePageClick(endPage + 1)}>
                         {'>'}
                     </button>
                 )}
@@ -145,7 +169,7 @@ const SubscribeLList = () => {
 
                 <div className="list_cont list_cont_admin2">
                     <table className="table_ty1 ad_tlist2">
-                    <tr>
+                        <tr>
                             <th>번호</th>
                             <th>구독이미지</th>
                             <th>전문가구독</th>
@@ -158,14 +182,15 @@ const SubscribeLList = () => {
                     <table id="appendNboardList" className="table_ty2 ad_tlist2">
                         {append_SboardList}
                     </table>
-                    <div id="spaging" style={{marginTop: '10px'}}>
+                    <div id="spaging" style={{ marginTop: '10px' }}>
                         {renderSearchPagination()}
                     </div>
                 </div>
-
-                <div className="li_top_sch af">
-                    <Link to={'/SubscribeInsert'} className="sch_bt2 wi_au">글쓰기</Link>
-                </div>
+                {mtype === 't' && (
+                    <div className="li_top_sch af">
+                        <Link to={'/SubscribeInsert'} className="sch_bt2 wi_au">글쓰기</Link>
+                    </div>
+                )}
             </article>
         </section>
     );

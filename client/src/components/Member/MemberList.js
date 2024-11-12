@@ -31,7 +31,7 @@ const MemberList = () => {
 
     // 멤버 목록
     const fetchMemberList = () => {
-        axios.get('http://localhost:8080/api/member/list')
+        axios.get('/api/member/list')
             .then(response => {
                 const fetchedMember = response.data;
                 // 최신 순으로 정렬

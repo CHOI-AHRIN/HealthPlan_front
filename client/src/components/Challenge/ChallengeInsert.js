@@ -20,11 +20,11 @@ const SubscribeLInsert = () => {
         const token = cookie.load('token');
 
         if (token) {
-            axios.post('http://localhost:8080/api/member/loginCookie', { token })
+            axios.post('/api/member/loginCookie', { token })
                 .then(response => {
                     const uuid = response.data.uuid;
                     if (uuid) {
-                        axios.post('http://localhost:8080/api/member/read', { uuid })
+                        axios.post('/api/member/read', { uuid })
                             .then(response => {
                                 const data = response.data;
                                 setUuid(uuid);  // uuid 상태 값 설정
@@ -81,7 +81,7 @@ const SubscribeLInsert = () => {
                 imageDTOList: imageDTOList,
             };
 
-            axios.post('http://localhost:8080/api/challenge/challengeinsert', Json_data)
+            axios.post('/api/challenge/challengeinsert', Json_data)
                 .then(response => {
                     try {
                         if (response.data == "success") {
@@ -131,7 +131,7 @@ const SubscribeLInsert = () => {
         formData.append('uploadFiles', selectedFile);
 
         try {
-            const res = await axios.post("http://localhost:8080/api/cupload/uploadAjax", formData);
+            const res = await axios.post("/api/cupload/uploadAjax", formData);
             const { fileName, uuid, folderPath, imageURL, thumbnailURL, imgType } = res.data[0];
 
             setImageDTOList((prevImageDTOList) => [
@@ -140,7 +140,7 @@ const SubscribeLInsert = () => {
             ]);
 
             const str = `<li data-name='${fileName}' data-path='${folderPath}' data-uuid='${uuid}' data-imgtype='${itype}' data-imageURL='${imageURL}'>
-                            <img src='http://localhost:8080/api/cupload/display?fileName=${thumbnailURL}'>
+                            <img src='/api/cupload/display?fileName=${thumbnailURL}'>
                           </li>`;
             $('#upload_img').append(str);
         } catch (error) {

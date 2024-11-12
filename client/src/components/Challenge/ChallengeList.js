@@ -17,7 +17,7 @@ const ChallengeList = () => {
     useEffect(() => {
         const token = cookie.load('token'); // 쿠키에서 토큰 가져오기
         if (token) {
-            axios.post('http://localhost:8080/api/member/loginCookie', { token })
+            axios.post('/api/member/loginCookie', { token })
                 .then(response => setCurrentUuid(response.data.uuid))
                 .catch(error => console.error('토큰에서 아이디를 읽어올 수 없습니다:', error));
         }
@@ -28,7 +28,7 @@ const ChallengeList = () => {
     // 챌린지 랭킹
     useEffect(() => {
         // 댓글 수 상위 3명의 데이터를 가져오는 API 호출
-        axios.get('http://localhost:8080/api/challenge/ranking')
+        axios.get('/api/challenge/ranking')
             .then(response => {
                 console.log(response.data); // rankingData 확인용 로그 추가
                 if (Array.isArray(response.data)) {
@@ -45,7 +45,7 @@ const ChallengeList = () => {
 
     // 챌린지 목록 및 전체 페이지 수 설정
     const fetchChallenges = () => {
-        axios.get(`http://localhost:8080/api/challenge/challengeList?searchType=${searchtype}&keyword=${keyword}`)
+        axios.get(`/api/challenge/challengeList?searchType=${searchtype}&keyword=${keyword}`)
             .then(response => {
                 const fetchedChallenges = response.data.clist;
                 console.log(fetchedChallenges); // 데이터가 모두 불러와지는지 확인
