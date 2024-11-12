@@ -48,12 +48,12 @@ const SubscribeLRead = (props) => {
 
         if (token) {
             // 토큰을 서버에 보내서 로그인한 사용자의 uuid를 받아옴
-            axios.post('http://localhost:8080/api/member/loginCookie', { token })
+            axios.post('/api/member/loginCookie', { token })
                 .then(response => {
                     const userUuid = response.data.uuid; // 서버로부터 받아온 로그인한 사용자의 uuid
                     setUuid(userUuid);
                     // 회원 번호(mno)를 가져오기 위해 추가 요청
-                    axios.post('http://localhost:8080/api/member/readMno', { uuid: userUuid })
+                    axios.post('/api/member/readMno', { uuid: userUuid })
                         .then(response => {
                             setMno(response.data.mno); // 회원 번호 상태 업데이트
                             callNboardInfoApi(userUuid); // 받아온 UUID를 기반으로 게시글 정보 요청
@@ -92,7 +92,7 @@ const SubscribeLRead = (props) => {
                 console.log("fetchUuids 호출됨, responseReplyList:", responseReplyList);
 
                 const requests = responseReplyList.map((data) =>
-                    axios.post('http://localhost:8080/api/member/getUuidByMno', { mno: data.mno })
+                    axios.post('/api/member/getUuidByMno', { mno: data.mno })
                 );
 
                 try {
@@ -122,7 +122,7 @@ const SubscribeLRead = (props) => {
 
     // 2. 게시글 정보 API 호출, 게시글 작성자 UUID와 로그인한 사용자의 UUID를 비교
     const callNboardInfoApi = async () => {
-        axios.get(`http://localhost:8080/api/subscribe/subscribeLessionRead/${sno}`, {
+        axios.get(`/api/subscribe/subscribeLessionRead/${sno}`, {
             //sno: sno,
         }).then(response => {
             try {
@@ -211,7 +211,7 @@ const SubscribeLRead = (props) => {
         return mainImgList.map((image, index) => (
             <li className="hidden_type1" key={index}>
                 {image.imgType == 'M' ?
-                    <img src={`http://localhost:8080/api/supload/display?fileName=${image.imgName}`}
+                    <img src={`/api/supload/display?fileName=${image.imgName}`}
                         alt={`썸네일 ${index}`}
                         onClick={() => handleThumbnailClick(image.imageURL)} />
                     : ''
@@ -222,7 +222,7 @@ const SubscribeLRead = (props) => {
 
     const deleteArticle = (e) => {
         sweetalertDelete1('삭제하시겠습니까?', () => {
-            axios.delete(`http://localhost:8080/api/subscribe/subscribeLessionDelete/${sno}`, {
+            axios.delete(`/api/subscribe/subscribeLessionDelete/${sno}`, {
                 // sno: sno
             }).then(response => {
 
@@ -287,7 +287,7 @@ const SubscribeLRead = (props) => {
                 rcomment: $('#replyTextVal').val()
             };
 
-            axios.post('http://localhost:8080/api/sreplies/add', Json_data)
+            axios.post('/api/sreplies/add', Json_data)
                 .then(response => {
                     try {
                         if (response.data == "SUCCESS") {
@@ -313,7 +313,7 @@ const SubscribeLRead = (props) => {
     }
 
     const callReplyListApi = (sno) => {
-        axios.get(`http://localhost:8080/api/sreplies/list/${sno}`) // 게시글 번호에서 댓글 달꺼니까!
+        axios.get(`/api/sreplies/list/${sno}`) // 게시글 번호에서 댓글 달꺼니까!
 
             .then(response => {
                 console.log("댓글 데이터 수신:", response.data); // 서버로부터 받은 데이터를 확인
@@ -389,7 +389,7 @@ const SubscribeLRead = (props) => {
 
     const deleteComment = (rno) => {
         sweetalertDelete2('삭제하시겠습니까?', () => {
-            axios.delete(`http://localhost:8080/api/sreplies/delete/${rno}`, {
+            axios.delete(`/api/sreplies/delete/${rno}`, {
                 /*  rNo: responseReplyList.data[index].rno,
                  sno: sno */
             })
@@ -449,7 +449,7 @@ const SubscribeLRead = (props) => {
     };
 
     const handleEditSubmit = () => {
-        axios.put(`http://localhost:8080/api/sreplies/update/${selectRno}`, {
+        axios.put(`/api/sreplies/update/${selectRno}`, {
             rno: selectRno,
             rcomment: editedContent,
         })
@@ -584,7 +584,7 @@ const SubscribeLRead = (props) => {
                                             }
                                         }}>
                                         {selectedImage && (
-                                            <img src={`http://localhost:8080/api/supload/display?fileName=${selectedImage}`} alt="선택한 썸네일" />
+                                            <img src={`/api/supload/display?fileName=${selectedImage}`} alt="선택한 썸네일" />
                                         )}
                                     </Modal>
 

@@ -42,7 +42,7 @@ const MemberModify = () => {
 
         setUuidState(uuid);
         if (uuid) {
-            axios.get(`http://localhost:8080/api/member/read/${uuid}`)
+            axios.get(`/api/member/read/${uuid}`)
                 .then(response => {
                     console.log("회원 정보:", response.data);
                     const data = response.data;
@@ -72,7 +72,7 @@ const MemberModify = () => {
             Json_form = "{\"" + Json_form.replace(/\&/g, '\",\"').replace(/=/gi, '\":"') + "\"}";
             let Json_data = JSON.parse(Json_form);
     
-            axios.post('http://localhost:8080/api/member/modifyMem', memberInfo)
+            axios.post('/api/member/modifyMem', memberInfo)
             uuid: uuid
                 .then(response => {
                     alert('회원 정보가 성공적으로 수정되었습니다.');
@@ -89,7 +89,7 @@ const MemberModify = () => {
             uuid: uuid, // uuid를 포함한 데이터로 POST 요청 보냄
         };
 
-        axios.post('http://localhost:8080/api/member/modifyMem', updatedMemberInfo)
+        axios.post('/api/member/modifyMem', updatedMemberInfo)
             .then(response => {
                 alert('회원 정보가 성공적으로 수정되었습니다.');
                 navigate('/MemberList'); // 수정 후 리스트 페이지로 이동
@@ -113,7 +113,7 @@ const MemberModify = () => {
     // 정보수정
     /*     const deleteMember = () => {
             sweetalertDelete('정말 삭제하시겠습니까?', function () {
-                axios.post('http://localhost:8080/api/member/remove', {
+                axios.post('/api/member/remove', {
                     uuid: uuid
                 })
                     .then(response => {
@@ -125,7 +125,7 @@ const MemberModify = () => {
     // 회원삭제
     const deleteMember = () => {
         sweetalertDelete('정말 삭제하시겠습니까?', function () {
-            axios.post('http://localhost:8080/api/member/remove', {
+            axios.post('/api/member/remove', {
                 uuid: uuid
             })
                 .then(response => {

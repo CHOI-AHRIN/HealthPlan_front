@@ -44,7 +44,7 @@ const MyPage = () => {
 
         // 2. token을 서버로 보내고 uuid를 받아오기
         axios
-            .post('http://localhost:8080/api/member/loginCookie', {
+            .post('/api/member/loginCookie', {
 
                 token: token
 
@@ -53,7 +53,7 @@ const MyPage = () => {
                 const uuid = response.data.uuid;
 
                 // 3. 받아온 데이터를 통해 정보 조회
-                axios.post('http://localhost:8080/api/member/read', {
+                axios.post('/api/member/read', {
                     uuid: uuid // 받은 uuid를 다시 서버로 전송
                 }).then(response => {
                     try {

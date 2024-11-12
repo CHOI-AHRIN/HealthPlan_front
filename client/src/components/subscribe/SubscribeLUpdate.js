@@ -28,7 +28,7 @@ const SubscribeLUpdate = (props) => {
 
 
     const callNboardInfoApi = () => {
-        axios.get(`http://localhost:8080/api/subscribe/subscribeLessionRead/${sno}`, {
+        axios.get(`/api/subscribe/subscribeLessionRead/${sno}`, {
         }).then(response => {
             try {
                 setTitle(response.data.title);
@@ -120,7 +120,7 @@ const SubscribeLUpdate = (props) => {
             };
 
 
-            axios.put(`http://localhost:8080/api/subscribe/subscribeLessionUpdate`, Json_data)
+            axios.put(`/api/subscribe/subscribeLessionUpdate`, Json_data)
                 .then(response => {
                     try {
                         if (response.data == "success") {
@@ -177,7 +177,7 @@ const SubscribeLUpdate = (props) => {
         formData.append('uploadFiles', selectedFile);
 
         try {
-            const res = await axios.post("http://localhost:8080/api/supload/uploadAjax", formData);
+            const res = await axios.post("/api/supload/uploadAjax", formData);
             const { fileName, uuid, folderPath, imageURL, thumbnailURL, imgType } = res.data[0];
 
             setImageDTOList((prevImageDTOList) => [
@@ -186,7 +186,7 @@ const SubscribeLUpdate = (props) => {
             ]);
 
             const str = `<li data-name='${fileName}' data-path='${folderPath}' data-uuid='${uuid}' data-imgtype='${type}' data-imageURL='${imageURL}'>
-                            <img src='http://localhost:8080/api/supload/display?fileName=${thumbnailURL}'>
+                            <img src='/api/supload/display?fileName=${thumbnailURL}'>
                           </li>`;
             if (type == 'M') {
                 $('#upload_MainImg').append(str);

@@ -31,11 +31,11 @@ const SubscribeLList = () => {
 
             if (token) {
                 // 토큰을 서버에 보내서 로그인한 사용자의 uuid를 받아옴
-                const uuidResponse = await axios.post('http://localhost:8080/api/member/loginCookie', { token });
+                const uuidResponse = await axios.post('/api/member/loginCookie', { token });
                 const userUuid = uuidResponse.data.uuid;
 
                 // uuid를 사용하여 mtype을 가져옴
-                const mtypeResponse = await axios.get(`http://localhost:8080/api/member/searchmtype?uuid=${userUuid}`);
+                const mtypeResponse = await axios.get(`/api/member/searchmtype?uuid=${userUuid}`);
                 setMtype(mtypeResponse.data.mtype);
             } else {
                 console.error("토큰이 존재하지 않습니다.");
@@ -46,7 +46,7 @@ const SubscribeLList = () => {
     };
 
     const callSboardListApi = (page) => {
-        axios.get(`http://localhost:8080/api/subscribe/subscribeList?page=${page}&searchType=${searchtype}&keyword=${keyword}`
+        axios.get(`/api/subscribe/subscribeList?page=${page}&searchType=${searchtype}&keyword=${keyword}`
         ).then(response => {
             try {
                 setAppend_SboardList(subscribeListAppend(response.data));
