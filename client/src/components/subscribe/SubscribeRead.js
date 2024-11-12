@@ -143,7 +143,7 @@ const SubscribeLRead = (props) => {
 
     // 3. 게시글 작성자와 로그인한 사용자의 UUID가 일치하면 수정/삭제 버튼을 보여줌
     const renderModifyDeleteButtons = () => {
-        if (uuid === writer) {
+        if (uuid === writer && uuid === 'admin') {
             return (
                 <div id="modifyButton" className="btn_confirm mt20" style={{ marginBottom: '44px', textAlign: 'center' }}>
                     <Link to={`/SubscribeUpdate/${sno}`} className="bt_ty bt_ty2 submit_ty1 saveclass">수정</Link>
@@ -170,26 +170,6 @@ const SubscribeLRead = (props) => {
         return null; // 작성자가 아니면 수정/삭제 버튼을 숨김
     };
 
-
-
-    /*     const callNboardInfoApi = async () => {
-            axios.get(`http://localhost:8080/api/subscribe/subscribeRead/${sno}`, {
-                //sno: sno,
-            }).then(response => {
-                try {
-                    setTitle(response.data.title);
-                    setContent(response.data.contents);
-                    setWriter(response.data.uuid);
-                    setViewCnt(response.data.counts);
-                    setRegidate(response.data.wdate);
-                    setImageDTOList(response.data.imageDTOList);
-                }
-                catch (error) {
-                    alert('게시글데이터 받기 오류')
-                }
-    
-            }).catch(error => { alert('게시글데이터 받기 오류2'); return false; });
-        } */
 
     const handleThumbnailClick = (thumbnailURL) => {
         setModalIsOpen(true);

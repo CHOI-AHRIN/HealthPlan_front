@@ -149,9 +149,6 @@ const ChallengeRead = (props) => {
             catch (error) {
                 alert('게시글 데이터 받기 오류')
             }
-            // if (memNickName === writer) {
-            //     $("#modifyButton").show();
-            // }
         }).catch(error => { alert('게시글 데이터 받기 오류2'); return false; });
     }
 
@@ -170,7 +167,7 @@ const ChallengeRead = (props) => {
 
     // 3. 게시글 작성자와 로그인한 사용자의 UUID가 일치하면 수정/삭제 버튼을 보여줌
     const renderModifyDeleteButtons = () => {
-        if (uuid === writer) {
+        if (uuid === writer && uuid === 'admin') {
             return (
                 <div id="modifyButton" className="btn_confirm mt20" style={{ marginBottom: '44px', textAlign: 'center' }}>
                     <Link to={`/ChallengeUpdate/${bno}`} className="bt_ty bt_ty2 submit_ty1 saveclass">수정</Link>
