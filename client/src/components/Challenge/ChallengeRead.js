@@ -141,12 +141,10 @@ const ChallengeRead = (props) => {
             try {
                 setTitle(response.data.title);
                 setContent(response.data.bcontents);
-                // setWriter(response.data.mno); // 사용자의 uuid 저장
-                // mno로 uuid 조회
                 getUuidByMno(response.data.mno);
                 setViewCnt(response.data.bcounts);
                 setRegidate(response.data.wdate);
-                //setImageDTOList(response.data.imageDTOList);
+                setImageDTOList(response.data.imageDTOList);
             }
             catch (error) {
                 alert('게시글 데이터 받기 오류')
@@ -219,18 +217,36 @@ const ChallengeRead = (props) => {
     };
 
     // 파일 
-    const renderImages = () => {
-        const imageList = imageDTOList;
-        return imageList.map((images, index) => (
-            <li className="hidden_type" key={index}>
-                <img
-                    src={`http://localhost:8080/api/challenge/display?fileName=${images.imgName}`}
-                    alt={`썸네일 ${index}`}
-                    onClick={() => handleThumbnailClick(images.imageURL)}
-                />
-            </li>
-        ));
-    };
+    /*     const renderImages = () => {
+            const imageList = imageDTOList;
+    
+            return imageList.map((images, index) => (
+                <li className="hidden_type" key={index}>
+                    {images.imgType == 'A' ?
+                        <img src={`http://localhost:8080/api/cupload/display?fileName=${images.imageURL}`}
+                            alt={`썸네일 ${index}`}
+                            onClick={() => handleThumbnailClick(images.imageURL)} />
+                        : ''
+                    }
+                </li>
+            ));
+        }; */
+
+        const renderImages = () => {
+            const imageList = imageDTOList;
+        
+            return imageList.map((images, index) => (
+                <li className="hidden_type" key={index}>
+                    {images.imgType === 'A' ? (
+                        <img src={`/api/cupload/display?fileName=${images.imgName}`}
+                             alt={`썸네일 ${index}`}
+                             onClick={() => handleThumbnailClick(images.imageURL)} />
+                    ) : null}
+                </li>
+            ));
+        };
+
+
 
     const deleteArticle = (e) => {
         sweetalertDelete1('삭제하시겠습니까?', () => {
@@ -313,12 +329,12 @@ const ChallengeRead = (props) => {
 
     // 포인트 적립 함수
     const handlePointSubmit = () => {
-       // alert(mno, pcount, psource);
+        // alert(mno, pcount, psource);
         axios.post('http://localhost:8080/api/challenge/addPoint', {
             mno: mno, // 댓글 작성자의 회원번호
             pcount: point, // 입력된 포인트 수량
             psource: psource // 입력된 포인트 적립 사유
-            
+
         })
             .then(response => {
                 if (response.data === "SUCCESS") {
@@ -579,6 +595,7 @@ const ChallengeRead = (props) => {
                                         </td>
                                     </tr>
                                     <Modal
+                                        ariaHideApp={false}
                                         isOpen={modalIsOpen}
                                         onRequestClose={closeImageModal}
                                         contentLabel="썸네일 이미지"
@@ -603,7 +620,7 @@ const ChallengeRead = (props) => {
                                             }
                                         }}>
                                         {selectedImage && (
-                                            <img src={`http://localhost:8080/api/challenge/display?fileName=${selectedImage}`} alt="선택한 썸네일" />
+                                            <img src={`http://localhost:8080/api/cupload/display?fileName=${selectedImage}`} alt="선택한 썸네일" />
                                         )}
                                     </Modal>
 
@@ -731,9 +748,9 @@ const ChallengeRead = (props) => {
                             type="text"
                             value={mno}
                             readOnly
-                            style={{ flex: 1, padding: '10px', textAlign: 'center' , width: '30px'}}
+                            style={{ flex: 1, padding: '10px', textAlign: 'center', width: '30px' }}
                         />
-                        <label style={{ fontSize: '19px', marginLeft:'20px', marginRight: '10px', width: '100px' }}>회원 아이디 :</label>
+                        <label style={{ fontSize: '19px', marginLeft: '20px', marginRight: '10px', width: '100px' }}>회원 아이디 :</label>
                         <input
                             type="text"
                             value={uuid}

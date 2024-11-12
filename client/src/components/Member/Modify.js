@@ -217,7 +217,35 @@ const Modify = () => {
                 }).catch(error => { alert('작업중 오류가 발생하였습니다.'); return false; });
         });
     };
-
+    /* 
+        const sweetalertDelete = (title, callbackFunc) => {
+            Swal.fire({
+                title: title,
+                text: "",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes'
+            }).then((result) => {
+                if (result.value) {
+                    Swal.fire(
+                        '탈퇴되었습니다.',
+                        '',
+                        'success'
+                    );
+                    cookie.remove('uuid', { path: '/' });
+                    cookie.remove('name', { path: '/' });
+                    cookie.remove('upw', { path: '/' });
+                    window.location.href = '/login';
+                } else {
+                    return false;
+                }
+                callbackFunc();
+            });
+        };
+     */
+    // 탈퇴 알럿
     const sweetalertDelete = (title, callbackFunc) => {
         Swal.fire({
             title: title,
@@ -226,9 +254,10 @@ const Modify = () => {
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes'
+            confirmButtonText: 'Yes',
+            cancelButtonText: 'Cancel'  // 취소 버튼 텍스트 추가
         }).then((result) => {
-            if (result.value) {
+            if (result.isConfirmed) {  // 'Yes' 버튼을 눌렀을 때만 실행
                 Swal.fire(
                     '탈퇴되었습니다.',
                     '',
@@ -238,14 +267,16 @@ const Modify = () => {
                 cookie.remove('name', { path: '/' });
                 cookie.remove('upw', { path: '/' });
                 window.location.href = '/login';
-            } else {
-                return false;
+                callbackFunc(); // 'Yes' 클릭 후에만 콜백 실행
+            } else if (result.isDismissed) {
+                Swal.fire(
+                    '취소되었습니다.',
+                    '',
+                    'info'
+                );
             }
-            callbackFunc();
         });
     };
-
-
 
     const toggleEditEmail = () => {
         setIsEditingEmail(!isEditingEmail);
@@ -334,8 +365,8 @@ const Modify = () => {
                                         color: '#fff', // 텍스트 색상
                                     }}
                                 >수정</div>
-                                <div className="bt_ty bt_ty2 submit_ty1 deleteclass" type="button" onClick={(e) => deleteMember()} 
-                                     style={{
+                                <div className="bt_ty bt_ty2 submit_ty1 deleteclass" type="button" onClick={(e) => deleteMember()}
+                                    style={{
                                         display: 'flex',
                                         alignItems: 'center',
                                         justifyContent: 'center',

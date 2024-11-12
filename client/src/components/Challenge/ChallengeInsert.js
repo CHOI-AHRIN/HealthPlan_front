@@ -70,7 +70,7 @@ const SubscribeLInsert = () => {
 
         if (fnValidate()) {
             let jsonstr = $("form[name='frm']").serialize();
-            alert(jsonstr);
+            // alert(jsonstr);
 
             jsonstr = decodeURIComponent(jsonstr);
             let Json_form = JSON.stringify(jsonstr).replace(/\"/gi, '')
@@ -132,11 +132,11 @@ const SubscribeLInsert = () => {
 
         try {
             const res = await axios.post("http://localhost:8080/api/cupload/uploadAjax", formData);
-            const { fileName, uuid, folderPath, imageURL, thumbnailURL, imgType} = res.data[0];
+            const { fileName, uuid, folderPath, imageURL, thumbnailURL, imgType } = res.data[0];
 
             setImageDTOList((prevImageDTOList) => [
                 ...prevImageDTOList,
-                {imgName: fileName, imageURL: imageURL, thumbnailURL: thumbnailURL, path: folderPath, uuid: uuid, imgType: itype },
+                { imgName: fileName, imageURL: imageURL, thumbnailURL: thumbnailURL, path: folderPath, uuid: uuid, imgType: itype },
             ]);
 
             const str = `<li data-name='${fileName}' data-path='${folderPath}' data-uuid='${uuid}' data-imgtype='${itype}' data-imageURL='${imageURL}'>

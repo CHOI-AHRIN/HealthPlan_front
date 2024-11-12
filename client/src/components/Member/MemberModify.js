@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import Swal from 'sweetalert2';
 
 const MemberModify = () => {
     // useState로 uuid 관리
@@ -63,8 +64,32 @@ const MemberModify = () => {
 
 
     // 회원 정보 수정
+    /*     const handleUpdate = () => {
+    
+            let jsonstr = $("form[name='frm']").serialize();
+            jsonstr = decodeURIComponent(jsonstr);
+            let Json_form = JSON.stringify(jsonstr).replace(/\"/gi, '');
+            Json_form = "{\"" + Json_form.replace(/\&/g, '\",\"').replace(/=/gi, '\":"') + "\"}";
+            let Json_data = JSON.parse(Json_form);
+    
+            axios.post('http://localhost:8080/api/member/modifyMem', memberInfo)
+            uuid: uuid
+                .then(response => {
+                    alert('회원 정보가 성공적으로 수정되었습니다.');
+                    navigate('/MemberList'); // 수정 후 리스트 페이지로 이동
+                })
+                .catch(error => {
+                    console.error('회원 정보 수정 오류:', error);
+                    alert('회원 정보 수정 중 오류가 발생했습니다.');
+                });
+        }; */
     const handleUpdate = () => {
-        axios.put('http://localhost:8080/api/member/update', memberInfo)
+        const updatedMemberInfo = {
+            ...memberInfo,
+            uuid: uuid, // uuid를 포함한 데이터로 POST 요청 보냄
+        };
+
+        axios.post('http://localhost:8080/api/member/modifyMem', updatedMemberInfo)
             .then(response => {
                 alert('회원 정보가 성공적으로 수정되었습니다.');
                 navigate('/MemberList'); // 수정 후 리스트 페이지로 이동
@@ -76,7 +101,6 @@ const MemberModify = () => {
     };
 
 
-
     // 입력 변경 처리
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -84,6 +108,59 @@ const MemberModify = () => {
             ...prevInfo,
             [name]: value
         }));
+    };
+
+    // 정보수정
+    /*     const deleteMember = () => {
+            sweetalertDelete('정말 삭제하시겠습니까?', function () {
+                axios.post('http://localhost:8080/api/member/remove', {
+                    uuid: uuid
+                })
+                    .then(response => {
+                    }).catch(error => { alert('작업중 오류가 발생하였습니다.'); return false; });
+            });
+        }; */
+
+
+    // 회원삭제
+    const deleteMember = () => {
+        sweetalertDelete('정말 삭제하시겠습니까?', function () {
+            axios.post('http://localhost:8080/api/member/remove', {
+                uuid: uuid
+            })
+                .then(response => {
+                }).catch(error => { alert('작업중 오류가 발생하였습니다.'); return false; });
+        });
+    };
+
+    // 탈퇴 알럿
+    const sweetalertDelete = (title, callbackFunc) => {
+        Swal.fire({
+            title: title,
+            text: "",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes',
+            cancelButtonText: 'Cancel'  // 취소 버튼 텍스트 추가
+        }).then((result) => {
+            if (result.isConfirmed) {  // 'Yes' 버튼을 눌렀을 때만 실행
+                Swal.fire(
+                    '탈퇴되었습니다.',
+                    '',
+                    'success'
+                );
+                window.location.href = '/MemberList';
+                callbackFunc(); // 'Yes' 클릭 후에만 콜백 실행
+            } else if (result.isDismissed) {
+                Swal.fire(
+                    '취소되었습니다.',
+                    '',
+                    'info'
+                );
+            }
+        });
     };
 
     return (
@@ -138,8 +215,12 @@ const MemberModify = () => {
                                     </tr>
                                     <tr>
                                         <th>회원타입</th>
-                                        <td><input type="text" name="mtype" value={memberInfo.mtype} onChange={handleChange} /></td>
+                                        <td><input type="text" name="mtype" value={memberInfo.mtype} onChange={handleChange} />
+                                        </td>
                                     </tr>
+                                    <div style={{ fontSize: '12px', color: '#888', marginLeft: '150px', width: '370%', textAlign: 'right' }}>
+                                        t: 전문가 / m: 일반회원
+                                    </div>
                                     <tr>
                                         <th>구독타입</th>
                                         <td><input type="text" name="sstype" value={memberInfo.sstype} onChange={handleChange} /></td>
@@ -162,8 +243,8 @@ const MemberModify = () => {
                             display: 'flex',
                             justifyContent: 'center'
                         }}>
-                        <div className="btn_confirm bt_ty bt_ty2 submit_ty1 modifyclass" type="button" /* onClick={(e) => submitClick('modify', e)}  */>수정</div>
-                        <div className="bt_ty bt_ty2 submit_ty1 deleteclass" type="button" /* onClick={(e) => deleteMember() }*/ >탈퇴</div>
+                        <div className="btn_confirm bt_ty bt_ty2 submit_ty1 modifyclass" type="button" onClick={handleUpdate}>수정</div>
+                        <div className="bt_ty bt_ty2 submit_ty1 deleteclass" type="button" onClick={(e) => deleteMember()} >탈퇴</div>
                     </div>
 
                 </form>
