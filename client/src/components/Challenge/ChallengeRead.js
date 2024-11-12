@@ -213,22 +213,6 @@ const ChallengeRead = (props) => {
         setSelectedImage('');
     };
 
-    // 파일 
-    /*     const renderImages = () => {
-            const imageList = imageDTOList;
-    
-            return imageList.map((images, index) => (
-                <li className="hidden_type" key={index}>
-                    {images.imgType == 'A' ?
-                        <img src={`/api/cupload/display?fileName=${images.imageURL}`}
-                            alt={`썸네일 ${index}`}
-                            onClick={() => handleThumbnailClick(images.imageURL)} />
-                        : ''
-                    }
-                </li>
-            ));
-        }; */
-
         const renderImages = () => {
             const imageList = imageDTOList;
         
@@ -481,14 +465,6 @@ const ChallengeRead = (props) => {
         setPoint(''); // 포인트 입력 초기화
     };
 
-    /*     const openEditModal = (rno) => {
-            this.setState({
-                selectRno: rno,
-                isEditModalOpen: true,
-                editedContent: rno,
-            });
-        }; */
-
     const openEditModal = (rno) => {
         setSelectRno(rno);  // 선택한 댓글 번호 설정
         setIsEditModalOpen(true);  // 모달 열기
@@ -625,10 +601,8 @@ const ChallengeRead = (props) => {
                                 {/* 조건에 맞으면 수정/삭제 버튼 표시 */}
                                 {renderModifyDeleteButtons()}
 
-                                {/*                                 <div id="modifyButton" class="btn_confirm mt20" style={{ "margin-bottom": "44px", textAlign: "center" }}>
-                                    <Link to={`/SubscribeLUpdate/${bno}`} className="bt_ty bt_ty2 submit_ty1 saveclass">수정</Link>
-                                    <a href='javascript:' className="bt_ty bt_ty2 submit_ty1 saveclass" onClick={(e) => deleteArticle(e)}>삭제</a>
-                                </div> */}
+                                {
+                                }
                             </div>
                         </article>
                     </form>

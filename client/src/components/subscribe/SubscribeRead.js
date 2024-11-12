@@ -31,16 +31,6 @@ const SubscribeLRead = (props) => {
     const [uuidMap, setUuidMap] = useState({}); // mno와 uuid 매핑을 저장
 
 
-    /*     useEffect(() => {
-            callNboardInfoApi();
-            callReplyListApi(sno);
-            // $("#modifyButton").hide();
-            // $("#replyerDiv").hide();
-            // $("#snoDiv").hide();
-        }, []) */
-
-
-
     // 1. token에서 로그인한 사용자의 id 읽어오기
     useEffect(() => {
         const token = cookie.load('token'); // 쿠키에서 토큰 가져오기
