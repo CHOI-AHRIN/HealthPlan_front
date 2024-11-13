@@ -32,15 +32,6 @@ const SubscribeLRead = (props) => {
 
     const [uuidMap, setUuidMap] = useState({}); // mno와 uuid 매핑을 저장
 
-
-    /*     useEffect(() => {
-            callNboardInfoApi();
-            // callReplyListApi(sno);
-            // $("#modifyButton").hide();
-            // $("#replyerDiv").hide();
-            // $("#snoDiv").hide();
-        }, []) */
-
     // 1. token에서 로그인한 사용자의 id 읽어오기
     useEffect(() => {
         const token = cookie.load('token'); // 쿠키에서 토큰 가져오기
@@ -371,14 +362,6 @@ const SubscribeLRead = (props) => {
                         </div>
                     </div>
                     <div>
-                        {/*                         {isCurrentUserCommentOwner && (
-                            <div>
-                                <button className="catbtn bt_ty2 submit_ty1 saveclass" onClick={() => modifyComment(`${data.rno}`)}>수정</button>
-                                <button className="catbtn bt_ty2 submit_ty1 saveclass" onClick={() => openEditModal(`${data.rno}`)}>modal</button>
-                                <button className="catbtn bt_ty2 submit_ty1 saveclass" onClick={() => deleteComment(`${data.rno}`)}>삭제</button>
-                            </div>
-              
-                        )} */}
                         {renderReplyModifyDeleteButtons(data)}
                     </div>
                 </li>
@@ -426,15 +409,6 @@ const SubscribeLRead = (props) => {
         setSelectRno(rno);
         setEditedContent(rco);
     };
-
-    /*     const openEditModal = (rno) => {
-            this.setState({
-                selectRno: rno,
-                isEditModalOpen: true,
-                editedContent: rno,
-            });
-        }; */
-
 
 
     const openEditModal = (rno) => {
@@ -591,11 +565,6 @@ const SubscribeLRead = (props) => {
                                 </table>
                                 {/* 조건에 맞으면 수정/삭제 버튼 표시 */}
                                 {renderModifyDeleteButtons()}
-
-                                {/*                                 <div id="modifyButton" class="btn_confirm mt20" style={{ "margin-bottom": "44px", textAlign: "center" }}>
-                                    <Link to={`/SubscribeLUpdate/${sno}`} className="bt_ty bt_ty2 submit_ty1 saveclass">수정</Link>
-                                    <a href='javascript:' className="bt_ty bt_ty2 submit_ty1 saveclass" onClick={(e) => deleteArticle(e)}>삭제</a>
-                                </div> */}
                             </div>
                         </article>
                     </form>
@@ -609,12 +578,7 @@ const SubscribeLRead = (props) => {
                                     <input type="hidden" name="sno" id="snoVal" value={sno} />
                                 </td>
                             </tr>
-                            {/*                             <tr id='replyerDiv'>
-                                <td>
-                                    <input type="text" name="replyer" id="replyerVal" value={uuid} />
-                                    <input type="text" name="mno" value={mno} />
-                                </td>
-                            </tr> */}
+
                             <table class="table_ty1">
                                 <tr style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
                                     <th style={{ marginRight: '10px' }}>

@@ -249,16 +249,6 @@ const SubscribeLInsert = () => {
                                         <th>
                                             파일첨부
                                         </th>
-                                        {/*    <td className="fileBox fileBox1">
-                                        <label htmlFor='imageSelect' className="btn_file">파일선택</label>
-                                        <input type="text" id="imagefile" className="fileName fileName1" readOnly="readonly" placeholder="선택된 파일 없음" />
-                                        <input type="file" id="imageSelect" className="uploadBtn uploadBtn1"
-                                            onChange={e => handleFileInput('file', e)} multiple />
-                                        <button type="button" className='bt_ty2' style={{ paddingTop: 5, paddingLeft: 10, paddingRight: 10 }}
-                                            onClick={handleRemoveAllThumbnails}>X</button>
-                                        <ul id="upload_img">
-                                        </ul>
-                                    </td> */}
                                         <td className="fileBox fileBox1">
                                             <label htmlFor='imageSelect' className="btn_file">파일선택</label>
                                             <input type="text" id="imagefile" className="fileName fileName1" readOnly="readonly" placeholder="선택된 파일 없음" />

@@ -150,46 +150,6 @@ const MainForm = () => {
                     환경을 제공합니다.
                 </div>
             </div>
-            {/* 하단 이미지5 */}
-{/*             <div className={`bottom-image-container ${showBottomImage ? 'visible' : ''}`}>
-                <img src={require(`../../img/MainImage/MainImage8.png`)} alt="" className="bottom-image" />
-                <div className="bottom-text">
-                    "에너지 효율성"
-                    <br />
-                    <br />
-                    전기 자동차는 내연기관 자동차보다
-                    <br />
-                    에너지 효율이 훨씬 높습니다
-                    <br />
-                    전기 자동차는 전기로 움직이며
-                    <br />
-                    전기 모터는 에너지를
-                    <br />
-                    더 효율적으로 사용합니다.
-                    <br />
-                    이를 통해 더 멀리 이동할 수 있고
-                    <br />
-                    에너지를 덜 사용할 수 있습니다.
-                </div>
-            </div> */}
-            {/* 하단 이미지6 */}
-{/*             <div className={`bottom-image-container ${showBottomImage ? 'visible' : ''}`}>
-                <img src={require(`../../img/MainImage/MainImage9.png`)} alt="" className="bottom-image2" />
-                <div className="bottom-text2">
-                    "지속가능한 미래"
-                    <br />
-                    <br />
-                    환경보호는 현재뿐만 아니라
-                    <br />
-                    미래에도 중요한 과제입니다.
-                    <br />
-                    전기차 시장은 기술 혁신과 함께
-                    <br />
-                    더욱 친환경적인 모빌리티로
-                    <br />
-                    지속적으로 성장, 발전할 것으로 예상됩니다.
-                </div>
-            </div> */}
         </div>
     );
 }
