@@ -19,6 +19,7 @@ const SubscribeLList = () => {
     const [mtype, setMtype] = useState('');
 
     useEffect(() => {
+        fetchMtype(); // mtype 초기화
         callSboardListApi(currentPage);
     }, []);
 
@@ -31,11 +32,13 @@ const SubscribeLList = () => {
             if (token) {
                 // 토큰을 서버에 보내서 로그인한 사용자의 uuid를 받아옴
                 const uuidResponse = await axios.post('/api/member/loginCookie', { token });
+
                 const userUuid = uuidResponse.data.uuid;
 
                 // uuid를 사용하여 mtype을 가져옴
-                const mtypeResponse = await axios.get(`/api/member/searchmtype?uuid=${userUuid}`);
-                setMtype(mtypeResponse.data.mtype);
+                const mtypeResponse = await axios.post('/api/member/searchMtype', { uuid: userUuid }); // POST 요청 본문에 uuid 전달
+                setMtype(mtypeResponse.data); // 서버에서 mtype만 반환하도록 기대
+                console.log("mtype Response:", mtypeResponse.data);
             } else {
                 console.error("토큰이 존재하지 않습니다.");
             }
