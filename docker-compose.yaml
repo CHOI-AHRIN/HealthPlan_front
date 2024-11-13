@@ -1,0 +1,9 @@
+version: '3'
+services:
+  react:
+    container_name: hpf-app
+    image: localhost:8443/hpf-app  # 여기에서 React 프로젝트의 이미지로 변경
+    ports:
+      - "80:80"
+    deploy:
+      replicas: 1
