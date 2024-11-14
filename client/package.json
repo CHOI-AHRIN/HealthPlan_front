@@ -1,7 +1,7 @@
 {
   "name": "client",
   "version": "0.1.0",
-  "proxy": "http://172.26.254.26:8080",
+  "proxy": "http://localhost:8080",
   "private": true,
   "dependencies": {
     "@testing-library/dom": "^9.0.0",

@@ -13,12 +13,14 @@ const ChallengeUpdate = (props) => {
     const [imageList, setImageList] = useState([]);
     const [title, setTitle] = useState();
     const [content, setContent] = useState();
+    const [mno, setMno] = useState();
     const [writer, setWriter] = useState();
     const [imgType, setImgType] = useState();
+    const [mainImage, setMainImageList] = useState([]);
+    const [imageMList, setMImageList] = useState([]);
 
     useEffect(() => {
         callChallengeInfoApi();
-        // $('#articleNo').hide();
     }, [])
 
 
@@ -30,10 +32,14 @@ const ChallengeUpdate = (props) => {
                 getUuidByMno(response.data.mno);
                 setTitle(response.data.title);
                 setContent(response.data.bcontents);
-                // setWriter(response.data.uuid);
+                setImgType(response.data.imgType);
                 setImageDTOList(response.data.imageDTOList);
+                setMainImageList(response.data.mainImage);
                 setImageList(response.data.imageDTOList.map(image => ({
-                    thumbnailURL: image.thumbnailURL
+                    thumbnailURL: image.imgName
+                })));
+                setMImageList(response.data.mainImage.map(image => ({
+                    thumbnailURL: image.imgName
                 })));
             }
             catch (error) {
@@ -57,6 +63,7 @@ const ChallengeUpdate = (props) => {
             });
     }
 
+    // 썸네일 로딩
     const renderImages = () => {
         return imageList.map((image, index) => (
             <li className="hidden_type" key={index}>
@@ -64,6 +71,17 @@ const ChallengeUpdate = (props) => {
                     src={`/api/cupload/display?fileName=${image.thumbnailURL}`}
                     alt={`썸네일 ${index}`}
                 />
+            </li>
+        ));
+    };
+
+    const renderMainImages = () => {
+        const mainImgList = mainImage;
+
+        return mainImgList.map((image, index) => (
+            <li className="hidden_type1" key={index}>
+                <img src={`/api/cupload/display?fileName=${image.imgName}`}
+                    alt={`썸네일 ${index}`} />
             </li>
         ));
     };
@@ -94,13 +112,20 @@ const ChallengeUpdate = (props) => {
         if (fnValidate()) {
             let jsonstr = $("form[name='frm']").serialize();
 
-            axios.put(`/api/challenge/challengeupdate`, jsonstr)
+            jsonstr = decodeURIComponent(jsonstr);
+            let Json_form = JSON.stringify(jsonstr).replace(/\"/gi, '')
+            Json_form = "{\"" + Json_form.replace(/\&/g, '\",\"').replace(/=/gi, '\":"') + "\"}";
+            let Json_data = {
+                ...JSON.parse(Json_form),
+                imageDTOList: imageDTOList,
+            };
+
+            axios.put(`/api/challenge/challengeupdate`, Json_data)
                 .then(response => {
                     try {
                         if (response.data == "success") {
                             sweetalert('수정되었습니다.', '', 'success', '확인')
                             setTimeout(() => {
-                                // history.push(`/ChallengeRead/${bno}`);
                                 navigate(`/ChallengeRead/${bno}`);
                             }, 1000
                             );
@@ -129,6 +154,7 @@ const ChallengeUpdate = (props) => {
         selected.imgType = "A";
         setSelectedFile(selected);
     }
+
 
     useEffect(() => {
         if (selectedFile) {
@@ -214,7 +240,7 @@ const ChallengeUpdate = (props) => {
                                             <input type="file" id="imageSelect" className="uploadBtn uploadBtn1"
                                                 onChange={e => handleFileInput('file', e)} multiple />
                                             <button type="button" className='bt_ty2' style={{ paddingTop: 5, paddingLeft: 10, paddingRight: 10 }}
-                                                onClick={handleRemoveAllThumbnails('A')}>X</button>
+                                                onClick={() => handleRemoveAllThumbnails('A')}>X</button>
                                             <ul id="upload_img">
                                                 {renderImages()}
                                             </ul>

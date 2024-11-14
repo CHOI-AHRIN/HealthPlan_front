@@ -67,7 +67,10 @@ const ChallengeList = () => {
             const year = date.substr(0, 4);
             const month = date.substr(5, 2);
             const day = date.substr(8, 2);
+            // const hour = date.substr(11, 2);
+            // const minute = date.substr(14, 2);
             const reg_date = `${year}.${month}.${day}`;
+            //   ${ hour }:${ minute }
 
             // 현재 페이지와 항목 인덱스를 기반으로 순차적으로 번호를 표시
             const num = startIdx + index + 1;
@@ -166,7 +169,7 @@ const ChallengeList = () => {
                 <div className="li_top">
                     <h2 className="s_tit1">챌린지</h2>
                 </div>
-            
+
                 <h4 className="s_tit2">오늘의 챌린지</h4>
                 <div className="searchingForm">
                     <form onSubmit={(e) => handleSearchButtonClick(e)}>
@@ -176,7 +179,7 @@ const ChallengeList = () => {
                             <option value="bcontents">내용</option>
                             <option value="uuid">작성자</option>
                         </select>
-                        <input className='search' type="text" placeholder="검색어를 입력해주세요11."
+                        <input className='search' type="text" placeholder="검색어를 입력해주세요."
                             value={keyword} onChange={handleSearchValChange} />
                         <button type="submit" className="sch_bt99 wi_au">검색</button>
                     </form>
@@ -221,7 +224,7 @@ const ChallengeList = () => {
                                 <th>인증수</th>
                             </tr>
                         </thead>
-                        <tbody id="appendChallengeRanking" className="table_ty2 ad_tlist2" style={{marginTop: '10px'}}>
+                        <tbody id="appendChallengeRanking" className="table_ty2 ad_tlist2" style={{ marginTop: '10px' }}>
                             {rankingData && rankingData.length > 0 ? (
                                 rankingData.map((data, index) => (
                                     <tr key={`${data.MNO}-${index}`}>
