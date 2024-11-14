@@ -30,3 +30,4 @@ COPY nginx.conf /etc/nginx/conf.d/default.conf
 # Nginx 서버 실행
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
+

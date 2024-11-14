@@ -14,6 +14,7 @@ const ChallengeUpdate = (props) => {
     const [title, setTitle] = useState();
     const [content, setContent] = useState();
     const [writer, setWriter] = useState();
+    const [imgType, setImgType] = useState();
 
     useEffect(() => {
         callChallengeInfoApi();
@@ -29,7 +30,7 @@ const ChallengeUpdate = (props) => {
                 getUuidByMno(response.data.mno);
                 setTitle(response.data.title);
                 setContent(response.data.bcontents);
-               // setWriter(response.data.uuid);
+                // setWriter(response.data.uuid);
                 setImageDTOList(response.data.imageDTOList);
                 setImageList(response.data.imageDTOList.map(image => ({
                     thumbnailURL: image.thumbnailURL
@@ -42,25 +43,25 @@ const ChallengeUpdate = (props) => {
 
     }
 
-    
-// mno로 uuid 조회 함수
-const getUuidByMno = (mno) => {
-    axios.post('/api/member/getUuidByMno', { mno })
-        .then(response => {
-            // 서버에서 받은 uuid를 Wuuid 상태로 저장
-            setWriter(response.data.uuid); 
-        })
-        .catch(error => {
-            console.error('UUID 조회 중 오류 발생:', error);
-            alert('uuid 조회 중 오류 발생');
-        });
-}
+
+    // mno로 uuid 조회 함수
+    const getUuidByMno = (mno) => {
+        axios.post('/api/member/getUuidByMno', { mno })
+            .then(response => {
+                // 서버에서 받은 uuid를 Wuuid 상태로 저장
+                setWriter(response.data.uuid);
+            })
+            .catch(error => {
+                console.error('UUID 조회 중 오류 발생:', error);
+                alert('uuid 조회 중 오류 발생');
+            });
+    }
 
     const renderImages = () => {
         return imageList.map((image, index) => (
             <li className="hidden_type" key={index}>
                 <img
-                    src={`/display?fileName=${image.thumbnailURL}`}
+                    src={`/api/cupload/display?fileName=${image.thumbnailURL}`}
                     alt={`썸네일 ${index}`}
                 />
             </li>
@@ -125,31 +126,32 @@ const getUuidByMno = (mno) => {
     const handleFileInput = (type, e) => {
         const selected = e.target.files[0];
         $('#imagefile').val(selected ? selected.name : '');
+        selected.imgType = "A";
         setSelectedFile(selected);
     }
 
     useEffect(() => {
         if (selectedFile) {
-            handlePostImage();
+            handlePostImage(selectedFile.imgType);
         }
     }, [selectedFile]);
 
 
-    const handlePostImage = async () => {
+    const handlePostImage = async (type) => {
         const formData = new FormData();
         formData.append('uploadFiles', selectedFile);
 
         try {
-            const res = await axios.post("/uploadAjax", formData);
-            const { fileName, uuid, folderPath, thumbnailURL } = res.data[0];
+            const res = await axios.post("/api/cupload/uploadAjax", formData);
+            const { fileName, uuid, folderPath, imageURL, thumbnailURL, imgType } = res.data[0];
 
             setImageDTOList((prevImageDTOList) => [
                 ...prevImageDTOList,
-                { imgName: fileName, path: folderPath, uuid: uuid },
+                { imgName: fileName, imageURL: imageURL, thumbnailURL: thumbnailURL, path: folderPath, uuid: uuid, imgType: type },
             ]);
 
-            const str = `<li data-name='${fileName}' data-path='${folderPath}' data-uuid='${uuid}'>
-                            <img src='/display?fileName=${thumbnailURL}'>
+            const str = `<li data-name='${fileName}' data-path='${folderPath}' data-uuid='${uuid}' data-imgtype='${type}' data-imageURL='${imageURL}'>
+                            <img src='/api/cupload/display?fileName=${thumbnailURL}'>
                           </li>`;
             $('#upload_img').append(str);
         } catch (error) {
@@ -157,10 +159,12 @@ const getUuidByMno = (mno) => {
         }
     }
 
-    const handleRemoveAllThumbnails = () => {
+    const handleRemoveAllThumbnails = (imgType) => {
+
         $('.fileBox1 ul').empty();
         $('#imagefile').val('');
         setImageDTOList([]);
+
     };
 
     return (
@@ -180,7 +184,7 @@ const getUuidByMno = (mno) => {
                                         </th>
                                         <td>
                                             <input type="text" name="bno" id="bnoVal" value={bno} readonly="readonly" />
-                                          {/*   <input type="text" name="mno" id="bnoVal" value="1" / >*/}
+                                            {/*   <input type="text" name="mno" id="bnoVal" value="1" / >*/}
                                         </td>
                                     </tr>
                                     <tr>
@@ -210,7 +214,7 @@ const getUuidByMno = (mno) => {
                                             <input type="file" id="imageSelect" className="uploadBtn uploadBtn1"
                                                 onChange={e => handleFileInput('file', e)} multiple />
                                             <button type="button" className='bt_ty2' style={{ paddingTop: 5, paddingLeft: 10, paddingRight: 10 }}
-                                                onClick={handleRemoveAllThumbnails}>X</button>
+                                                onClick={handleRemoveAllThumbnails('A')}>X</button>
                                             <ul id="upload_img">
                                                 {renderImages()}
                                             </ul>

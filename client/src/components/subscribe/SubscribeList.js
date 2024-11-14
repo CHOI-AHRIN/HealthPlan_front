@@ -6,8 +6,6 @@ import cookie from 'react-cookies';
 
 const SubscribeLList = () => {
 
-    //const history = useHistory();
-
     const [append_SboardList, setAppend_SboardList] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState('');
@@ -18,6 +16,7 @@ const SubscribeLList = () => {
     const [keyword, setKeyword] = useState('');
     const [searchtype, setSearchtype] = useState('');
     const [mtype, setMtype] = useState('');
+    const [userUuid, setUserUuid] = useState('');
 
     useEffect(() => {
         fetchMtype(); // mtype 초기화
@@ -38,6 +37,8 @@ const SubscribeLList = () => {
                 // 토큰을 서버에 보내서 로그인한 사용자의 uuid를 받아옴
                 const uuidResponse = await axios.post('/api/member/loginCookie', { token });
                 const userUuid = uuidResponse.data.uuid;
+
+                setUserUuid(userUuid); // uuid를 상태로 저장
 
                 // uuid를 사용하여 mtype을 가져옴
                 const mtypeResponse = await axios.post('/api/member/searchMtype', { uuid: userUuid }); // POST 요청 본문에 uuid 전달
@@ -192,7 +193,7 @@ const SubscribeLList = () => {
                         {renderSearchPagination()}
                     </div>
                 </div>
-                {mtype === 't' && (
+                {mtype === 't' && userUuid ==='admin' && (
                     <div className="li_top_sch af">
                         <Link to={'/SubscribeInsert'} className="sch_bt2 wi_au">글쓰기</Link>
                     </div>

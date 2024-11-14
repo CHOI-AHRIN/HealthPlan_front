@@ -234,7 +234,7 @@ const SubscribeLInsert = () => {
                                             <label for="spoint">구독료</label>
                                         </th>
                                         <td>
-                                            <input type="text" name="spoint" id="spointVal" />
+                                            <input type="text" name="spoint" id="spointVal" placeholder="숫자만 입력해주세요." />
                                         </td>
                                     </tr>
                                     <tr>
