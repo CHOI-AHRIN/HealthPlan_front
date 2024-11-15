@@ -193,7 +193,7 @@ const SubscribeLList = () => {
                         {renderSearchPagination()}
                     </div>
                 </div>
-                {mtype === 't' && userUuid ==='admin' && (
+                {(mtype === 't' || userUuid === 'admin') && (
                     <div className="li_top_sch af">
                         <Link to={'/SubscribeInsert'} className="sch_bt2 wi_au">글쓰기</Link>
                     </div>
