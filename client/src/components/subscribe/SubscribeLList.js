@@ -87,16 +87,16 @@ const SubscribeLList = () => {
             result.push(
                 <tr className="hidden_type">
                     <td> {num} </td>
-                    <td>{
+                    <td style={{width: '100px'}}>{
                         data.titleimg != null
                             ? <img src={`/api/supload/display?fileName=${data.titleimg}`} width='35px' height='35px' />
                             : <img src={require(`../../img/layout/exerciseMan.gif`)} width='40px' height='40px' />
                     }
                     </td>
-                    <td><Link to={`/SubscribeLRead/${data.sno}`}>{data.title}{data.replycnt > 0 && ` [${data.replycnt}]`}</Link></td>
+                    <td style={{width: '300px'}}><Link to={`/SubscribeLRead/${data.sno}`}>{data.title}{data.replycnt > 0 && ` [${data.replycnt}]`}</Link></td>
                     <td> {data.uuid} </td>
                     <td> {data.spoint} </td>
-                    <td> {data.counts} </td>
+                    <td style={{width: '100px'}}> {data.counts} </td>
                     <td> {data.wdate} </td>
                 </tr>
             )
@@ -178,11 +178,11 @@ const SubscribeLList = () => {
                     <table className="table_ty1 ad_slist">
                         <tr>
                             <th>번호</th>
-                            <th>강의이미지</th>
-                            <th>강의제목</th>
+                            <th style={{width: '100px'}}>강의이미지</th>
+                            <th style={{width: '300px'}}>강의제목</th>
                             <th>강의등록</th>
                             <th>수강료</th>
-                            <th>조회수</th>
+                            <th style={{width: '100px'}}>조회수</th>
                             <th>등록일</th>
                         </tr>
                     </table>

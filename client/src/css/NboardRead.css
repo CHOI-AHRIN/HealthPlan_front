@@ -33,8 +33,15 @@
 .bt_ty1{display: inline-block; overflow: hidden;position: relative; width: 115px; height: 52px; line-height: 50px; color: #fff; font-size: 16px; font-weight: 400; text-align: center; margin-right: 8px; transition:.3s;}
 .catbtn{display: inline-block; overflow: hidden;position: relative; width: 62px; height: 42px; line-height: 40px; color: #fff; font-size: 16px; font-weight: 400; text-align: center; margin-right: 8px; transition:.3s;}
 .catbtn2{display: inline-block; overflow: hidden;position: relative; width: 100%; height: 42px; line-height: 40px; color: #fff; font-size: 16px; font-weight: 400; text-align: center; margin-right: 8px; transition:.3s;}
+.catbtn3{display: inline-block; overflow: hidden;position: relative; width: 50px; height: 42px; line-height: 40px; color: #fff; font-size: 16px; font-weight: 400; text-align: center; margin-right: 8px; transition:.3s;}
 
 
 .line {
   border: 1px solid #000000; margin-top: 20px; 
+}
+
+.reply-buttons {
+  display: flex;
+  gap: 10px; /* 버튼 간격 */
+  align-items: center; /* 버튼 높이를 맞춤 */
 }

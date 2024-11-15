@@ -167,7 +167,7 @@ const ChallengeRead = (props) => {
 
     // 3. 게시글 작성자와 로그인한 사용자의 UUID가 일치하면 수정/삭제 버튼을 보여줌
     const renderModifyDeleteButtons = () => {
-        if (uuid === writer && uuid === 'admin') {
+        if (uuid === writer || uuid === 'admin') {
             return (
                 <div id="modifyButton" className="btn_confirm mt20" style={{ marginBottom: '44px', textAlign: 'center' }}>
                     <Link to={`/ChallengeUpdate/${bno}`} className="bt_ty bt_ty2 submit_ty1 saveclass">수정</Link>
@@ -180,25 +180,33 @@ const ChallengeRead = (props) => {
 
     // 4. 댓글 작성자와 로그인한 사용자의 UUID가 일치하면 수정/삭제 버튼을 보여줌
     const renderReplyModifyDeleteButtons = (data) => {
-        // data.replyer를 uuidMap에서 찾아서 현재 로그인한 uuid와 비교
-        if (uuidMap[data.mno] && uuidMap[data.mno] === uuid && uuid !== 'admin') {
+        // Admin인 경우 모든 버튼 표시
+        if (uuid === 'admin') {
             return (
-                <div>
+                <div className="reply-buttons">
+                    <button className="catbtn3 bt_ty2 submit_ty1 saveclass" onClick={() => modifyComment(`${data.rno}`)}>수정</button>
+                    <button className="catbtn3 bt_ty2 submit_ty1 saveclass" onClick={() => deleteComment(`${data.rno}`)}>삭제</button>
+                    <button className="bt_ty2 submit_ty1 saveclass" onClick={() => addPoint(data)}
+                        style={{ width: '100px', height: '42px', lineHeight: '40px' }}>포인트 적립</button>
+
+                </div>
+            );
+        }
+
+        // 일반 사용자: 댓글 작성자와 로그인 사용자 UUID가 동일한 경우 수정/삭제 버튼만 표시
+        if (uuidMap[data.mno] && uuidMap[data.mno] === uuid) {
+            return (
+                <div className="reply-buttons">
                     <button className="catbtn bt_ty2 submit_ty1 saveclass" onClick={() => modifyComment(`${data.rno}`)}>수정</button>
-                    {/* <button className="catbtn bt_ty2 submit_ty1 saveclass" onClick={() => openEditModal(`${data.rno}`)}>모달</button> */}
                     <button className="catbtn bt_ty2 submit_ty1 saveclass" onClick={() => deleteComment(`${data.rno}`)}>삭제</button>
                 </div>
             );
         }
-        if (uuid == 'admin') {
-            return (
-                <div>
-                    <button className="catbtn2 bt_ty2 submit_ty1 saveclass" onClick={() => addPoint(data)}>포인트 적립</button>
-                </div>
-            )
-        }
-        return null; // 작성자가 아니면 수정/삭제 버튼을 숨김
+
+        // 작성자가 아니거나 특별한 조건이 없는 경우 버튼을 숨김
+        return null;
     };
+
 
 
     // 파일 - 썸네일
@@ -213,19 +221,19 @@ const ChallengeRead = (props) => {
         setSelectedImage('');
     };
 
-        const renderImages = () => {
-            const imageList = imageDTOList;
-        
-            return imageList.map((images, index) => (
-                <li className="hidden_type" key={index}>
-                    {images.imgType === 'A' ? (
-                        <img src={`/api/cupload/display?fileName=${images.imgName}`}
-                             alt={`썸네일 ${index}`}
-                             onClick={() => handleThumbnailClick(images.imageURL)} />
-                    ) : null}
-                </li>
-            ));
-        };
+    const renderImages = () => {
+        const imageList = imageDTOList;
+
+        return imageList.map((images, index) => (
+            <li className="hidden_type" key={index}>
+                {images.imgType === 'A' ? (
+                    <img src={`/api/cupload/display?fileName=${images.imgName}`}
+                        alt={`썸네일 ${index}`}
+                        onClick={() => handleThumbnailClick(images.imageURL)} />
+                ) : null}
+            </li>
+        ));
+    };
 
 
 
@@ -380,9 +388,8 @@ const ChallengeRead = (props) => {
                         </div>
                         <div className="cat">
                             <p style={{ fontSize: '19px' }}>
-                                {/*  {data.userUuid} */}{/* {' '} */}
-                                {uuidMap[data.mno] ? uuidMap[data.mno] : '아이디 누락'} {/* uuid 표시 */}
-                                {data.mno}
+                                {data.mno} | {uuidMap[data.mno] ? uuidMap[data.mno] : '아이디 누락'} {/* uuid 표시 */}
+
                                 <span style={{ fontSize: '12px' }}>
                                     {/* {formattedDate} */}
                                     {/*  {data.modidate && ( */}

@@ -343,9 +343,8 @@ const SubscribeLRead = (props) => {
                         <div className="cat">
                             <p style={{ fontSize: '19px' }}>
                                 {/*  {data.userUuid} */}{/* {' '} */}
-
-                                {uuidMap[data.mno] ? uuidMap[data.mno] : '아이디 누락'} {/* uuid 표시 */}
-                                {data.mno}
+                                {data.mno}  |  {uuidMap[data.mno] ? uuidMap[data.mno] : '아이디 누락'} {/* uuid 표시 */}
+                               
                                 <span style={{ fontSize: '12px' }}>
                                     {/* {formattedDate} */}
                                     {/*  {data.modidate && ( */}
@@ -459,7 +458,7 @@ const SubscribeLRead = (props) => {
                                     <Link to={`/SubscribeLList`} className="bt_ty bt_ty2 submit_ty1 saveclass">목록</Link>
                                 </div>
                                 <table class="table_ty1">
-                                    <tr>
+            {/*                         <tr>
                                         <th>
                                             대표이미지
                                         </th>
@@ -468,8 +467,8 @@ const SubscribeLRead = (props) => {
                                                 {renderMainImages()}
                                             </ul>
                                         </td>
-                                    </tr>
-                                    <tr>
+                                    </tr>*/}
+                                    <tr> 
                                         <th>
                                             <label for="title">강의제목</label>
                                         </th>

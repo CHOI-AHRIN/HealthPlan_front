@@ -10,14 +10,18 @@ const SubscribeLUpdate = (props) => {
     const { sno } = useParams();
     const [selectedFile, setSelectedFile] = useState(null);
     const [imageDTOList, setImageDTOList] = useState([]);
+    const [imageMList, setMImageList] = useState([]);
     const [imageList, setImageList] = useState([]);
     const [title, setTitle] = useState();
     const [content, setContent] = useState();
     const [writer, setWriter] = useState();
+    const [spoint, setSpoint] = useState();
+    const [imgType, setImgType] = useState();
+    const [mno, setMno] = useState();
+    const [mainImage, setMainImageList] = useState([]);
 
     useEffect(() => {
         callNboardInfoApi();
-        // $('#articleNo').hide();
     }, [])
 
 
@@ -27,12 +31,26 @@ const SubscribeLUpdate = (props) => {
         }).then(response => {
             try {
                 setTitle(response.data.title);
+                setSpoint(response.data.spoint);
                 setContent(response.data.contents);
+                setMno(response.data.mno);
                 setWriter(response.data.uuid);
+                setImgType(response.data.imgType);
                 setImageDTOList(response.data.imageDTOList);
+                setMainImageList(response.data.mainImage);
                 setImageList(response.data.imageDTOList.map(image => ({
-                    thumbnailURL: image.imgName
+                    thumbnailURL: image.imgName,
                 })));
+                setMImageList(response.data.mainImage.map(image => ({
+                    thumbnailURL: image.imgName,
+                })));
+
+                $('#imagefile').val(
+                    response.data.imageDTOList.map(image => image.imgName).join(', ')
+                );
+                $('#imageMainfile').val(
+                    response.data.mainImage.map(image => image.imgName).join(', ')
+                );
             }
             catch (error) {
                 alert('게시글데이터 받기 오류')
@@ -52,10 +70,22 @@ const SubscribeLUpdate = (props) => {
         ));
     };
 
+    const renderMainImages = () => {
+        const mainImgList = mainImage;
+
+        return mainImgList.map((image, index) => (
+            <li className="hidden_type1" key={index}>
+                <img src={`/api/supload/display?fileName=${image.imgName}`}
+                    alt={`썸네일 ${index}`} />
+            </li>
+        ));
+    };
+
     const submitClick = (type, e) => {
 
         const title_checker = $('#titleVal').val();
         const content_checker = $('#contentVal').val();
+        const spoint_checker = $('#spointVal').val();
 
         const fnValidate = (e) => {
             if (title_checker === '') {
@@ -64,6 +94,13 @@ const SubscribeLUpdate = (props) => {
                 return false;
             }
             $('#titleVal').removeClass('border_validate_err');
+
+            if (spoint_checker === '') {
+                $('#spointVal').addClass('border_validate_err');
+                sweetalert('구독료를 입력해주세요.', '', 'error', '닫기')
+                return false;
+            }
+            $('#spointVal').removeClass('border_validate_err');
 
             if (content_checker === '') {
                 $('#contentVal').addClass('border_validate_err');
@@ -77,7 +114,7 @@ const SubscribeLUpdate = (props) => {
 
         if (fnValidate()) {
             let jsonstr = $("form[name='frm']").serialize();
-            
+
             jsonstr = decodeURIComponent(jsonstr);
             let Json_form = JSON.stringify(jsonstr).replace(/\"/gi, '')
             Json_form = "{\"" + Json_form.replace(/\&/g, '\",\"').replace(/=/gi, '\":"') + "\"}";
@@ -113,21 +150,28 @@ const SubscribeLUpdate = (props) => {
             confirmButtonText: confirmButtonText
         })
     }
-
     const handleFileInput = (type, e) => {
         const selected = e.target.files[0];
         $('#imagefile').val(selected ? selected.name : '');
+        selected.imgType = "A";
+        setSelectedFile(selected);
+    }
+
+    const handleFileInput2 = (type, e) => {
+        const selected = e.target.files[0];
+        $('#imageMainfile').val(selected ? selected.name : '');
+        selected.imgType = "M";
         setSelectedFile(selected);
     }
 
     useEffect(() => {
         if (selectedFile) {
-            handlePostImage();
+            handlePostImage(selectedFile.imgType);
         }
     }, [selectedFile]);
 
 
-    const handlePostImage = async () => {
+    const handlePostImage = async (type) => {
         const formData = new FormData();
         formData.append('uploadFiles', selectedFile);
 
@@ -137,12 +181,17 @@ const SubscribeLUpdate = (props) => {
 
             setImageDTOList((prevImageDTOList) => [
                 ...prevImageDTOList,
-                { imgName: fileName, imageURL: imageURL, thumbnailURL: thumbnailURL, path: folderPath, uuid: '111', imgType: "A" },
+                { imgName: fileName, imageURL: imageURL, thumbnailURL: thumbnailURL, path: folderPath, uuid: uuid, imgType: type },
             ]);
 
-            const str = `<li data-name='${fileName}' data-path='${folderPath}' data-uuid='${uuid} data-imageURL='${imageURL}'>
+            const str = `<li data-name='${fileName}' data-path='${folderPath}' data-uuid='${uuid}' data-imgtype='${type}' data-imageURL='${imageURL}'>
                             <img src='/api/supload/display?fileName=${thumbnailURL}'>
                           </li>`;
+            if (type == 'M') {
+                $('#upload_MainImg').append(str);
+            } else {
+                $('#upload_img').append(str);
+            }
             $('#upload_img').append(str);
         } catch (error) {
             alert('작업 중 오류가 발생하였습니다.');
@@ -150,9 +199,15 @@ const SubscribeLUpdate = (props) => {
     }
 
     const handleRemoveAllThumbnails = () => {
-        $('.fileBox1 ul').empty();
-        $('#imagefile').val('');
-        setImageDTOList([]);
+        if (imgType === 'M') {
+            // $('.fileMainBox1 ul').empty();
+            $('#imageMainfile').val('');
+            setMainImageList([])
+        } else {
+            $('.fileBox1 ul').empty();
+            $('#imagefile').val('');
+            setImageDTOList([]);
+        }
     };
 
     return (
@@ -172,7 +227,29 @@ const SubscribeLUpdate = (props) => {
                                         </th>
                                         <td>
                                             <input type="text" name="sno" id="snoVal" value={sno} readonly="readonly" />
-                                            {/* <input type="text" name="mno" id="snoVal" value="1" /> */}
+                                            <input type="hidden" name="mno" id="mnoVal" value={mno} readonly="readonly" style={{ display: 'none' }} />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            대표이미지
+                                        </th>
+                                        <td className="fileBox fileMainBox1">
+                                            <label htmlFor='imageMainSelect' className="btn_file">파일선택</label>
+                                            <input
+                                                type="text"
+                                                id="imageMainfile"
+                                                className="fileName fileName1"
+                                                readOnly="readonly"
+
+                                                placeholder="선택된 파일 없음" />
+                                            <input type="file" id="imageMainSelect" className="uploadBtn uploadBtn1"
+                                                onChange={e => handleFileInput2('file', e)} multiple />
+                                            <button type="button" className='bt_ty2' style={{ paddingTop: 5, paddingLeft: 10, paddingRight: 10 }}
+                                                onClick={() => handleRemoveAllThumbnails('M')}>X</button>
+                                            <ul id="upload_MainImg">
+                                                {renderMainImages()}
+                                            </ul>
                                         </td>
                                     </tr>
                                     <tr>
@@ -181,6 +258,14 @@ const SubscribeLUpdate = (props) => {
                                         </th>
                                         <td>
                                             <input type="text" name="title" id="titleVal" defaultValue={title} />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            <label for="spoint">구독료</label>
+                                        </th>
+                                        <td>
+                                            <input type="text" name="spoint" id="spointVal" defaultValue={spoint} />
                                         </td>
                                     </tr>
                                     <tr>
@@ -202,7 +287,7 @@ const SubscribeLUpdate = (props) => {
                                             <input type="file" id="imageSelect" className="uploadBtn uploadBtn1"
                                                 onChange={e => handleFileInput('file', e)} multiple />
                                             <button type="button" className='bt_ty2' style={{ paddingTop: 5, paddingLeft: 10, paddingRight: 10 }}
-                                                onClick={handleRemoveAllThumbnails}>X</button>
+                                                onClick={() => handleRemoveAllThumbnails('A')}>X</button>
                                             <ul id="upload_img">
                                                 {renderImages()}
                                             </ul>

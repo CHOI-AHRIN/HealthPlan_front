@@ -14,14 +14,6 @@ const Header = () => {
     /*  const [activeIndex, setActiveIndex] = useState(null); // 활성화된 메뉴 인덱스 */
     const [submenuVisible, setSubmenuVisible] = useState(false); // 서브메뉴
 
-    /*     const MENU_LIST = [
-            { title: '커뮤니티', list: [ '식단', '운동' ] },
-            { title: '챌린지', list: [ '챌린지'] },
-            { title: '구독', list: [ '구독', '강의' ] },
-            { title: 'FAQ', list: [ 'FAQ' ] },
-            { title: '마이페이지', list: [ '마이페이지' ] }
-        ]; */
-
 
     useEffect(() => {
         // 특정 경로에서만 헤더를 숨기기
@@ -130,7 +122,7 @@ const Header = () => {
                                 onMouseEnter={toggleSubmenu}
                                 onMouseLeave={toggleSubmenu}
                             >
-                                <Link to={'/SubscribeLList'} onClick={() => handleMenuClick('/SubscribeLList')}>
+                                <Link to={'/SubscribeList'} onClick={() => handleMenuClick('/SubscribeList')}>
                                     구독
                                 </Link>
                                 {submenuVisible && (

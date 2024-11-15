@@ -40,11 +40,18 @@ const SubscribeLUpdate = (props) => {
                 setImageDTOList(response.data.imageDTOList);
                 setMainImageList(response.data.mainImage);
                 setImageList(response.data.imageDTOList.map(image => ({
-                    thumbnailURL: image.imgName
+                    thumbnailURL: image.imgName,
                 })));
                 setMImageList(response.data.mainImage.map(image => ({
-                    thumbnailURL: image.imgName
+                    thumbnailURL: image.imgName,
                 })));
+
+                $('#imagefile').val(
+                    response.data.imageDTOList.map(image => image.imgName).join(', ')
+                );
+                $('#imageMainfile').val(
+                    response.data.mainImage.map(image => image.imgName).join(', ')
+                );
             }
             catch (error) {
                 alert('게시글데이터 받기 오류')
@@ -201,8 +208,8 @@ const SubscribeLUpdate = (props) => {
 
 
     const handleRemoveAllThumbnails = (imgType) => {
-        if (imgType == 'M') {
-            $('.fileMainBox1 ul').empty();
+        if (imgType === 'M') {
+            // $('.fileMainBox1 ul').empty();
             $('#imageMainfile').val('');
             setMainImageList([])
         } else {
@@ -239,8 +246,13 @@ const SubscribeLUpdate = (props) => {
                                         </th>
                                         <td className="fileBox fileMainBox1">
                                             <label htmlFor='imageMainSelect' className="btn_file">파일선택</label>
-                                            <input type="text" id="imageMainfile" className="fileName fileName1"
-                                                readOnly="readonly" placeholder="선택된 파일 없음" />
+                                            <input
+                                                type="text"
+                                                id="imageMainfile"
+                                                className="fileName fileName1"
+                                                readOnly="readonly"
+
+                                                placeholder="선택된 파일 없음" />
                                             <input type="file" id="imageMainSelect" className="uploadBtn uploadBtn1"
                                                 onChange={e => handleFileInput2('file', e)} multiple />
                                             <button type="button" className='bt_ty2' style={{ paddingTop: 5, paddingLeft: 10, paddingRight: 10 }}

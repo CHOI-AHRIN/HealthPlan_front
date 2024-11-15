@@ -87,16 +87,16 @@ const SubscribeLList = () => {
             result.push(
                 <tr className="hidden_type">
                     <td> {num} </td>
-                    <td>{
+                    <td style={{width: '100px'}}>{
                         data.titleimg != null
                             ? <img src={`api/supload/display?fileName=${data.titleimg}`} width='35px' height='35px' />
                             : <img src={require(`../../img/layout/avatar.jpg`)} width='30px' height='30px' />
                     }
                     </td>
-                    <td><Link to={`/SubscribeRead/${data.sno}`}>{data.title}{data.replycnt > 0 && ` [${data.replycnt}]`}</Link></td>
+                    <td style={{width: '300px'}}><Link to={`/SubscribeRead/${data.sno}`}>{data.title}{data.replycnt > 0 && ` [${data.replycnt}]`}</Link></td>
                     <td> {data.uuid} </td>
                     <td> {data.spoint} </td>
-                    <td> {data.counts} </td>
+                    <td style={{width: '100px'}}> {data.counts} </td>
                     <td> {data.wdate} </td>
                 </tr>
             )
@@ -174,19 +174,19 @@ const SubscribeLList = () => {
                     </form>
                 </div>
 
-                <div className="list_cont list_cont_admin2">
-                    <table className="table_ty1 ad_tlist2">
+                <div className="list_cont list_cont_admin">
+                    <table className="table_ty1 ad_slist">
                         <tr>
                             <th>번호</th>
-                            <th>구독이미지</th>
-                            <th>전문가구독</th>
+                            <th style={{width: '100px'}}>전문가이미지</th>
+                            <th style={{width: '300px'}}>전문가구독</th>
                             <th>전문가</th>
                             <th>구독료</th>
-                            <th>조회수</th>
+                            <th style={{width: '100px'}}>조회수</th>
                             <th>작성일</th>
                         </tr>
                     </table>
-                    <table id="appendNboardList" className="table_ty2 ad_tlist2">
+                    <table id="appendNboardList" className="table_ty2 ad_slist">
                         {append_SboardList}
                     </table>
                     <div id="spaging" style={{ marginTop: '10px' }}>
