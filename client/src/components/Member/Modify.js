@@ -318,27 +318,27 @@ const Modify = () => {
                                             </td>
                                         </tr>
                                         <tr>
-                                            <th>연락처</th>
+                                            <th>* 연락처</th>
                                             <td>
                                                 <input id="phone_val" type="text" name="phone" />
 
                                             </td>
                                         </tr>
                                         <tr>
-                                            <th>이메일</th>
+                                            <th>* 이메일</th>
                                             <td>
                                                 <input id="email_val" type="text" name="email" />
                                             </td>
                                         </tr>
                                         <tr>
-                                            <th>새 비밀번호</th>
+                                            <th>* 새 비밀번호</th>
                                             <td>
                                                 <input id="upw" type="password" name="upw"
                                                     placeholder="비밀번호를 입력해주세요." onKeyPress={memPwKeyPress} />
                                             </td>
                                         </tr>
                                         <tr>
-                                            <th>비밀번호 확인</th>
+                                            <th>* 비밀번호 확인</th>
                                             <td>
                                                 <input id="upw_cnf_val" type="password"
                                                     placeholder="비밀번호를 한번 더 입력해주세요." onKeyPress={memPwCnfKeyPress} />
