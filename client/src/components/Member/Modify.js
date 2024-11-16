@@ -352,8 +352,8 @@ const Modify = () => {
                                     display: 'flex',
                                     justifyContent: 'center', // 버튼을 가로로 중앙에 정렬
                                     alignItems: 'center', // 버튼을 세로로 중앙에 정렬
-                                    gap: '20px', // 버튼 사이의 간격 조정
                                     marginTop: '20px', // 버튼 그룹 위쪽 여백
+                                    alignItems: 'flex-end'
                                 }}>
                                 <div className="btn_confirm bt_ty bt_ty2 submit_ty1 modifyclass" type="button" onClick={(e) => submitClick('modify', e)}
                                     style={{
