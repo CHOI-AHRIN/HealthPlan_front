@@ -309,8 +309,8 @@ const SubscribeLRead = (props) => {
                         <div className="cat">
                             <p style={{ fontSize: '19px' }}>
                                 {/* {data.replyer} */}
-                                {uuidMap[data.mno] ? uuidMap[data.mno] : '아이디 누락'} {/* uuid 표시 */}
-                                {data.mno}
+                                {data.mno} | {uuidMap[data.mno] ? uuidMap[data.mno] : '아이디 누락'} {/* uuid 표시 */}
+                               
                                 <span style={{ fontSize: '12px' }}>
                                     <span style={{ marginLeft: '5px', color: 'grey' }}></span>
                                     <span style={{ fontSize: '10px', color: 'grey' }}></span>

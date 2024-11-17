@@ -14,9 +14,9 @@ const SubscribeLRead = (props) => {
     const [spoint, setSpoint] = useState('');
     const [content, setContent] = useState('');
     const [writer, setWriter] = useState('');
-    const [mno, setMno] = useState('');
+    const [mno, setMno] = useState(''); // 글 작성자 회원번호
+    const [userMno, setUserMno] = useState(''); // 로그인한 사용자의 회원번호
     const [uuid, setUuid] = useState(cookie.load('uuid'));
-    const [rmno, setRmno] = useState('');
     const [viewCnt, setViewCnt] = useState('');
     const [regidate, setRegidate] = useState('');
     const [imageDTOList, setImageDTOList] = useState([]);
@@ -46,7 +46,7 @@ const SubscribeLRead = (props) => {
                     // 회원 번호(mno)를 가져오기 위해 추가 요청
                     axios.post('/api/member/readMno', { uuid: userUuid })
                         .then(response => {
-                            setRmno(response.data.mno); // 회원 번호 상태 업데이트
+                            setUserMno(response.data.mno); // 로그인한 사용자의 mno // 회원 번호 상태 업데이트
                             callNboardInfoApi(userUuid); // 받아온 UUID를 기반으로 게시글 정보 요청
                             callReplyListApi(sno); // 11.06 추가 댓글 요청
                         })
@@ -157,7 +157,6 @@ const SubscribeLRead = (props) => {
             return (
                 <div>
                     <button className="catbtn bt_ty2 submit_ty1 saveclass" onClick={() => modifyComment(`${data.rno}`)}>수정</button>
-                    {/*  <button className="catbtn bt_ty2 submit_ty1 saveclass" onClick={() => openEditModal(`${data.rno}`)}>모달</button> */}
                     <button className="catbtn bt_ty2 submit_ty1 saveclass" onClick={() => deleteComment(`${data.rno}`)}>삭제</button>
                 </div>
             );
@@ -274,7 +273,7 @@ const SubscribeLRead = (props) => {
             const Json_data = {
                 sno: $('#snoVal').val(),
                 replyer: $('#replyerVal').val(),
-                Rmno: rmno,  // mno 값을 별도로 수집한 경우
+                mno: userMno, // 로그인한 사용자의 mno
                 rcomment: $('#replyTextVal').val()
             };
 
@@ -349,7 +348,7 @@ const SubscribeLRead = (props) => {
                                     {/* {formattedDate} */}
                                     {/*  {data.modidate && ( */}
                                     {/* <> */}
-                                    <span style={{ marginLeft: '5px', color: 'grey' }}>(수정됨)</span>
+                                    <span style={{ marginLeft: '5px', color: 'grey' }}>{/* (수정됨) */}</span>
                                     <span style={{ fontSize: '10px', color: 'grey' }}>
                                         {/* {moment(data.modidate).fromNow()} */}
                                     </span>
@@ -584,7 +583,7 @@ const SubscribeLRead = (props) => {
                                         <label for="mno">회원번호</label>
                                     </th>
                                     <td style={{ flex: '1', marginRight: '10px' }}>
-                                        <input type="text" name="mno" id="rmno" readOnly="readonly" value={rmno} style={{ width: '100%' }} />
+                                        <input type="text" name="mno" id="rmno" readOnly="readonly" value={userMno} style={{ width: '100%' }} />
                                     </td>
 
                                     <th style={{ marginLeft: '20px' }}>
