@@ -177,7 +177,6 @@ const ChallengeList = () => {
                             <option value="total">전체</option>
                             <option value="TITLE">제목</option>
                             <option value="bcontents">내용</option>
-                            {/* <option value="uuid">작성자</option> */}
                         </select>
                         <input className='search' type="text" placeholder="검색어를 입력해주세요."
                             value={keyword} onChange={handleSearchValChange} />

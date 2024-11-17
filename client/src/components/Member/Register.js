@@ -59,6 +59,10 @@ const Register = () => {
             sweetalert('핸드폰 번호에 공백을 제거해 주세요.', '', 'error', '닫기');
             return false;
         }
+        if (!mtype) { // 회원유형 선택 여부 확인
+            sweetalert('회원유형을 선택해주세요.', '', 'error', '닫기');
+            return false;
+        }
 
         return true;
 
@@ -100,7 +104,7 @@ const Register = () => {
             .then(response => {
                 if (response && response.data === "success") {
                     sweetalert('회원가입 되었습니다.', '', 'success', '확인')
-                    .then(() => { navigate('/login'); }); 
+                        .then(() => { navigate('/login'); });
                 } else {
                     sweetalert('회원가입 중 오류가 발생했습니다.1', '', 'error', '닫기');
                 }
@@ -114,15 +118,15 @@ const Register = () => {
 
 
     // SweetAlert 알림 함수 
-// SweetAlert 알림 함수 수정
-const sweetalert = (title, contents, icon, confirmButtonText) => {
-    return Swal.fire({
-        title: title,
-        text: contents,
-        icon: icon,
-        confirmButtonText: confirmButtonText
-    });
-};
+    // SweetAlert 알림 함수 수정
+    const sweetalert = (title, contents, icon, confirmButtonText) => {
+        return Swal.fire({
+            title: title,
+            text: contents,
+            icon: icon,
+            confirmButtonText: confirmButtonText
+        });
+    };
 
     const handleMtypeChange = (e) => {
         setMtype(e.target.value); // 선택된 값을 mtype 상태에 저장
@@ -149,7 +153,7 @@ const sweetalert = (title, contents, icon, confirmButtonText) => {
                                             <th>비밀번호</th>
                                             <td>
                                                 <input id="upw_val" type="password" name="upw" value={upw}
-                                                    placeholder="비밀번호를 입력해주세요." onChange={(e) => setUpw(e.target.value)} />
+                                                    placeholder="영문, 특수기호, 숫자를 포함해 작성해주세요." onChange={(e) => setUpw(e.target.value)} />
                                             </td>
                                         </tr>
                                         <tr>
@@ -177,7 +181,7 @@ const sweetalert = (title, contents, icon, confirmButtonText) => {
                                             <th>핸드폰 번호</th>
                                             <td>
                                                 <input id="phone_val" type="tel" name="phone" value={phone}
-                                                    placeholder="핸드폰 번호를 입력해주세요." onChange={(e) => setPhone(e.target.value)} />
+                                                    placeholder="번호만 입력해주세요." onChange={(e) => setPhone(e.target.value)} />
                                             </td>
                                         </tr>
                                         <tr>
@@ -193,11 +197,6 @@ const sweetalert = (title, contents, icon, confirmButtonText) => {
                                     </table>
                                 </div>
                             </div>
-                            {/*                                 <div className="btn_confirm">
-                                    {/* <a href="javascript:" className="bt_ty bt_ty2 submit_ty1 modifyclass"
-                            onClick={() => submitClick()}>회원가입</a> 
-                                    <button className="bt_ty bt_ty2 submit_ty1 modifyclass" onClick={submitClick}>회원가입</button>
-                                </div> */}
                             <div className="btn_confirm">
                                 <button className="bt_ty bt_ty2 submit_ty1 modifyclass" type="submit">회원가입</button>
                             </div>
