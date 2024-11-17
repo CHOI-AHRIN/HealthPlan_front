@@ -67,10 +67,7 @@ const ChallengeList = () => {
             const year = date.substr(0, 4);
             const month = date.substr(5, 2);
             const day = date.substr(8, 2);
-            // const hour = date.substr(11, 2);
-            // const minute = date.substr(14, 2);
             const reg_date = `${year}.${month}.${day}`;
-            //   ${ hour }:${ minute }
 
             // 현재 페이지와 항목 인덱스를 기반으로 순차적으로 번호를 표시
             const num = startIdx + index + 1;
@@ -88,8 +85,6 @@ const ChallengeList = () => {
     };
 
     // 랭킹 함수
-
-
     const challengeRankingAppend = () => {
         if (!rankingData || !Array.isArray(rankingData) || rankingData.length === 0) {
             return (
@@ -224,21 +219,7 @@ const ChallengeList = () => {
                             </tr>
                         </thead>
                         <tbody id="appendChallengeRanking" className="table_ty2 ad_tlist2" style={{ marginTop: '10px' }}>
-                            {rankingData && rankingData.length > 0 ? (
-                                rankingData.map((data, index) => (
-                                    <tr key={`${data.MNO}-${index}`}>
-                                        <td>{index + 1}</td> {/* 순위 */}
-                                        <td>{data.MNO}</td> {/* 회원번호 */}
-                                        <td>{data.UUID}</td> {/* 아이디 */}
-                                        <td>{data.NAME}</td> {/* 이름 */}
-                                        <td>{data.COMMENTCOUNT}</td> {/* 인증수 (댓글 수) */}
-                                    </tr>
-                                ))
-                            ) : (
-                                <tr>
-                                    <td colSpan="5">데이터가 없습니다.</td>
-                                </tr>
-                            )}
+                            {challengeRankingAppend()}
                         </tbody>
                     </table>
                 </div>

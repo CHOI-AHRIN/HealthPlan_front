@@ -3,6 +3,7 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 import $ from 'jquery';
 import cookie from 'react-cookies';
+import Modal from 'react-modal';
 
 const Modify = () => {
 
@@ -208,43 +209,31 @@ const Modify = () => {
         });
     };
 
+    // 회원 탈퇴
     const deleteMember = () => {
         sweetalertDelete('정말 탈퇴하시겠습니까?', function () {
-            axios.post('/api/member/remove', {
-                uuid: uuid
-            })
+            axios.delete('/api/member/remove', { data: { uuid } }) // axios delete 메서드에서 body 데이터를 전달하려면 `data` 사용
                 .then(response => {
-                }).catch(error => { alert('작업중 오류가 발생하였습니다.'); return false; });
+                    if (response.data === 'success') {
+                        // 성공 메시지 출력 및 사용자 탈퇴 처리
+                        Swal.fire('탈퇴 완료', '회원 탈퇴가 완료되었습니다.', 'success')
+                            .then(() => {
+                                // 로그아웃 처리 또는 홈 화면으로 리디렉션
+                                window.location.href = '/';
+                            });
+                    } else {
+                        // 실패 메시지 처리
+                        Swal.fire('탈퇴 실패', '회원 탈퇴 중 문제가 발생했습니다.', 'error');
+                    }
+                })
+                .catch(error => {
+                    // 에러 메시지 출력 및 디버깅 정보 로그
+                    console.error('탈퇴 요청 중 오류 발생:', error);
+                    Swal.fire('오류 발생', '작업 중 문제가 발생했습니다. 다시 시도해주세요.', 'error');
+                });
         });
     };
-    /* 
-        const sweetalertDelete = (title, callbackFunc) => {
-            Swal.fire({
-                title: title,
-                text: "",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes'
-            }).then((result) => {
-                if (result.value) {
-                    Swal.fire(
-                        '탈퇴되었습니다.',
-                        '',
-                        'success'
-                    );
-                    cookie.remove('uuid', { path: '/' });
-                    cookie.remove('name', { path: '/' });
-                    cookie.remove('upw', { path: '/' });
-                    window.location.href = '/login';
-                } else {
-                    return false;
-                }
-                callbackFunc();
-            });
-        };
-     */
+
     // 탈퇴 알럿
     const sweetalertDelete = (title, callbackFunc) => {
         Swal.fire({
@@ -371,11 +360,52 @@ const Modify = () => {
                                         alignItems: 'center',
                                         justifyContent: 'center',
                                         cursor: 'pointer',
-                                        backgroundColor: '#d9534f', // 예시 배경색 (삭제 버튼)
+                                        backgroundColor: '#d9534f', // 배경색 (삭제 버튼)
                                         color: '#fff', // 텍스트 색상
                                     }}>탈퇴</div>
-
                             </div>
+
+                            {/* 비밀번호 확인 모달 */}
+                            {/* <Modal
+                                isOpen={isModalOpen}
+                                onRequestClose={closeModal}
+                                contentLabel="비밀번호 확인"
+                                style={{
+                                    content: {
+                                        top: '50%',
+                                        left: '50%',
+                                        right: 'auto',
+                                        bottom: 'auto',
+                                        marginRight: '-50%',
+                                        transform: 'translate(-50%, -50%)',
+                                        width: '400px',
+                                    },
+                                }}
+                            >
+                                <h2>비밀번호 확인</h2>
+                                <p>회원 탈퇴를 위해 비밀번호를 입력해주세요.</p>
+                                <input
+                                    type="password"
+                                    value={password}
+                                    onChange={handlePasswordChange}
+                                    placeholder="비밀번호 입력"
+                                    style={{ width: '100%', padding: '10px', marginTop: '10px' }}
+                                />
+                                <div style={{ marginTop: '20px', textAlign: 'right' }}>
+                                    <button
+                                        onClick={closeModal}
+                                        style={{ marginRight: '10px', padding: '10px 20px' }}
+                                    >
+                                        취소
+                                    </button>
+                                    <button
+                                        onClick={confirmAndDelete}
+                                        style={{ padding: '10px 20px', backgroundColor: '#d9534f', color: '#fff' }}
+                                    >
+                                        확인
+                                    </button>
+                                </div>
+                            </Modal> */}
                         </form>
                     </div>
                 </article>

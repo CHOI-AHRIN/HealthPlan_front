@@ -363,7 +363,7 @@ const ChallengeRead = (props) => {
             .catch(error => { alert('작업중 오류가 발생하였습니다2.'); return false; });
     }
 
-
+    // 댓글 목록 
     const ReplyListAppend = (replyList) => {
 
         if (!replyList || replyList.length === 0) {
@@ -374,12 +374,6 @@ const ChallengeRead = (props) => {
         for (let i = 0; i < replyList.length; i++) {
             let data = replyList[i]
             const isCurrentUserCommentOwner = true; // 작성자 여부 판단
-            // const isCurrentUserCommentOwner = data.replyer === currentUser;
-            // const formattedDate = moment(data.regdate).fromNow();
-            console.log("댓글에서 보여줄 내용:", data); // 댓글 목록 확인
-
-            console.log("uuidMap 확인:", uuidMap);
-            console.log("현재 mno 확인:", data.mno);
             result.push(
                 <li key={data.rno} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '19px' }}>
                     <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -391,29 +385,15 @@ const ChallengeRead = (props) => {
                                 {data.mno} | {uuidMap[data.mno] ? uuidMap[data.mno] : '아이디 누락'} {/* uuid 표시 */}
 
                                 <span style={{ fontSize: '12px' }}>
-                                    {/* {formattedDate} */}
-                                    {/*  {data.modidate && ( */}
-                                    {/* <> */}
                                     <span style={{ marginLeft: '5px', color: 'grey' }}>{/* (수정됨) */}</span>
                                     <span style={{ fontSize: '10px', color: 'grey' }}>
-                                        {/* {moment(data.modidate).fromNow()} */}
                                     </span>
-                                    {/*  </> */}
-                                    {/* )} */}
                                 </span>
                             </p>
                             <p style={{ color: '#525252' }}>{data.rcomment}</p>
                         </div>
                     </div>
                     <div>
-                        {/*                         {isCurrentUserCommentOwner && (
-                            <div>
-                                <button className="catbtn bt_ty2 submit_ty1 saveclass" onClick={() => modifyComment(`${data.rno}`)}>수정</button>
-                                <button className="catbtn bt_ty2 submit_ty1 saveclass" onClick={() => openEditModal(`${data.rno}`)}>modal</button>
-                                <button className="catbtn bt_ty2 submit_ty1 saveclass" onClick={() => deleteComment(`${data.rno}`)}>삭제</button>
-                            </div>
-              
-                        )} */}
                         {renderReplyModifyDeleteButtons(data)}
 
                     </div>
@@ -426,8 +406,6 @@ const ChallengeRead = (props) => {
     const deleteComment = (rno) => {
         sweetalertDelete2('삭제하시겠습니까?', () => {
             axios.delete(`/api/breplies/delete/${rno}`, {
-                /*  rNo: responseReplyList.data[index].rno,
-                 bno: bno */
             })
                 .then(response => {
                     if (response.data == "SUCCESS") {
@@ -449,7 +427,6 @@ const ChallengeRead = (props) => {
         }).then((result) => {
             if (result.value) {
                 callbackFunc();
-                //callReplyListApi(bno);
             } else {
                 return false;
             }
