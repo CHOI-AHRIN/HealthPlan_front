@@ -46,7 +46,7 @@ const SubscribeLRead = (props) => {
                     // 회원 번호(mno)를 가져오기 위해 추가 요청
                     axios.post('/api/member/readMno', { uuid: userUuid })
                         .then(response => {
-                            setMno(response.data.mno); // 회원 번호 상태 업데이트
+                            setRmno(response.data.mno); // 회원 번호 상태 업데이트
                             callNboardInfoApi(userUuid); // 받아온 UUID를 기반으로 게시글 정보 요청
                             callReplyListApi(sno); // 11.06 추가 댓글 요청
                         })
@@ -274,7 +274,7 @@ const SubscribeLRead = (props) => {
             const Json_data = {
                 sno: $('#snoVal').val(),
                 replyer: $('#replyerVal').val(),
-                mno: mno,  // mno 값을 별도로 수집한 경우
+                Rmno: rmno,  // mno 값을 별도로 수집한 경우
                 rcomment: $('#replyTextVal').val()
             };
 
@@ -458,7 +458,7 @@ const SubscribeLRead = (props) => {
                                     <Link to={`/SubscribeLList`} className="bt_ty bt_ty2 submit_ty1 saveclass">목록</Link>
                                 </div>
                                 <table class="table_ty1">
-            {/*                         <tr>
+                                    {/* <tr>
                                         <th>
                                             대표이미지
                                         </th>
@@ -584,7 +584,7 @@ const SubscribeLRead = (props) => {
                                         <label for="mno">회원번호</label>
                                     </th>
                                     <td style={{ flex: '1', marginRight: '10px' }}>
-                                        <input type="text" name="mno" id="mno" readOnly="readonly" value={mno} style={{ width: '100%' }} />
+                                        <input type="text" name="mno" id="rmno" readOnly="readonly" value={rmno} style={{ width: '100%' }} />
                                     </td>
 
                                     <th style={{ marginLeft: '20px' }}>
