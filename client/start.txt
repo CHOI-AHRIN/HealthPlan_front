@@ -1,0 +1,18 @@
+# 의존성충돌 무시 후 설치
+npm install --legacy-peer-deps
+
+# 강제 설치
+npm install --force
+
+# recompose 제거
+npm uninstall recompose
+
+# npm 캐시 지우기
+npm cache clean --force
+
+# nvm 16버전
+nvm install 16
+nvm use 16
+
+# 시작하기
+npm start

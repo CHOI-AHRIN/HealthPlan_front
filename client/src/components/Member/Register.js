@@ -113,7 +113,7 @@ const Register = () => {
 
 
 
-    // SweetAlert 알림 함수
+    // SweetAlert 알림 함수 
 // SweetAlert 알림 함수 수정
 const sweetalert = (title, contents, icon, confirmButtonText) => {
     return Swal.fire({
@@ -124,17 +124,6 @@ const sweetalert = (title, contents, icon, confirmButtonText) => {
     });
 };
 
-/*     const sweetalertRegister = (title, contents, icon, confirmButtonText) => {
-        Swal.fire({
-            title: title,
-            text: contents,
-            icon: icon,
-            confirmButtonText: confirmButtonText
-        }).then(function () {
-            window.location.href = '/';
-        });
-    };
- */
     const handleMtypeChange = (e) => {
         setMtype(e.target.value); // 선택된 값을 mtype 상태에 저장
     };
@@ -154,7 +143,6 @@ const sweetalert = (title, contents, icon, confirmButtonText) => {
                                             <td className='displayflex'>
                                                 <input id="uuid_val" type="text" name="uuid" value={uuid}
                                                     placeholder="아이디를 입력해주세요." onChange={(e) => setUuid(e.target.value)} />
-                                                {/*  <button>중복확인</button> */}
                                             </td>
                                         </tr>
                                         <tr>

@@ -35,10 +35,10 @@ import SubscribeLRead from './subscribe/SubscribeLRead';
 import SubscribeLUpdate from './subscribe/SubscribeLUpdate';
 
 // 구독 전문가 컴포넌트 import
-import SubscribeList    from './subscribe/SubscribeList';
-import SubscribeInsert  from './subscribe/SubscribeInsert';
-import SubscribeRead    from './subscribe/SubscribeRead';
-import SubscribeUpdate  from './subscribe/SubscribeUpdate';
+import SubscribeList from './subscribe/SubscribeList';
+import SubscribeInsert from './subscribe/SubscribeInsert';
+import SubscribeRead from './subscribe/SubscribeRead';
+import SubscribeUpdate from './subscribe/SubscribeUpdate';
 
 // 챌린지 컴포넌트 import
 import ChallengeList from './Challenge/ChallengeList';
@@ -59,11 +59,12 @@ const App = () => {
         .then(response => {
           const uuid = response.data.uuid;
           if (uuid) {
-            axios.post('/api/member/read', { uuid })
+            axios.post('/api/member/readName', { uuid })
               .then(response => {
+                console.log('응답 데이터:', response.data); // 응답 데이터 출력
                 const data = response.data;
                 setToken(token);  // uuid 상태 값 설정
-                setName(data.name);  // mno 값 설정
+                setName(data.name);  // name 값 설정
               })
               .catch(error => {
                 console.error('회원 정보를 가져오는 중 오류 발생:', error);
@@ -108,10 +109,10 @@ const App = () => {
         <Route path='/SubscribeLInsert' element={<SubscribeLInsert />} />
         <Route path='/SubscribeLRead/:sno' element={<SubscribeLRead />} />
         <Route path='/SubscribeLUpdate/:sno' element={<SubscribeLUpdate />} />
-        <Route path='/SubscribeList' element={<SubscribeList/>} />
-        <Route path='/SubscribeInsert' element={<SubscribeInsert/>} />
-        <Route path='/SubscribeRead/:sno' element={<SubscribeRead/>} />
-        <Route path='/SubscribeUpdate/:sno' element={<SubscribeUpdate/>} />
+        <Route path='/SubscribeList' element={<SubscribeList />} />
+        <Route path='/SubscribeInsert' element={<SubscribeInsert />} />
+        <Route path='/SubscribeRead/:sno' element={<SubscribeRead />} />
+        <Route path='/SubscribeUpdate/:sno' element={<SubscribeUpdate />} />
         <Route path='/ChallengeList' element={<ChallengeList />} />
         <Route path='/ChallengeRead/:bno' element={<ChallengeRead />} />
         <Route path='/ChallengeInsert' element={<ChallengeInsert />} />
