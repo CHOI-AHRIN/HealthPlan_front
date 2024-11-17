@@ -120,6 +120,7 @@ const ChallengeList = () => {
 
     const handlePageClick = (page) => {
         setCurrentPage(page);
+        fetchChallenges(); // 검색결과 즉시 반영
     };
 
     const renderSearchPagination = () => {

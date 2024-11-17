@@ -59,30 +59,6 @@ const MemberModify = () => {
     }, [uuid]);
 
 
-
-
-
-
-    // 회원 정보 수정
-    /*     const handleUpdate = () => {
-    
-            let jsonstr = $("form[name='frm']").serialize();
-            jsonstr = decodeURIComponent(jsonstr);
-            let Json_form = JSON.stringify(jsonstr).replace(/\"/gi, '');
-            Json_form = "{\"" + Json_form.replace(/\&/g, '\",\"').replace(/=/gi, '\":"') + "\"}";
-            let Json_data = JSON.parse(Json_form);
-    
-            axios.post('/api/member/modifyMem', memberInfo)
-            uuid: uuid
-                .then(response => {
-                    alert('회원 정보가 성공적으로 수정되었습니다.');
-                    navigate('/MemberList'); // 수정 후 리스트 페이지로 이동
-                })
-                .catch(error => {
-                    console.error('회원 정보 수정 오류:', error);
-                    alert('회원 정보 수정 중 오류가 발생했습니다.');
-                });
-        }; */
     const handleUpdate = () => {
         const updatedMemberInfo = {
             ...memberInfo,
@@ -91,8 +67,9 @@ const MemberModify = () => {
 
         axios.post('/api/member/modifyMem', updatedMemberInfo)
             .then(response => {
-                alert('회원 정보가 성공적으로 수정되었습니다.');
-                navigate('/MemberList'); // 수정 후 리스트 페이지로 이동
+                // alert('회원 정보가 성공적으로 수정되었습니다.');
+                sweetalertModify('회원 정보가 성공적으로 수정되었습니다.', '', 'success', '확인');
+                // navigate('/MemberList'); // 수정 후 리스트 페이지로 이동
             })
             .catch(error => {
                 console.error('회원 정보 수정 오류:', error);
@@ -110,17 +87,6 @@ const MemberModify = () => {
         }));
     };
 
-    // 정보수정
-    /*     const deleteMember = () => {
-            sweetalertDelete('정말 삭제하시겠습니까?', function () {
-                axios.post('/api/member/remove', {
-                    uuid: uuid
-                })
-                    .then(response => {
-                    }).catch(error => { alert('작업중 오류가 발생하였습니다.'); return false; });
-            });
-        }; */
-
 
     // 회원삭제
     const deleteMember = () => {
@@ -130,6 +96,20 @@ const MemberModify = () => {
                 }).catch(error => { alert('작업중 오류가 발생하였습니다.'); return false; });
         });
     };
+
+    // 수정 알럿
+    const sweetalertModify = (title, contents, icon, confirmButtonText) => {
+        Swal.fire({
+            title: title,
+            text: contents,
+            icon: icon,
+            confirmButtonText: confirmButtonText
+        }).then(function () {
+            window.location.href = '/MemberList';
+        });
+    };
+
+
 
     // 탈퇴 알럿
     const sweetalertDelete = (title, callbackFunc) => {
