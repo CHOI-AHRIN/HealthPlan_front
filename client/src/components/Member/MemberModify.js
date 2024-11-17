@@ -125,9 +125,7 @@ const MemberModify = () => {
     // 회원삭제
     const deleteMember = () => {
         sweetalertDelete('정말 삭제하시겠습니까?', function () {
-            axios.post('/api/member/remove', {
-                uuid: uuid
-            })
+            axios.delete('/api/member/remove', { data: { uuid } })
                 .then(response => {
                 }).catch(error => { alert('작업중 오류가 발생하였습니다.'); return false; });
         });
