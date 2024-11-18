@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from "axios";
 
+// useEffect → fetchMemberList 실행 → 멤버 데이터를 가져와 정렬 후 상태값 업데이트
+
 const MemberList = () => {
     const [Members, setMembers] = useState([]); // 전체 멤버 목록
     const [currentPage, setCurrentPage] = useState(1); // 현재 페이지 번호
@@ -42,8 +44,6 @@ const MemberList = () => {
             .catch(error => console.error('멤버 목록을 가져오는 중 오류:', error));
     };
 
-
-
     const memberListAppend = () => {
         const startIdx = (currentPage - 1) * itemsPerPage;
         const currentMembers = Members.slice(startIdx, startIdx + itemsPerPage);
@@ -55,11 +55,8 @@ const MemberList = () => {
             const day = date.substr(8, 2);
             const reg_date = `${year}.${month}.${day}`;
 
-
-
             // 현재 페이지와 항목 인덱스를 기반으로 순차적으로 번호를 표시
             const num = startIdx + index + 1;
-
             return (
                 <tr className="hidden_type" key={data.mno}>
                     <td style={{ width: '70px' }}>  {num} </td>
@@ -78,12 +75,9 @@ const MemberList = () => {
         });
     };
 
-
-
     useEffect(() => {
         fetchMemberList();
     }, []);
-
 
     return (
         <section className="sub_wrap">
@@ -108,9 +102,6 @@ const MemberList = () => {
                     <table id="appendChallengeList" className="table_ty2 ad_tlist2">
                         {memberListAppend()}
                     </table>
-                    {/*                     <div id="spaging">
-                        {renderSearchPagination()}
-                    </div> */}
                 </div>
             </article>
         </section>
